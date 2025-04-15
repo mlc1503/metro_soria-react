@@ -1,5 +1,6 @@
 import { Tabs } from "expo-router";
 import React from "react";
+import { colorsList } from "../constants/Colors";
 
 
 export default function TabLayout(){
@@ -7,7 +8,11 @@ export default function TabLayout(){
     <Tabs
         screenOptions={{
             headerShown: false,
-        }}>
+            // tabBarBackground: {
+
+            // }
+        }}
+        >
         <Tabs.Screen
             name="lineas"
             options={{
