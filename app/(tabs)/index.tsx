@@ -6,8 +6,27 @@ import Card from '@/app/components/Card';
 
 const [textOrigen, onChangeTextOrigen] = React.useState('')
 const [textDestino, onChangeTextDestino] = React.useState('')
+
+
 let estaciones = [
-	"Plaza del Rosel Y San Blas", "Zamora", "Las Camaretas"
+  {
+    nombre: "zamora",
+    lineas:[
+      "L2a", "L2b", "L1"
+    ]
+  },
+  {
+    nombre: "san blas",
+    lineas:[
+      "L2e", "L2b", "L1"
+    ]
+  },
+  {
+    nombre: "zamora",
+    lineas:[
+      "Lx", "L2b", "L2a"
+    ]
+  },
 ]
 
 
@@ -43,8 +62,11 @@ export default function Index() {
                 <Text style={styles.text}>Buscar</Text>
             </Pressable>
 
-            <Card titulo="hola1232"/>
-            <Card titulo="hola132"/>
+            {
+              estaciones.map((estacion) =>(
+                <Card titulo={estacion.nombre} lineas={estacion.lineas}/>
+              )) 
+            }
 
 			
       </View>
@@ -52,30 +74,30 @@ export default function Index() {
   );
 }
 
-const Hola = () => {
-    estaciones.forEach(titulo => {
-        return(
-            <View style={{width: "100%"}}>
-              <View style={styles.viewCard}>
-                <Image
-                  source={require('@/assets/icons/L1_icon.png')}
-                  style={{width: 30, height: 30}}
-                />
-                <Image
-                  source={require('@/assets/icons/L2a_icon.png')}
-                  style={{width: 30, height: 30}}
-                  />
-                <Image
-                  source={require('@/assets/icons/L2b_icon.png')}
-                  style={{width: 30, height: 30}}
-                />
-              </View>
-              <Text>{titulo}</Text>
-            </View>
-        )
-    });
+// const Hola = () => {
+//     estaciones.forEach(titulo => {
+//         return(
+//             <View style={{width: "100%"}}>
+//               <View style={styles.viewCard}>
+//                 <Image
+//                   source={require('@/assets/icons/L1_icon.png')}
+//                   style={{width: 30, height: 30}}
+//                 />
+//                 <Image
+//                   source={require('@/assets/icons/L2a_icon.png')}
+//                   style={{width: 30, height: 30}}
+//                   />
+//                 <Image
+//                   source={require('@/assets/icons/L2b_icon.png')}
+//                   style={{width: 30, height: 30}}
+//                 />
+//               </View>
+//               <Text>{titulo}</Text>
+//             </View>
+//         )
+//     });
     
-}
+// }
 
 
 const styles = StyleSheet.create({

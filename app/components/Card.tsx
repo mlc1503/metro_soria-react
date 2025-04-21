@@ -1,23 +1,56 @@
 import { Text, View, Image, StyleSheet } from 'react-native'
 import { colorsList, constants } from "../constants/Colors";
 
-export default function Card({ titulo }: { titulo: string}){
+
+
+export default function Card({ titulo, lineas}: { titulo: string, lineas: Array<string>}){
+
+
+    let listaIconos: any[] = []; 
+    lineas.forEach(linea => {
+        switch (linea) {
+            case "L1":
+                listaIconos.push(require("@/assets/icons/L1_icon.png"))
+                break;
+
+            case "L1e":
+                listaIconos.push(require("@/assets/icons/L1e_icon.png"))
+                break;
+
+            case "L2":
+                listaIconos.push(require("@/assets/icons/L2_icon.png"))
+                break;
+
+            case "L2a":
+                listaIconos.push(require("@/assets/icons/L2a_icon.png"))
+                break;
+
+            case "L2b":
+                listaIconos.push(require("@/assets/icons/L2b_icon.png"))
+                break;
+            case "L2e":
+                listaIconos.push(require("@/assets/icons/L2e_icon.png"))
+                break;
+                
+            default:
+                break;
+
+        }
+        
+    });
+
 
     return (
         <View style={{width: "100%"}}>
             <View style={styles.viewCard}>
-            <Image
-                source={require('@/assets/icons/L1_icon.png')}
-                style={{width: 30, height: 30}}
-            />
-            <Image
-                source={require('@/assets/icons/L2a_icon.png')}
-                style={{width: 30, height: 30}}
-                />
-            <Image
-                source={require('@/assets/icons/L2b_icon.png')}
-                style={{width: 30, height: 30}}
-            />
+            {
+                listaIconos.map((ruta) =>(
+                    <Image
+                        source={ruta}
+                        style={{width: 30, height: 30}}
+                    />
+                ))
+            }
             <Text>{titulo}</Text>
             </View>
         </View>
