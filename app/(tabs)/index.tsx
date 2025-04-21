@@ -1,12 +1,18 @@
 import { Link } from "expo-router";
 import React from "react";
-import { Button, Pressable, ScrollView, Text, TextInput, View, StyleSheet } from "react-native";
-import { colorsList } from "../constants/Colors";
+import { Button, Pressable, ScrollView, Text, TextInput, View, StyleSheet, Image } from "react-native";
+import { colorsList, constants } from "../constants/Colors";
+import Card from '@/app/components/Card';
+
+const [textOrigen, onChangeTextOrigen] = React.useState('')
+const [textDestino, onChangeTextDestino] = React.useState('')
+let estaciones = [
+	"Plaza del Rosel Y San Blas", "Zamora", "Las Camaretas"
+]
+
 
 export default function Index() {
-
-  const [textOrigen, onChangeTextOrigen] = React.useState('')
-  const [textDestino, onChangeTextDestino] = React.useState('')
+	
 
   return (
     <ScrollView style={{
@@ -20,8 +26,6 @@ export default function Index() {
 
                 alignContent: "center",
                 alignItems: "center",
-                // borderColor: '#000000',
-                // borderWidth: 2,
         }}>
             <TextInput
                 style={styles.textInput}
@@ -31,7 +35,6 @@ export default function Index() {
             />
             <TextInput
                 style={styles.textInput}
-                // style={StyleSheet.compose(styles.textInput, styles.text)}
                 onChangeText={onChangeTextDestino}
                 value={textDestino}
                 placeholder="Destino..."
@@ -40,22 +43,46 @@ export default function Index() {
                 <Text style={styles.text}>Buscar</Text>
             </Pressable>
 
-            <View>
-                {/* <Card>
+            <Card titulo="hola1232"/>
+            <Card titulo="hola132"/>
 
-                </Card> */}
-            </View>
+			
       </View>
     </ScrollView>
   );
+}
+
+const Hola = () => {
+    estaciones.forEach(titulo => {
+        return(
+            <View style={{width: "100%"}}>
+              <View style={styles.viewCard}>
+                <Image
+                  source={require('@/assets/icons/L1_icon.png')}
+                  style={{width: 30, height: 30}}
+                />
+                <Image
+                  source={require('@/assets/icons/L2a_icon.png')}
+                  style={{width: 30, height: 30}}
+                  />
+                <Image
+                  source={require('@/assets/icons/L2b_icon.png')}
+                  style={{width: 30, height: 30}}
+                />
+              </View>
+              <Text>{titulo}</Text>
+            </View>
+        )
+    });
+    
 }
 
 
 const styles = StyleSheet.create({
   textInput: {
     borderWidth: 2,
-    borderRadius: 10,
-    padding: 10,
+    borderRadius: constants.bounds.radius,
+    padding: constants.bounds.padding,
     backgroundColor: colorsList.light.MAIN_WHITE,
     borderColor: colorsList.light.PRIMARY_BLUE,
     fontSize: 24,
@@ -64,8 +91,8 @@ const styles = StyleSheet.create({
   },
   pressable: {
     backgroundColor: colorsList.light.PRIMARY_BLUE,
-    borderRadius: 10,
-    padding: 10,
+    borderRadius: constants.bounds.radius,
+    padding: constants.bounds.padding,
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
@@ -74,5 +101,16 @@ const styles = StyleSheet.create({
   text: {
     color: colorsList.light.MAIN_WHITE,
     fontSize: 24,
+  },
+  viewCard:{
+    flexDirection: "row",
+    columnGap: constants.bounds.padding,
+    backgroundColor: colorsList.light.MAIN_WHITE,
+    borderColor: colorsList.light.PRIMARY_BLUE,
+    borderWidth: 2,
+    padding: constants.bounds.padding,
+    borderRadius: constants.bounds.radius,
+    alignItems: "center",
+    justifyContent: "flex-start"
   }
 })

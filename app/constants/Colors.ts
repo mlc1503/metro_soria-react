@@ -9,5 +9,12 @@ export const colorsList = {
         ALERT_RED: '#A71000',
         TEST_COLOR : "#72B465",
         FULL_WHITE: "#FFFFFF",
+    },  
+}
+
+export const constants = {
+    bounds:{
+        radius: 10,
+        padding: 10,
     }
 }
