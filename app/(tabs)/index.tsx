@@ -74,32 +74,6 @@ export default function Index() {
   );
 }
 
-// const Hola = () => {
-//     estaciones.forEach(titulo => {
-//         return(
-//             <View style={{width: "100%"}}>
-//               <View style={styles.viewCard}>
-//                 <Image
-//                   source={require('@/assets/icons/L1_icon.png')}
-//                   style={{width: 30, height: 30}}
-//                 />
-//                 <Image
-//                   source={require('@/assets/icons/L2a_icon.png')}
-//                   style={{width: 30, height: 30}}
-//                   />
-//                 <Image
-//                   source={require('@/assets/icons/L2b_icon.png')}
-//                   style={{width: 30, height: 30}}
-//                 />
-//               </View>
-//               <Text>{titulo}</Text>
-//             </View>
-//         )
-//     });
-    
-// }
-
-
 const styles = StyleSheet.create({
   textInput: {
     borderWidth: 2,
