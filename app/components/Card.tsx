@@ -10,26 +10,26 @@ export default function Card({ titulo, lineas}: { titulo: string, lineas: Array<
 	lineas.forEach(linea => {
 		switch (linea) {
 			case "L1":
-				listaIconos.push(require("@/assets/icons/L1_icon.png"))
+				listaIconos.push(require("@/assets/icons/L1_icon.webp"))
 				break;
 
 			case "L1e":
-				listaIconos.push(require("@/assets/icons/L1e_icon.png"))
+				listaIconos.push(require("@/assets/icons/L1e_icon.webp"))
 				break;
 
 			case "L2":
-				listaIconos.push(require("@/assets/icons/L2_icon.png"))
+				listaIconos.push(require("@/assets/icons/L2_icon.webp"))
 				break;
 
 			case "L2a":
-				listaIconos.push(require("@/assets/icons/L2a_icon.png"))
+				listaIconos.push(require("@/assets/icons/L2a_icon.webp"))
 				break;
 
 			case "L2b":
-				listaIconos.push(require("@/assets/icons/L2b_icon.png"))
+				listaIconos.push(require("@/assets/icons/L2b_icon.webp"))
 				break;
 			case "L2e":
-				listaIconos.push(require("@/assets/icons/L2e_icon.png"))
+				listaIconos.push(require("@/assets/icons/L2e_icon.webp"))
 				break;
 					
 			default:

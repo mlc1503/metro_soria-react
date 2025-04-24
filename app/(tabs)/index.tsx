@@ -36,7 +36,7 @@ export default function Index() {
 					},
 				]
 			)
-		}, 10000);
+		}, 2000);
 
 	})
 
@@ -68,8 +68,8 @@ export default function Index() {
 				<Text style={styles.text}>Buscar</Text>
 			</Pressable>
 
-			{estaciones.map((estacion: { nombre: string; lineas: string[]; }) =>(
-			<Card titulo={estacion.nombre} lineas={estacion.lineas}/>
+			{estaciones.map((estacion: { nombre: string; lineas: string[]; }, index) =>(
+				<Card key={index} titulo={estacion.nombre} lineas={estacion.lineas}/>
 			))}
 				
 		</View>
