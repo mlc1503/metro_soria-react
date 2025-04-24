@@ -11,7 +11,7 @@
 		}}
 		>
 		<Link href="/">
-		<Text>Esta página no existe</Text>
+			<Text>Esta página no existe. Click aquí para volver al inicio</Text>
 		</Link>
 		</View>
 	);

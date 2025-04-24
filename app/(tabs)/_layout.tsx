@@ -8,22 +8,25 @@ export default function TabLayout(){
     <Tabs
         screenOptions={{
             headerShown: false,
-            // tabBarBackground: {
+            tabBarInactiveBackgroundColor: colorsList.light.PRIMARY_BLUE,
+            tabBarInactiveTintColor: colorsList.light.FULL_WHITE,
+            tabBarActiveBackgroundColor: colorsList.light.FULL_WHITE,
+            tabBarActiveTintColor: colorsList.light.PRIMARY_BLUE
 
-            // }
+
         }}
         >
+        <Tabs.Screen
+            name="index"
+            options={{
+                title: 'Inicio',
+                href: '/'
+            }}
+        />
         <Tabs.Screen
             name="lineas"
             options={{
             title: 'Lineas',
-            }}
-        />
-        <Tabs.Screen
-            name="index"
-            options={{
-            title: 'index',
-            href: null
             }}
         />
         <Tabs.Screen
