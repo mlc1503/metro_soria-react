@@ -16,5 +16,8 @@ export const constants = {
     bounds:{
         radius: 10,
         padding: 10,
+    },
+    text:{
+        mainTextSize: 24
     }
 }

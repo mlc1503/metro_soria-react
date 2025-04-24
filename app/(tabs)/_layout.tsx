@@ -1,6 +1,6 @@
 import { Tabs } from "expo-router";
 import React from "react";
-import { colorsList } from "../constants/Colors";
+import { colorsList } from "../constants/Constants";
 
 
 export default function TabLayout(){

@@ -1,7 +1,7 @@
 import { Link } from "expo-router";
 import { useEffect, useState } from "react";
 import { Button, Pressable, ScrollView, Text, TextInput, View, StyleSheet, Image } from "react-native";
-import { colorsList, constants } from "../constants/Colors";
+import { colorsList, constants } from "../constants/Constants";
 import Card from '@/app/components/Card';
 
 
@@ -9,7 +9,7 @@ export default function Index() {
 	
 	const [textOrigen, onChangeTextOrigen] = useState('')
 	const [textDestino, onChangeTextDestino] = useState('')
-	const [estaciones, setEstaciones] = useState( [{ nombre: '', lineas: [''] }] );
+	const [estaciones, setEstaciones] = useState( [{ nombre: '', lineas: [''], data: [] }] );
 
 	useEffect(()=>{
 
@@ -19,24 +19,34 @@ export default function Index() {
 					{
 						nombre: "Plaza del Rosel y San Blas",
 						lineas:[
-							"L2a", "L2b", "L1e",
-						]
+							"L2a", "L2b",
+						],
+						data:[]
 					},
 					{
-						nombre: "san blas",
+						nombre: "Constitución",
 						lineas:[
-							"L1", "L2b", "L2e",
-						]
+							"L1", "L2b", "L2a",
+						],
+						data:[]
 					},
 					{
-						nombre: "zamora",
+						nombre: "Zamora",
 						lineas:[
 							"L2b", "L2a", "L1e",
-						]
+						],
+						data:[]
+					},
+					{
+						nombre: "Estación de Soria",
+						lineas:[
+							"L1", "L1e",
+						],
+						data:[]
 					},
 				]
 			)
-		}, 2000);
+		}, 3000);
 
 	})
 
@@ -68,8 +78,8 @@ export default function Index() {
 				<Text style={styles.text}>Buscar</Text>
 			</Pressable>
 
-			{estaciones.map((estacion: { nombre: string; lineas: string[]; }, index) =>(
-				<Card key={index} titulo={estacion.nombre} lineas={estacion.lineas}/>
+			{estaciones.map((estacion: { nombre: string; lineas: string[]; data:any[]}, index) =>(
+				<Card key={index} nombre={estacion.nombre} lineas={estacion.lineas} data={['hola2', ]}/>
 			))}
 				
 		</View>
@@ -91,7 +101,10 @@ const styles = StyleSheet.create({
 	pressable: {
 		backgroundColor: colorsList.light.PRIMARY_BLUE,
 		borderRadius: constants.bounds.radius,
-		padding: constants.bounds.padding,
+		paddingLeft: constants.bounds.padding * 2.2,
+		paddingRight: constants.bounds.padding * 2.2,
+		paddingTop: constants.bounds.padding * 0.8,
+		paddingBottom: constants.bounds.padding * 0.8,
 		flex: 1,
 		flexDirection: "row",
 		alignItems: "center",
@@ -100,6 +113,7 @@ const styles = StyleSheet.create({
 	text: {
 		color: colorsList.light.MAIN_WHITE,
 		fontSize: 24,
+		textAlign: "center"
 	},
 	viewCard:{
 		flexDirection: "row",
