@@ -29,4 +29,5 @@ export const listaIconos = new Map([
     ["L2a", require("@/assets/icons/L2a_icon.webp")],
     ["L2b", require("@/assets/icons/L2b_icon.webp")],
     ["L2e", require("@/assets/icons/L2e_icon.webp")],
+    ["warning", require("@/assets/icons/warning.png")],
 ])

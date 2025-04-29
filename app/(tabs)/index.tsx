@@ -5,20 +5,39 @@ import { colorsList, constants } from "../constants/Constants";
 import Card from "@/app/components/Card";
 
 
+type StationDataItem = 
+	{
+		type: 'service'; 
+		info: {
+			line: string;
+			timeOfArrival: string;
+			destinationTitle: string;
+		}; 
+	} 
+	| 
+	{ type: 'warning'; info: {message: string;} };
+
+interface StationInfo {
+	id:number,
+	name: string,
+	lines: Array<string>,
+	data: StationDataItem[]
+}
+
 export default function Index() {
 	
 	const [textOrigen, onChangeTextOrigen] = useState('')
 	const [textDestino, onChangeTextDestino] = useState('')
-	const [estaciones, setEstaciones] = useState( [{ nombre: '', lineas: [''], data: [{}] }] );
+	const [estaciones, setEstaciones] = useState(Array<StationInfo>);
 
 	useEffect(()=>{
 
 		setTimeout(() => {
 			setEstaciones(
-				[
-					{
-						nombre: "Plaza del Rosel y San Blas",
-						lineas:[
+				[{
+						id: 0,
+						name: "Plaza del Rosel y San Blas",
+						lines:[
 							"L2a", "L2b",
 						],
 						data:[
@@ -34,41 +53,41 @@ export default function Index() {
 							{ 
 								type: 'service', 
 								info: { 
-									line: 'L2', 
+									line: 'L2a', 
 									timeOfArrival: '10:30', 
-									destinationTitle: 'Estación de Soria',
+									destinationTitle: 'Las Camaretas',
 								} 
 							}]
 					},
 					{
-						nombre: "Constitución",
-						lineas:[
+						id: 1,
+						name: "Constitución",
+						lines:[
 							"L1", "L2b", "L2a",
 						],
 						data:[{ 
 							type: 'warning', 
-							info: [{
+							info: {
 								message: "No hay servicio en la estación",	
-							}] 
+							} 
 						}]
 					},
 					{
-						nombre: "Zamora",
-						lineas:[
-							"L2b", "L2a", "L1e",
+						id: 2,
+						name: "Constitución",
+						lines:[
+							"L1e", "L2b", "L2a",
 						],
-						data:[]
-					},
-					{
-						nombre: "Estación de Soria",
-						lineas:[
-							"L1", "L1e",
-						],
-						data:[]
+						data:[{ 
+							type: 'warning', 
+							info: {
+								message: "No hay servicio en la estación",	
+							} 
+						}]
 					},
 				]
 			)
-		}, 3000);
+		}, 1000);
 
 	})
 
@@ -100,10 +119,9 @@ export default function Index() {
 				<Text style={styles.text}>Buscar</Text>
 			</Pressable>
 
-			{estaciones.map((estacion: { nombre: string; lineas: string[]; data:any[]}, index) =>(
-				<Card key={index} nombre={estacion.nombre} lineas={estacion.lineas} data={estacion.data}/>
+			{estaciones.map((estacion) =>(
+				<Card key={estacion.id} nombre={estacion.name} lineas={estacion.lines} data={estacion.data} />
 			))}
-				
 		</View>
 		</ScrollView>
 	);
