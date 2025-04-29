@@ -13,13 +13,15 @@ type StationDataItem =
 	| 
 	{ type: 'warning'; info: {message: string;} };
 
-interface CardProps{
+interface SavedStationCardProps{
 	nombre: string;
 	lineas: string[];
 	data: StationDataItem[];
 }
 
-export default function Card({ nombre, lineas, data}: CardProps){
+export default function SavedStationCard({ nombre, lineas, data}: SavedStationCardProps){
+
+	//TODO: calcular tiempo restante hasta paso de tren por estación (probablemente con useEffect y useState)
 
 	const getArrayIconoLineas = (lineas: string[], size:number = 37)=>{
 
@@ -33,11 +35,12 @@ export default function Card({ nombre, lineas, data}: CardProps){
 	}
 
 	return (
+		//TODO: vincular tarjeta con vista de parada
 		<View style={{width: "100%"}}>
 			<View style={styles.savedStationCard}>
 
 				<View style={styles.lineasNombreDiv}>
-					<Text style={styles.textStyles}>{nombre}</Text>
+					<Text style={{fontSize: constants.text.mainTitleSize, fontWeight: "semibold"}}>{nombre}</Text>
 					<View style={{flexDirection: 'row', columnGap: constants.bounds.padding}}>
 						{getArrayIconoLineas(lineas)}
 					</View>
@@ -52,7 +55,7 @@ export default function Card({ nombre, lineas, data}: CardProps){
 										<View style={{ flexDirection: 'row', gap: constants.bounds.padding, alignItems: 'center', justifyContent: 'center', width: "100%"}}>
 
 											{getArrayIconoLineas([elem.type], 30)}
-											<Text style={{fontSize: 18}}>
+											<Text style={styles.textStyles}>
 												{elem.info.message}
 											</Text>
 										
@@ -66,12 +69,12 @@ export default function Card({ nombre, lineas, data}: CardProps){
 
 										<View style={{ flexDirection: 'row', gap: constants.bounds.padding, alignItems: 'center'}}>
 											{getArrayIconoLineas([elem.info.line], 30)}
-											<Text style={{fontSize: 20}}>
+											<Text style={styles.textStyles}>
 												{elem.info.destinationTitle}
 											</Text>
 										</View>
 										<View>
-											<Text style={{fontSize: 20}}>
+											<Text style={styles.textStyles}>
 												{elem.info.timeOfArrival}
 											</Text>
 										</View>
@@ -100,7 +103,6 @@ const styles = StyleSheet.create({
 		height: "auto",
 	},
 	lineasNombreDiv:{
-		// width: "100%",
 		flexDirection: "column",
 		flexWrap: 'wrap',
 		gap: constants.bounds.padding,
@@ -109,8 +111,7 @@ const styles = StyleSheet.create({
 		
 	},
 	textStyles:{
-		fontSize: constants.text.mainTextSize,
-		fontWeight: "semibold"
+		fontSize: constants.text.mainLabelSize,
 	},
 	mainInfoDiv:{
 		width: "100%",

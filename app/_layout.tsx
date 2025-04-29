@@ -3,6 +3,7 @@ import { Stack, Tabs } from "expo-router";
 import { StatusBar, useColorScheme } from "react-native";
 import { useFonts } from 'expo-font';
 import { useEffect } from "react";
+import { colorsList } from "./constants/Constants";
 import * as SplashScreen from 'expo-splash-screen';
 
 SplashScreen.preventAutoHideAsync()
@@ -27,12 +28,14 @@ export default function RootLayout() {
 
 
 	return (
-		// <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-		<Stack>
-			<Stack.Screen name="(tabs)" options={{ headerShown: false,}}/>
-			<Stack.Screen name="+not-found"/>
-			<Stack.Screen name="itinerarios"/>
-		</Stack>
-		// </ThemeProvider>
+		<>
+			<StatusBar barStyle="default" backgroundColor={colorScheme === 'dark' ? colorsList.light.MAIN_BLACK : colorsList.light.PRIMARY_BLUE} />
+			<Stack>
+				<Stack.Screen name="(tabs)" options={{ headerShown: false, }} />
+				<Stack.Screen name="+not-found" />
+				<Stack.Screen name="itinerarios" />
+			</Stack>
+		</>
+
 	)
 }

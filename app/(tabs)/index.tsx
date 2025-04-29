@@ -2,7 +2,7 @@ import { Link } from "expo-router";
 import { useEffect, useState } from "react";
 import { Button, Pressable, ScrollView, Text, TextInput, View, StyleSheet, Image } from "react-native";
 import { colorsList, constants } from "../constants/Constants";
-import Card from "@/app/components/Card";
+import SavedStationCard from "@/app/components/SavedStationCard";
 
 
 type StationDataItem = 
@@ -38,7 +38,7 @@ export default function Index() {
 						id: 0,
 						name: "Plaza del Rosel y San Blas",
 						lines:[
-							"L2a", "L2b",
+							"L1", "L2a", "L2b",
 						],
 						data:[
 							
@@ -47,14 +47,22 @@ export default function Index() {
 								info: { 
 									line: 'L1', 
 									timeOfArrival: '10:30', 
-									destinationTitle: 'Estación de Soria',
+									destinationTitle: 'Estación',
+								}
+							},
+							{ 
+								type: 'service', 
+								info: { 
+									line: 'L2b', 
+									timeOfArrival: '10:30', 
+									destinationTitle: 'Concatedral',
 								}
 							},
 							{ 
 								type: 'service', 
 								info: { 
 									line: 'L2a', 
-									timeOfArrival: '10:30', 
+									timeOfArrival: '10:35', 
 									destinationTitle: 'Las Camaretas',
 								} 
 							}]
@@ -74,7 +82,7 @@ export default function Index() {
 					},
 					{
 						id: 2,
-						name: "Constitución",
+						name: "Mariano Granados",
 						lines:[
 							"L1e", "L2b", "L2a",
 						],
@@ -87,7 +95,7 @@ export default function Index() {
 					},
 				]
 			)
-		}, 1000);
+		}, 0);
 
 	})
 
@@ -120,7 +128,7 @@ export default function Index() {
 			</Pressable>
 
 			{estaciones.map((estacion) =>(
-				<Card key={estacion.id} nombre={estacion.name} lineas={estacion.lines} data={estacion.data} />
+				<SavedStationCard key={estacion.id} nombre={estacion.name} lineas={estacion.lines} data={estacion.data} />
 			))}
 		</View>
 		</ScrollView>

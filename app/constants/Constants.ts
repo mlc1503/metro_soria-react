@@ -18,7 +18,8 @@ export const constants = {
         padding: 10,
     },
     text:{
-        mainTextSize: 24
+        mainTitleSize: 24,
+        mainLabelSize: 18
     }
 }
 
