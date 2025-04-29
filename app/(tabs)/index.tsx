@@ -2,14 +2,14 @@ import { Link } from "expo-router";
 import { useEffect, useState } from "react";
 import { Button, Pressable, ScrollView, Text, TextInput, View, StyleSheet, Image } from "react-native";
 import { colorsList, constants } from "../constants/Constants";
-import Card from '@/app/components/Card';
+import Card from "@/app/components/Card";
 
 
 export default function Index() {
 	
 	const [textOrigen, onChangeTextOrigen] = useState('')
 	const [textDestino, onChangeTextDestino] = useState('')
-	const [estaciones, setEstaciones] = useState( [{ nombre: '', lineas: [''], data: [] }] );
+	const [estaciones, setEstaciones] = useState( [{ nombre: '', lineas: [''], data: [{}] }] );
 
 	useEffect(()=>{
 
@@ -21,14 +21,36 @@ export default function Index() {
 						lineas:[
 							"L2a", "L2b",
 						],
-						data:[]
+						data:[
+							
+							{ 
+								type: 'service', 
+								info: { 
+									line: 'L1', 
+									timeOfArrival: '10:30', 
+									destinationTitle: 'Estación de Soria',
+								}
+							},
+							{ 
+								type: 'service', 
+								info: { 
+									line: 'L2', 
+									timeOfArrival: '10:30', 
+									destinationTitle: 'Estación de Soria',
+								} 
+							}]
 					},
 					{
 						nombre: "Constitución",
 						lineas:[
 							"L1", "L2b", "L2a",
 						],
-						data:[]
+						data:[{ 
+							type: 'warning', 
+							info: [{
+								message: "No hay servicio en la estación",	
+							}] 
+						}]
 					},
 					{
 						nombre: "Zamora",
@@ -79,7 +101,7 @@ export default function Index() {
 			</Pressable>
 
 			{estaciones.map((estacion: { nombre: string; lineas: string[]; data:any[]}, index) =>(
-				<Card key={index} nombre={estacion.nombre} lineas={estacion.lineas} data={['hola2', ]}/>
+				<Card key={index} nombre={estacion.nombre} lineas={estacion.lineas} data={estacion.data}/>
 			))}
 				
 		</View>

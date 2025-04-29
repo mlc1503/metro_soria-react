@@ -21,3 +21,12 @@ export const constants = {
         mainTextSize: 24
     }
 }
+
+export const listaIconos = new Map([
+    ["L1", require("@/assets/icons/L1_icon.webp")],
+    ["L1e", require("@/assets/icons/L1e_icon.webp")],
+    ["L2", require("@/assets/icons/L2_icon.webp")],
+    ["L2a", require("@/assets/icons/L2a_icon.webp")],
+    ["L2b", require("@/assets/icons/L2b_icon.webp")],
+    ["L2e", require("@/assets/icons/L2e_icon.webp")],
+])
