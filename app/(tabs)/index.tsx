@@ -135,7 +135,6 @@ export default function Index() {
 			{estaciones.map((estacion) =>(
 				<SavedStationCard key={estacion.id} nombre={estacion.name} lineas={estacion.lines} data={estacion.data} />
 			))}
-			aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 		</View>
 		</ScrollView>
 	);
