@@ -9,13 +9,17 @@ export default function TabLayout(){
         screenOptions={{
             headerShown: true,
             headerTitleAlign: "center",
+            headerTitle: ()=> IconoCTFV,
+            headerStyle: {
+                backgroundColor: colorsList.light.PRIMARY_BLUE,
+            },
+            
             tabBarInactiveBackgroundColor: colorsList.light.PRIMARY_BLUE,
             tabBarInactiveTintColor: colorsList.light.FULL_WHITE,
             tabBarActiveBackgroundColor: colorsList.light.FULL_WHITE,
             tabBarActiveTintColor: colorsList.light.PRIMARY_BLUE,
-            headerTitle: ()=> IconoCTFV,
-            headerStyle: {
-                backgroundColor: colorsList.light.PRIMARY_BLUE,
+            tabBarItemStyle:{
+                // alignItems: "flex-start"
             },
         }}
         >
@@ -29,7 +33,7 @@ export default function TabLayout(){
         <Tabs.Screen
             name="lineas"
             options={{
-            title: 'Lineas',
+                title: 'Lineas',
             }}
         />
         <Tabs.Screen
