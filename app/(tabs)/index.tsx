@@ -105,9 +105,9 @@ export default function Index() {
 			backgroundColor: colorsList.light.FULL_WHITE
 		}}>
 		<View style={{
-			margin: 10,
+			margin: constants.bounds.padding,
 			flexDirection: 'column',
-			rowGap: 10,
+			rowGap: constants.bounds.padding,
 			alignContent: "center",
 			alignItems: "center",
 		}}>
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
 		padding: constants.bounds.padding,
 		backgroundColor: colorsList.light.MAIN_WHITE,
 		borderColor: colorsList.light.PRIMARY_BLUE,
-		fontSize: 24,
+		fontSize: constants.text.mainTitleSize,
 		color: colorsList.light.PRIMARY_BLUE,
 		width: "100%"
 	},
