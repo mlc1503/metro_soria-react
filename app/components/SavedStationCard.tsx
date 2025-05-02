@@ -49,10 +49,11 @@ export default function SavedStationCard({ nombre, lineas, data}: SavedStationCa
 				<View style={{width: "100%", padding: constants.bounds.padding*2}}>
 					<View style={styles.mainInfoDiv}>
 						{data.map((elem, index) => {
+
 							if(elem.type == 'warning'){
 								return(
-									<View style={styles.inlineTrainInformation} key={index}> 
-										<View style={{ flexDirection: 'row', gap: constants.bounds.padding, alignItems: 'center', justifyContent: 'center', width: "100%"}}>
+								<View style={styles.inlineTrainInformation} key={index}> 
+									<View style={{ flexDirection: 'row', gap: constants.bounds.padding, alignItems: 'center', justifyContent: 'center', width: "100%"}}>
 
 											{getArrayIconoLineas([elem.type], constants.icons.normalSize)}
 											<Text style={styles.textStyles}>
@@ -65,7 +66,7 @@ export default function SavedStationCard({ nombre, lineas, data}: SavedStationCa
 							}
 							else if(elem.type == 'service'){
 								return(
-									<View style={styles.inlineTrainInformation} key={index}> 
+								<View style={styles.inlineTrainInformation} key={index}> 
 
 										<View style={{ flexDirection: 'row', gap: constants.bounds.padding, alignItems: 'center'}}>
 											{getArrayIconoLineas([elem.info.line], constants.icons.normalSize)}
