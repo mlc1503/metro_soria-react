@@ -49,39 +49,33 @@ export default function SavedStationCard({ nombre, lineas, data}: SavedStationCa
 				<View style={{width: "100%", padding: constants.bounds.padding*2}}>
 					<View style={styles.mainInfoDiv}>
 						{data.map((elem, index) => {
+
 							if(elem.type == 'warning'){
 								return(
-									<View style={styles.inlineTrainInformation} key={index}> 
-										<View style={{ flexDirection: 'row', gap: constants.bounds.padding, alignItems: 'center', justifyContent: 'center', width: "100%"}}>
+								<View style={styles.inlineTrainInformation} key={index}> 
+									<View style={{ flexDirection: 'row', gap: constants.bounds.padding, alignItems: 'center', justifyContent: 'center', width: "100%"}}>
 
-											{getArrayIconoLineas([elem.type], 30)}
-											<Text style={styles.textStyles}>
-												{elem.info.message}
-											</Text>
-										
-										</View>
+										{getArrayIconoLineas([elem.type], 30)}
+										<Text style={styles.textStyles}> {elem.info.message} </Text>
+
 									</View>
-								)
-							}
+								</View>
+							)}
+
 							else if(elem.type == 'service'){
 								return(
-									<View style={styles.inlineTrainInformation} key={index}> 
+								<View style={styles.inlineTrainInformation} key={index}> 
 
-										<View style={{ flexDirection: 'row', gap: constants.bounds.padding, alignItems: 'center'}}>
-											{getArrayIconoLineas([elem.info.line], 30)}
-											<Text style={styles.textStyles}>
-												{elem.info.destinationTitle}
-											</Text>
-										</View>
-										<View>
-											<Text style={styles.textStyles}>
-												{elem.info.timeOfArrival}
-											</Text>
-										</View>
-										
+									<View style={{ flexDirection: 'row', gap: constants.bounds.padding, alignItems: 'center'}}>
+										{getArrayIconoLineas([elem.info.line], 30)}
+										<Text style={styles.textStyles}> {elem.info.destinationTitle} </Text>
 									</View>
-								)
-							}
+									<View>
+										<Text style={styles.textStyles}> {elem.info.timeOfArrival} </Text>
+									</View>
+									
+								</View>
+							)}
 						})}
 					</View>
 				</View>
