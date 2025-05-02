@@ -1,6 +1,6 @@
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import { useEffect, useState } from "react";
-import { Button, Pressable, ScrollView, Text, TextInput, View, StyleSheet, Image } from "react-native";
+import { Button, Pressable, ScrollView, Text, TextInput, View, StyleSheet, Image, Platform } from "react-native";
 import { colorsList, constants } from "../constants/Constants";
 import SavedStationCard from "@/app/components/SavedStationCard";
 
@@ -100,17 +100,20 @@ export default function Index() {
 	})
 
 
+
+
 	return (
 		<ScrollView style={{
 			backgroundColor: colorsList.light.FULL_WHITE
 		}}>
 		<View style={{
-			margin: 10,
+			margin: constants.bounds.padding,
 			flexDirection: 'column',
-			rowGap: 10,
+			rowGap: constants.bounds.padding,
 			alignContent: "center",
 			alignItems: "center",
 		}}>
+			<Text>Dónde vas?</Text>
 			<TextInput
 				style={styles.textInput}
 				onChangeText={onChangeTextOrigen}
@@ -123,7 +126,9 @@ export default function Index() {
 				value={textDestino}
 				placeholder="Destino..."
 			/>
-			<Pressable style={styles.pressable}>
+			<Pressable style={styles.pressable} onPress={()=>{
+				router.navigate({pathname: '/itinerarios', params: {origin: textOrigen, destination: textDestino}})
+			}}>
 				<Text style={styles.text}>Buscar</Text>
 			</Pressable>
 
@@ -142,7 +147,7 @@ const styles = StyleSheet.create({
 		padding: constants.bounds.padding,
 		backgroundColor: colorsList.light.MAIN_WHITE,
 		borderColor: colorsList.light.PRIMARY_BLUE,
-		fontSize: 24,
+		fontSize: constants.text.mainTitleSize,
 		color: colorsList.light.PRIMARY_BLUE,
 		width: "100%"
 	},

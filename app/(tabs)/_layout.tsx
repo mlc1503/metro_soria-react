@@ -1,19 +1,26 @@
 import { Tabs } from "expo-router";
 import React from "react";
-import { colorsList } from "../constants/Constants";
+import { colorsList, getArrayIconoLineas, IconoCTFV } from "../constants/Constants";
 
 
 export default function TabLayout(){
     return(
     <Tabs
         screenOptions={{
-            headerShown: false,
+            headerShown: true,
+            headerTitleAlign: "center",
+            headerTitle: ()=> IconoCTFV,
+            headerStyle: {
+                backgroundColor: colorsList.light.PRIMARY_BLUE,
+            },
+            
             tabBarInactiveBackgroundColor: colorsList.light.PRIMARY_BLUE,
             tabBarInactiveTintColor: colorsList.light.FULL_WHITE,
             tabBarActiveBackgroundColor: colorsList.light.FULL_WHITE,
-            tabBarActiveTintColor: colorsList.light.PRIMARY_BLUE
-
-
+            tabBarActiveTintColor: colorsList.light.PRIMARY_BLUE,
+            tabBarItemStyle:{
+                // alignItems: "flex-start"
+            },
         }}
         >
         <Tabs.Screen
@@ -26,7 +33,7 @@ export default function TabLayout(){
         <Tabs.Screen
             name="lineas"
             options={{
-            title: 'Lineas',
+                title: 'Lineas',
             }}
         />
         <Tabs.Screen

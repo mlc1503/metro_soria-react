@@ -1,3 +1,5 @@
+import { Image } from "react-native";
+
 export const colorsList = {
     light: {
         PRIMARY_BLUE : '#214478',
@@ -32,3 +34,21 @@ export const listaIconos = new Map([
     ["L2e", require("@/assets/icons/L2e_icon.webp")],
     ["warning", require("@/assets/icons/warning.png")],
 ])
+
+export function getArrayIconoLineas(lineas: string[], size:number = 37){
+        return lineas.map((linea, index) =>(
+            <Image
+                key={`${linea}-${index}`}
+                source={listaIconos.get(linea)}
+                style={{width: size, height: size}}
+            />
+        ))
+}
+
+
+export const IconoCTFV = <Image 
+                            source={require('@/assets/icons/MetroSoriaLogoTinted.png')}
+                            style={{
+                                height: 50,
+                                width: 50,    
+                        }}/>
