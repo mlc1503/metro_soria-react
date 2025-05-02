@@ -5,6 +5,7 @@ import { useFonts } from 'expo-font';
 import { useEffect } from "react";
 import { colorsList, IconoCTFV } from "./constants/Constants";
 import * as SplashScreen from 'expo-splash-screen';
+import { BottomTabBar } from "@react-navigation/bottom-tabs";
 
 SplashScreen.preventAutoHideAsync()
 

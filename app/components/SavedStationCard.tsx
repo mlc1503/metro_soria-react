@@ -1,5 +1,5 @@
 import { Text, View, Image, StyleSheet } from 'react-native'
-import { colorsList, constants, listaIconos } from "../constants/Constants";
+import { colorsList, constants, listaIconos, getArrayIconoLineas } from "../constants/Constants";
 
 type StationDataItem = 
 	{
@@ -23,16 +23,16 @@ export default function SavedStationCard({ nombre, lineas, data}: SavedStationCa
 
 	//TODO: calcular tiempo restante hasta paso de tren por estación (probablemente con useEffect y useState)
 
-	const getArrayIconoLineas = (lineas: string[], size:number = 37)=>{
+	// const getArrayIconoLineas = (lineas: string[], size:number = 37)=>{
 
-		return lineas.map((linea, index) =>(
-			<Image
-				key={`${linea}-${index}`}
-				source={listaIconos.get(linea)}
-				style={{width: size, height: size}}
-			/>
-		))
-	}
+	// 	return lineas.map((linea, index) =>(
+	// 		<Image
+	// 			key={`${linea}-${index}`}
+	// 			source={listaIconos.get(linea)}
+	// 			style={{width: size, height: size}}
+	// 		/>
+	// 	))
+	// }
 
 	return (
 		//TODO: vincular tarjeta con vista de parada
@@ -40,7 +40,7 @@ export default function SavedStationCard({ nombre, lineas, data}: SavedStationCa
 			<View style={styles.savedStationCard}>
 
 				<View style={styles.lineasNombreDiv}>
-					<Text style={{fontSize: constants.text.mainTitleSize, fontWeight: "semibold"}}>{nombre}</Text>
+					<Text style={{fontSize: constants.text.mainTitleSize, fontWeight: "500"}}>{nombre}</Text>
 					<View style={{flexDirection: 'row', columnGap: constants.bounds.padding}}>
 						{getArrayIconoLineas(lineas)}
 					</View>
@@ -54,7 +54,7 @@ export default function SavedStationCard({ nombre, lineas, data}: SavedStationCa
 									<View style={styles.inlineTrainInformation} key={index}> 
 										<View style={{ flexDirection: 'row', gap: constants.bounds.padding, alignItems: 'center', justifyContent: 'center', width: "100%"}}>
 
-											{getArrayIconoLineas([elem.type], 30)}
+											{getArrayIconoLineas([elem.type], constants.icons.normalSize)}
 											<Text style={styles.textStyles}>
 												{elem.info.message}
 											</Text>
@@ -68,7 +68,7 @@ export default function SavedStationCard({ nombre, lineas, data}: SavedStationCa
 									<View style={styles.inlineTrainInformation} key={index}> 
 
 										<View style={{ flexDirection: 'row', gap: constants.bounds.padding, alignItems: 'center'}}>
-											{getArrayIconoLineas([elem.info.line], 30)}
+											{getArrayIconoLineas([elem.info.line], constants.icons.normalSize)}
 											<Text style={styles.textStyles}>
 												{elem.info.destinationTitle}
 											</Text>

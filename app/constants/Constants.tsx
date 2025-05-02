@@ -20,8 +20,12 @@ export const constants = {
         padding: 10,
     },
     text:{
-        mainTitleSize: 24,
-        mainLabelSize: 18
+        mainTitleSize: 20,
+        mainLabelSize: 16
+    },
+    icons:{
+        normalSize: 28,
+        plusSize: 32
     }
 }
 
@@ -35,7 +39,7 @@ export const listaIconos = new Map([
     ["warning", require("@/assets/icons/warning.png")],
 ])
 
-export function getArrayIconoLineas(lineas: string[], size:number = 37){
+export function getArrayIconoLineas(lineas: string[], size:number = constants.icons.plusSize){
         return lineas.map((linea, index) =>(
             <Image
                 key={`${linea}-${index}`}
@@ -50,5 +54,6 @@ export const IconoCTFV = <Image
                             source={require('@/assets/icons/MetroSoriaLogoTinted.png')}
                             style={{
                                 height: 50,
-                                width: 50,    
+                                width: 50,
+                                resizeMode: "contain"  
                         }}/>

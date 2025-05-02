@@ -113,7 +113,7 @@ export default function Index() {
 			alignContent: "center",
 			alignItems: "center",
 		}}>
-			<Text>Dónde vas?</Text>
+			<Text style={styles.labelText}>Dónde vas?</Text>
 			<TextInput
 				style={styles.textInput}
 				onChangeText={onChangeTextOrigen}
@@ -129,7 +129,7 @@ export default function Index() {
 			<Pressable style={styles.pressable} onPress={()=>{
 				router.navigate({pathname: '/itinerarios', params: {origin: textOrigen, destination: textDestino}})
 			}}>
-				<Text style={styles.text}>Buscar</Text>
+				<Text style={styles.buttonText}>Buscar</Text>
 			</Pressable>
 
 			{estaciones.map((estacion) =>(
@@ -163,9 +163,14 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 	},
-	text: {
+	buttonText: {
 		color: colorsList.light.MAIN_WHITE,
-		fontSize: 24,
+		fontSize: constants.text.mainTitleSize,
+		textAlign: "center"
+	},
+	labelText: {
+		color: colorsList.light.MAIN_BLACK,
+		fontSize: constants.text.mainTitleSize,
 		textAlign: "center"
 	},
 	viewCard:{
