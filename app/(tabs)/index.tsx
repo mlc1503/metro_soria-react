@@ -139,6 +139,14 @@ export default function Index() {
 			alignItems: "center",
 		}}>
 			<Text style={styles.labelText}>Dónde vas?</Text>
+			{
+				testData.map((item, index) =>(
+					<View key={index}>
+						<Text>{item.id}</Text>
+						<Text>{item.name}</Text>
+					</View>
+				))
+			}
 			<TextInput
 				style={styles.textInput}
 				onChangeText={onChangeTextOrigen}
