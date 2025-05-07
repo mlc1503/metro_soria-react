@@ -1,13 +1,38 @@
+import React from "react";
 import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native";
-import { Stack, Tabs } from "expo-router";
-import { StatusBar, useColorScheme } from "react-native";
+import { Stack} from "expo-router";
+import { StatusBar, useColorScheme, View } from "react-native";
 import { useFonts } from 'expo-font';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { colorsList, IconoCTFV } from "./constants/Constants";
 import * as SplashScreen from 'expo-splash-screen';
-import { BottomTabBar } from "@react-navigation/bottom-tabs";
+
+import { Asset } from 'expo-asset'
+import { SQLiteProvider } from 'expo-sqlite'
+import * as FileSystem from 'expo-file-system'
 
 SplashScreen.preventAutoHideAsync()
+
+const loadDatabase = async()=>{
+	const dbName = "test.db";
+	const dbAsset = require('@/assets/db/test.db');
+	const dbUri = Asset.fromModule(dbAsset).uri;
+	const dbFilePath = `${FileSystem.documentDirectory}SQLite/${dbName}`
+	
+	const fileInfo = await FileSystem.getInfoAsync(dbFilePath)
+	
+	if(!fileInfo.exists){
+		await FileSystem.makeDirectoryAsync(
+			`${FileSystem.documentDirectory}SQLite`, 
+			{intermediates: true}
+		);
+
+		
+		
+	}
+	await FileSystem.downloadAsync(dbUri, dbFilePath)
+	console.log("se ha descargado el fichero .db al dispositivo");
+}
 
 export default function RootLayout() {
 
@@ -16,11 +41,22 @@ export default function RootLayout() {
 		SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
 	});
 
+	const [dbLoaded, setDbLoaded] = useState(false)
+
+	
+
 	useEffect(() => {
 		if (loaded) {
 			SplashScreen.hideAsync();
 		}
-	}, [loaded]);
+
+		loadDatabase()
+			.then(()=> {
+				setDbLoaded(true); 
+				console.log("se ha cargado la bd");
+			})
+			.catch((error) => console.error("Un error ha ocurrido al cargar la DB.\n",error))
+	}, [loaded, dbLoaded]);
 
 	if (!loaded) {
 		return null;
@@ -29,24 +65,31 @@ export default function RootLayout() {
 
 
 	return (
-		<>
-			<StatusBar barStyle="default" backgroundColor={colorScheme === 'dark' ? colorsList.light.MAIN_BLACK : colorsList.light.PRIMARY_BLUE} />
-			<Stack
-				screenOptions={{
-							
-					headerTitle: ()=> IconoCTFV,
-					headerStyle: {
-						backgroundColor: colorsList.light.PRIMARY_BLUE,
-					},
-					headerTitleAlign: "center",
+		<React.Suspense 
+			// fallback={
+			// 	<View style={{flex: 1, backgroundColor: colorsList.light.ALERT_RED}}/>
+			// }
+		>
+			<SQLiteProvider databaseName="test.db" useSuspense>
+				<StatusBar barStyle="default" backgroundColor={colorScheme === 'dark' ? colorsList.light.MAIN_BLACK : colorsList.light.PRIMARY_BLUE} />
+				<Stack
+					screenOptions={{
+								
+						headerTitle: ()=> IconoCTFV,
+						headerStyle: {
+							backgroundColor: colorsList.light.PRIMARY_BLUE,
+						},
+						headerTitleAlign: "center",
 
-				}}
-			>
-				<Stack.Screen name="(tabs)" options={{ headerShown: false, }} />
-				<Stack.Screen name="+not-found" />
-				<Stack.Screen name="itinerarios" />
-			</Stack>
-		</>
+					}}
+				>
+					<Stack.Screen name="(tabs)" options={{ headerShown: false, }} />
+					<Stack.Screen name="+not-found" />
+					<Stack.Screen name="itinerarios" />
+				</Stack>
+			</SQLiteProvider>
+
+		</React.Suspense>
 
 	)
 }

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Button, Pressable, ScrollView, Text, TextInput, View, StyleSheet, Image, Platform } from "react-native";
 import { colorsList, constants } from "../constants/Constants";
 import SavedStationCard from "@/app/components/SavedStationCard";
+import { openDatabaseAsync, openDatabaseSync, useSQLiteContext } from "expo-sqlite";
 
 
 type StationDataItem = 
@@ -24,11 +25,19 @@ interface StationInfo {
 	data: StationDataItem[]
 }
 
+interface TestData{
+	id: number,
+	name: string
+}
+
 export default function Index() {
 	
 	const [textOrigen, onChangeTextOrigen] = useState('')
 	const [textDestino, onChangeTextDestino] = useState('')
 	const [estaciones, setEstaciones] = useState(Array<StationInfo>);
+
+	const db = useSQLiteContext();
+	const [testData, setTestData] = useState<TestData[]>([])
 
 	useEffect(()=>{
 
@@ -96,12 +105,28 @@ export default function Index() {
 				]
 			)
 		}, 0);
+		
+		db.withTransactionAsync(async() => {
+			await getData()
+		})
 
-	})
+	}, [db])
 
 
+	async function getData() {
 
+		db.getAllAsync<TestData>(`SELECT * FROM test;`)
+			.then((result)=> {
+				setTestData(result) 
+			})
+			.catch((err) => {
+				console.error("ERROR GETDATA()\n",err);
+			})
+		
+	}
 
+	console.log(testData);
+	
 	return (
 		<ScrollView style={{
 			backgroundColor: colorsList.light.FULL_WHITE
