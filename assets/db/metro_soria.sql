@@ -145,38 +145,68 @@ SELECT route_stations.* FROM route_stations WHERE route_id = (SELECT lines.id FR
 
 /*GET ESTACIONES TITULO POR LINEA*/
 -- L1 necesita una otra consulta para volver a mostrar Estación de soria como ultima estacion y hacer el circulo completo
-SELECT l.id, l.line_name AS line_name, s.name AS stop_name
+SELECT l.id, s.stop_id, l.line_name AS line_name, s.name AS stop_name
 FROM stops s JOIN route_stations r ON s.stop_id = r.stop_id JOIN lines l ON r.route_id = l.id
-WHERE r.route_id = (SELECT lines.id FROM lines WHERE lines.id = 1) ;
+WHERE r.route_id = (SELECT lines.id FROM lines WHERE lines.id = 1);
 
 
+SELECT l.id, l.line_name, r.route_id, s.stop_id, s.name
+FROM route_stations r 
+	JOIN stops s ON s.stop_id = r.stop_id
+	JOIN lines l ON l.id = r.route_id
+WHERE s.stop_id = (
+	SELECT s.stop_id
+	FROM route_stations r 
+		LEFT JOIN stops s ON r.stop_id = s.stop_id
+	WHERE r.route_id = 2
+)
 
+
+SELECT s.stop_id, s.name
+FROM route_stations r 
+	LEFT JOIN stops s ON r.stop_id = s.stop_id
+WHERE r.route_id = 2
+
+
+/*GET NOMBRE LINEA, ESTACION DE COMIENZO, ESTACION DE FINAL, DE TODAS LAS LÍNEAS*/
 SELECT 
     l.id,
     l.line_name,
     origin.name AS origin_stop_name,
-    destination.name AS destination_stop_name
+    destination.name AS destination_stop_name,
 FROM 
     lines l
 JOIN 
     stops origin ON l.origin_id = origin.stop_id
 LEFT JOIN 
-    stops destination ON l.destination_id = destination.stop_id
-	 WHERE l.id = 2;
+    stops destination ON l.destination_id = destination.stop_id;
 
 
+
+/*GET LINEAS QUE PASAN POR CADA PARADA DE ITINERARIO DE LINEA*/
+WITH cte_route_stops AS (
+    SELECT 
+        rs.stop_id,
+        s.name AS stop_name,
+        rs.id AS route_station_id
+    FROM route_stations rs
+    JOIN stops s ON rs.stop_id = s.stop_id
+    WHERE rs.route_id = 3
+    ORDER BY rs.id  -- Using auto-increment ID as sequence indicator
+)
+-- Then find all lines serving each stop
 SELECT 
-                l.id,
-                l.line_name,
-                origin.name AS origin_stop_name,
-                destination.name AS destination_stop_name
-            FROM 
-                lines l
-            JOIN 
-                stops origin ON l.origin_id = origin.stop_id
-            LEFT JOIN 
-                stops destination ON l.destination_id = destination.stop_id;
-
+    cte.stop_id,
+    cte.stop_name,
+    cte.route_station_id,
+    (
+        SELECT l.line_name
+        FROM route_stations other_rs
+        JOIN lines l ON other_rs.route_id = l.id
+        WHERE other_rs.stop_id = cte.stop_id
+    ) AS all_serving_lines
+FROM cte_route_stops cte
+ORDER BY cte.route_station_id;
 
 -- RESET AUTOINCREMENT
 DELETE FROM lines;

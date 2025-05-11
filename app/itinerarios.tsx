@@ -44,12 +44,9 @@ export default function Index() {
 		`, [id])
 		.then((result) =>{
 			setData(result)
-			console.log("success itinerario", result);
-			
 		})
 		.catch((err)=>{
 			console.error("GET ITINERARIO FAILED", err);
-			
 		})
 	}
 

@@ -29,14 +29,11 @@ interface LineDetails{
 export default function Index() {
     const [lineas, setLineas] = useState<LineDetails[]>([])
     const db = useSQLiteContext();
-
-    console.log("holaLineas");
     
     useEffect(()=>{
 
         if(lineas.length == 0){
             db.withTransactionAsync(async() => {
-                console.log("ARRAY LINEAS VACIO, LLENANDO ");
                 await getLines()
             })
         }        

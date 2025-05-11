@@ -107,7 +107,6 @@ export default function Index() {
 		}, 0);
 		
 		if(testData.length == 0){
-			console.log("EL ARRAY ESTA VACIO");
 			db.withTransactionAsync(async() => {
 				await getData()
 			})
