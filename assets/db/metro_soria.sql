@@ -9,13 +9,13 @@ CREATE TABLE IF NOT EXISTS lines(
 );
 
 
-INSERT INTO lines (line_name, origin_id, destination_id) VALUES ('L1', 1);
-INSERT INTO lines (line_name, origin_id, destination_id) VALUES ('L1e', 1);
+INSERT INTO lines (line_name, origin_id, destination_id) VALUES ('L1', 1, NULL);
+INSERT INTO lines (line_name, origin_id, destination_id) VALUES ('L1e', 1, 21);
 INSERT INTO lines (line_name, origin_id, destination_id) VALUES ('L2a', 13, 21);
 INSERT INTO lines (line_name, origin_id, destination_id) VALUES ('L2b', 13, 26);
 INSERT INTO lines (line_name, origin_id, destination_id) VALUES ('L2e', 26, 21);
 
-
+"lines"
 -- Create the table
 CREATE TABLE IF NOT EXISTS stops (
     stop_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -56,12 +56,11 @@ CREATE TABLE IF NOT EXISTS route_stations (
     route_id INTEGER NOT NULL,
     stop_id INTEGER NOT NULL,
     next_station_id INTEGER,
-    time_to_next INTEGER
+    time_to_next INTEGER,
 
-    FOREIGN KEY route_id REFERENCES lines(id)
-    FOREIGN KEY stop_id REFERENCES stops(id)
-    FOREIGN KEY next_station_id REFERENCES stops(id)
-    
+    FOREIGN KEY (route_id) REFERENCES lines(id),
+    FOREIGN KEY (stop_id) REFERENCES stops(id),
+    FOREIGN KEY (next_station_id) REFERENCES stops(id)
 );
 
 INSERT INTO route_stations (route_id, stop_id, next_station_id, time_to_next) VALUES (1, 1, 2, 2);
@@ -132,8 +131,11 @@ CREATE TABLE IF NOT EXISTS users(
 CREATE TABLE trains(	
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	route_id INTEGER NOT NULL,
+	sentido VARCHAR CHECK( sentido IN ('IDA','VUELTA') NOT NULL DEFAULT 'IDA'
 	departure_time BIGINT NOT NULL
 );
+
+
 
 /*GET IDs ITINERARIO ESTACIONES POR LINEA*/
 SELECT route_stations.* FROM route_stations WHERE route_id = (SELECT lines.id FROM lines WHERE lines.line_name = 'L2e');
@@ -141,19 +143,16 @@ SELECT route_stations.* FROM route_stations WHERE route_id = (SELECT lines.id FR
 
 /*GET ESTACIONES TITULO POR LINEA*/
 -- L1 necesita una otra consulta para volver a mostrar Estación de soria como ultima estacion y hacer el circulo completo
-SELECT l.line_name AS line_name, s.name AS stop_name
+SELECT l.id, l.line_name AS line_name, s.name AS stop_name
 FROM stops s JOIN route_stations r ON s.stop_id = r.stop_id JOIN lines l ON r.route_id = l.id
-WHERE r.route_id = (SELECT lines.id FROM lines WHERE lines.line_name = 'L1') ;
+WHERE r.route_id = (SELECT lines.id FROM lines WHERE lines.id = 1) ;
 
-
-
-SELECT lines.id FROM lines WHERE lines.line_name = 'L1e'
 
 
 -- RESET AUTOINCREMENT
 DELETE FROM lines;
 DELETE FROM stops;
 DELETE FROM route_stations;
-DELETE FROM sqlite_sequence WHERE name='route_stations'
-DELETE FROM sqlite_sequence WHERE name='stops'
-DELETE FROM sqlite_sequence WHERE name='lines'
+DELETE FROM sqlite_sequence WHERE name='route_stations';
+DELETE FROM sqlite_sequence WHERE name='stops';
+DELETE FROM sqlite_sequence WHERE name='lines';
