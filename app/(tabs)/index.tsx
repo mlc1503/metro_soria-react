@@ -27,7 +27,7 @@ interface StationInfo {
 
 interface TestData{
 	id: number,
-	name: string
+	line_name: string
 }
 
 export default function Index() {
@@ -106,16 +106,20 @@ export default function Index() {
 			)
 		}, 0);
 		
-		db.withTransactionAsync(async() => {
-			await getData()
-		})
-
+		if(testData.length == 0){
+			console.log("EL ARRAY ESTA VACIO");
+			db.withTransactionAsync(async() => {
+				await getData()
+			})
+			
+		}
+		
 	}, [db])
 
 
 	async function getData() {
 
-		db.getAllAsync<TestData>(`SELECT * FROM test;`)
+		db.getAllAsync<TestData>(`SELECT * FROM lines;`)
 			.then((result)=> {
 				setTestData(result) 
 			})
@@ -124,9 +128,7 @@ export default function Index() {
 			})
 		
 	}
-
-	console.log(testData);
-	
+		
 	return (
 		<ScrollView style={{
 			backgroundColor: colorsList.light.FULL_WHITE
@@ -143,7 +145,7 @@ export default function Index() {
 				testData.map((item, index) =>(
 					<View key={index}>
 						<Text>{item.id}</Text>
-						<Text>{item.name}</Text>
+						<Text>{item.line_name}</Text>
 					</View>
 				))
 			}

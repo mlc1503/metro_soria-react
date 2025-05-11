@@ -3,7 +3,7 @@ import { Button, Text, View } from "react-native";
 
 export default function Index() {
 
-	const {origin, destination} = useLocalSearchParams();
+	const {origin, destination, line_id} = useLocalSearchParams();
 
 return (
 	<View style={{
@@ -11,8 +11,9 @@ return (
 		justifyContent: "center",
 		alignItems: "center",
 	}}>
-		<Text>{origin}</Text>
-		<Text>{destination}</Text>
+		<Text>ORIGIN_ID{origin}</Text>
+		<Text>DESTINATION_ID{destination}</Text>
+		<Text>LINE_ID {line_id}</Text>
 
 	</View>
 );

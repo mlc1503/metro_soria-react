@@ -1,20 +1,25 @@
 CREATE TABLE IF NOT EXISTS lines(
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	line VARCHAR(50) NOT NULL,
+	line_name VARCHAR(50) NOT NULL,
+	origin_id INTEGER NOT NULL,
+	destination_id INTEGER,
+
+    FOREIGN KEY(origin_id) REFERENCES stops(id)
+    FOREIGN KEY(destination_id) REFERENCES stops(id)
 );
 
 
-INSERT INTO lines (id, line, route) VALUES (1, 'L1', NULL);
-INSERT INTO lines (id, line, route) VALUES (2, 'L1e', NULL);
-INSERT INTO lines (id, line, route) VALUES (3, 'L2a', NULL);
-INSERT INTO lines (id, line, route) VALUES (4, 'L2b', NULL);
-INSERT INTO lines (id, line, route) VALUES (5, 'L2e', NULL);
+INSERT INTO lines (line_name, origin_id, destination_id) VALUES ('L1', 1);
+INSERT INTO lines (line_name, origin_id, destination_id) VALUES ('L1e', 1);
+INSERT INTO lines (line_name, origin_id, destination_id) VALUES ('L2a', 13, 21);
+INSERT INTO lines (line_name, origin_id, destination_id) VALUES ('L2b', 13, 26);
+INSERT INTO lines (line_name, origin_id, destination_id) VALUES ('L2e', 26, 21);
 
 
 -- Create the table
 CREATE TABLE IF NOT EXISTS stops (
     stop_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT
+    name VARCHAR(50)
 );
 
 -- Insert data (stop_id will auto-increment)
@@ -46,12 +51,17 @@ INSERT INTO stops (name) VALUES ('Polígono (Norte)');
 INSERT INTO stops (name) VALUES ('Las Casas');
 
 
-CREATE TABLE route_stations (
+CREATE TABLE IF NOT EXISTS route_stations (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     route_id INTEGER NOT NULL,
     stop_id INTEGER NOT NULL,
     next_station_id INTEGER,
     time_to_next INTEGER
+
+    FOREIGN KEY route_id REFERENCES lines(id)
+    FOREIGN KEY stop_id REFERENCES stops(id)
+    FOREIGN KEY next_station_id REFERENCES stops(id)
+    
 );
 
 INSERT INTO route_stations (route_id, stop_id, next_station_id, time_to_next) VALUES (1, 1, 2, 2);
@@ -108,15 +118,32 @@ INSERT INTO route_stations (route_id, stop_id, next_station_id, time_to_next) VA
 INSERT INTO route_stations (route_id, stop_id, next_station_id, time_to_next) VALUES (5, 24, 25, 2);
 INSERT INTO route_stations (route_id, stop_id, next_station_id, time_to_next) VALUES (5, 25, 26, 2);
 
+
+CREATE TABLE IF NOT EXISTS users(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username VARCHAR(50) NOT NULL,
+    password VARCHAR(50) NOT NULL,
+    saved_stations_id INTEGER,
+
+    FOREIGN KEY (saved_stations_id) REFERENCES stops(id)
+);
+
+
+CREATE TABLE trains(	
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	route_id INTEGER NOT NULL,
+	departure_time BIGINT NOT NULL
+);
+
 /*GET IDs ITINERARIO ESTACIONES POR LINEA*/
-SELECT route_stations.* FROM route_stations WHERE route_id = (SELECT lines.id FROM lines WHERE lines.line_name = 'L1e') ORDER BY route_stations.id DESC;
+SELECT route_stations.* FROM route_stations WHERE route_id = (SELECT lines.id FROM lines WHERE lines.line_name = 'L2e');
 
 
-/*GET LINE ESTACIONES POR LINEA*/
+/*GET ESTACIONES TITULO POR LINEA*/
 -- L1 necesita una otra consulta para volver a mostrar Estación de soria como ultima estacion y hacer el circulo completo
 SELECT l.line_name, s.name
 FROM stops s JOIN route_stations r ON s.stop_id = r.stop_id JOIN lines l ON r.route_id = l.id
-WHERE r.route_id = (SELECT lines.id FROM lines WHERE lines.line_name = 'L1e') ORDER BY r.id DESC;
+WHERE r.route_id = (SELECT lines.id FROM lines WHERE lines.line_name = 'L1e') ;
 
 
 

@@ -3,56 +3,65 @@ import { useEffect, useState } from "react";
 import { Button, ScrollView, StyleSheet, Text, View } from "react-native";
 import { constants, colorsList, listaIconos } from "../constants/Constants";
 import LineCard from "../components/LineCard";
+import { useSQLiteContext } from "expo-sqlite";
 
-type LineDetails = {
-    nameId: string,
-    origin:{
-        id: number,
-        name: string,
-    }
-    destination?:{
-        id: number,
-        name: string,
-    }
+// type LineDetails = {
+//     id: number,
+//     nameId: string,
+    // origin:{
+    //     id: number,
+    //     name: string,
+    // }
+    // destination?:{
+    //     id: number,
+    //     name: string,
+    // }
+// }
+
+interface LineDetails{
+    id: number,
+    line_name: string,
+    origin_stop_name: string
+    destination_stop_name: string
+    
 }
 
 export default function Index() {
-    const [lineas, setLineas] = useState(Array<LineDetails>)
+    const [lineas, setLineas] = useState<LineDetails[]>([])
+    const db = useSQLiteContext();
+
     useEffect(()=>{
-        setTimeout(() => {
-            setLineas([
-                {
-                    nameId: 'L1',
-                    origin:{
-                        id: 1,
-                        name: "Estación de Soria"
-                    },
-                },
-                {
-                    nameId: 'L1e',
-                    origin:{
-                        id: 1,
-                        name: "Estación de Soria"
-                    },
-                    destination: {
-                        id: 8,
-                        name: "Las Camaretas"
-                    }
-                },
-                {
-                    nameId: 'L2b',
-                    origin:{
-                        id: 1,
-                        name: "Concatedral"
-                    },
-                    destination: {
-                        id: 18,
-                        name: "Las Casas"
-                    }
-                },
-            ])
-        }, 1000);
-    })
+
+        if(lineas.length == 0){
+            db.withTransactionAsync(async() => {
+                console.log("ARRAY LINEAS VACIO, LLENANDO ");
+                await getLines()
+            })
+        }        
+
+    }, [db])
+    
+    async function getLines() {
+        db.getAllAsync<LineDetails>(`
+            SELECT 
+                l.id,
+                l.line_name,
+                origin.name AS origin_stop_name,
+                destination.name AS destination_stop_name
+            FROM 
+                lines l
+            JOIN 
+                stops origin ON l.origin_id = origin.stop_id
+            LEFT JOIN 
+                stops destination ON l.destination_id = destination.stop_id;
+        `)
+        .then((result)=> {
+            setLineas(result) 
+        })
+        .catch((err) => {
+            console.error("ERROR GETDATA()\n",err);
+        })
+    }
 
     return (
         <ScrollView style={{
@@ -71,7 +80,13 @@ export default function Index() {
                 
                 {lineas.map((lineaItem, index) =>{
                     return(
-                        <LineCard key={index} nameId={lineaItem.nameId} origin={lineaItem.origin} destination={lineaItem.destination}/>
+                        <LineCard 
+                            key={index} 
+                            id={lineaItem.id} 
+                            nameId={lineaItem.line_name} 
+                            origin_stop_name={lineaItem.origin_stop_name} 
+                            destination_stop_name={lineaItem.destination_stop_name} 
+                        />
                     )
                 })}
 
