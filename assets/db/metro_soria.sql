@@ -131,8 +131,10 @@ CREATE TABLE IF NOT EXISTS users(
 CREATE TABLE trains(	
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	route_id INTEGER NOT NULL,
-	sentido VARCHAR CHECK( sentido IN ('IDA','VUELTA') NOT NULL DEFAULT 'IDA'
-	departure_time BIGINT NOT NULL
+	sentido VARCHAR CHECK( sentido IN ('IDA','VUELTA') ) NOT NULL DEFAULT ('IDA'),
+	departure_time BIGINT NOT NULL,
+	
+	FOREIGN KEY (route_id) REFERENCES route_stations(route_id)
 );
 
 
@@ -147,6 +149,33 @@ SELECT l.id, l.line_name AS line_name, s.name AS stop_name
 FROM stops s JOIN route_stations r ON s.stop_id = r.stop_id JOIN lines l ON r.route_id = l.id
 WHERE r.route_id = (SELECT lines.id FROM lines WHERE lines.id = 1) ;
 
+
+
+SELECT 
+    l.id,
+    l.line_name,
+    origin.name AS origin_stop_name,
+    destination.name AS destination_stop_name
+FROM 
+    lines l
+JOIN 
+    stops origin ON l.origin_id = origin.stop_id
+LEFT JOIN 
+    stops destination ON l.destination_id = destination.stop_id
+	 WHERE l.id = 2;
+
+
+SELECT 
+                l.id,
+                l.line_name,
+                origin.name AS origin_stop_name,
+                destination.name AS destination_stop_name
+            FROM 
+                lines l
+            JOIN 
+                stops origin ON l.origin_id = origin.stop_id
+            LEFT JOIN 
+                stops destination ON l.destination_id = destination.stop_id;
 
 
 -- RESET AUTOINCREMENT
