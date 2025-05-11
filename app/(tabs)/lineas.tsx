@@ -30,6 +30,8 @@ export default function Index() {
     const [lineas, setLineas] = useState<LineDetails[]>([])
     const db = useSQLiteContext();
 
+    console.log("holaLineas");
+    
     useEffect(()=>{
 
         if(lineas.length == 0){

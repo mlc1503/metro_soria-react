@@ -37,7 +37,7 @@ export default function Index() {
 	const [estaciones, setEstaciones] = useState(Array<StationInfo>);
 
 	const db = useSQLiteContext();
-	const [testData, setTestData] = useState<TestData[]>([])
+	const [testData, setTestData] = useState<TestData[]>([])	
 
 	useEffect(()=>{
 

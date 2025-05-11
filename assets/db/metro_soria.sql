@@ -141,10 +141,19 @@ SELECT route_stations.* FROM route_stations WHERE route_id = (SELECT lines.id FR
 
 /*GET ESTACIONES TITULO POR LINEA*/
 -- L1 necesita una otra consulta para volver a mostrar Estación de soria como ultima estacion y hacer el circulo completo
-SELECT l.line_name, s.name
+SELECT l.line_name AS line_name, s.name AS stop_name
 FROM stops s JOIN route_stations r ON s.stop_id = r.stop_id JOIN lines l ON r.route_id = l.id
-WHERE r.route_id = (SELECT lines.id FROM lines WHERE lines.line_name = 'L1e') ;
+WHERE r.route_id = (SELECT lines.id FROM lines WHERE lines.line_name = 'L1') ;
 
 
 
 SELECT lines.id FROM lines WHERE lines.line_name = 'L1e'
+
+
+-- RESET AUTOINCREMENT
+DELETE FROM lines;
+DELETE FROM stops;
+DELETE FROM route_stations;
+DELETE FROM sqlite_sequence WHERE name='route_stations'
+DELETE FROM sqlite_sequence WHERE name='stops'
+DELETE FROM sqlite_sequence WHERE name='lines'
