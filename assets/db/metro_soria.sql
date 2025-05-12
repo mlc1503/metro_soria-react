@@ -319,7 +319,7 @@ WHERE route_stations.stop_id = 5
 
 SELECT DISTINCT s.stop_id , s.name, c.connecting_lines
 FROM stops s JOIN correspondences2 c ON c.stop_id = s.stop_id JOIN route_stations r ON r.stop_id = s.stop_id
-WHERE r.route_id = 1
+WHERE r.route_id = 5
 
 ------------------------------------------------------
 
@@ -332,7 +332,7 @@ SELECT l.id as line_id, l.line_name AS line_name, s.stop_id, s.name AS stop_name
 			);
 			
 			
-SELECT r.stop_id, l.line_name route_stations r JOIN lines l ON l.id = r.route_id
+SELECT s.name, r.stop_id, r.next_station_id, r.time_to_next FROM route_stations r JOIN lines l ON l.id = r.route_id JOIN stops s ON r.stop_id = s.stop_id WHERE l.id = 2
 
 -- RESET AUTOINCREMENT
 DELETE FROM lines;
@@ -341,4 +341,3 @@ DELETE FROM route_stations;
 DELETE FROM sqlite_sequence WHERE name='route_stations';
 DELETE FROM sqlite_sequence WHERE name='stops';
 DELETE FROM sqlite_sequence WHERE name='lines';
-

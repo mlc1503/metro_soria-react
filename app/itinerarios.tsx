@@ -1,8 +1,8 @@
 import { useLocalSearchParams } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
-import { Text, View } from "react-native";
-import { constants, getArrayIconoLineas } from "./constants/Constants";
+import { StyleSheet, Text, View } from "react-native";
+import { colorsList, constants, getArrayIconoLineas } from "./constants/Constants";
 import ItineraryItem from "./components/ItineraryItem";
 
 
@@ -51,6 +51,8 @@ export default function Index() {
 	}, [db])
 
 	const loadData = async (id:number)=> {
+
+		//TODO: MODIFICAR DATOS EN BD Y CONSULTA PARA COGER TAMBIÉN LA ÚLTIMA ESTACIÓN DE LA LÍNEA
 		
 		const route_data = db.getAllAsync<RouteData>(`
 								SELECT l.id as line_id, l.line_name AS line_name, s.stop_id, s.name AS stop_name
@@ -89,7 +91,7 @@ export default function Index() {
 
 	const label = async () => {
 		if(labelLine == 'test'){
-			// setLabelLine(itinerary[0].name + ' - ' + itinerary[itinerary.length	-1].name);
+			setLabelLine(itinerary[0].name + ' - ' + itinerary[itinerary.length	-1].name);
 		}
 	}
 
@@ -108,8 +110,6 @@ export default function Index() {
 			</View>
 		)
 	}
-
-
 	
 	return (
 		<View style={{
@@ -122,7 +122,7 @@ export default function Index() {
 
 			{getArrayIconoLineas([id], 50)}
 
-			<Text>{labelLine}</Text>
+			<Text style={styles.labelText}>{labelLine}</Text>
 
 			{itinerary.map((item, index) =>{
 				return(
@@ -134,3 +134,11 @@ export default function Index() {
 		</View>
 	);
 }
+
+const styles = StyleSheet.create({
+	labelText: {
+		fontSize: constants.text.mainTitleSize,
+        fontWeight: "500",
+        textAlign: "center"
+	},
+})
