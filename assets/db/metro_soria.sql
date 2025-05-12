@@ -137,7 +137,100 @@ CREATE TABLE trains(
 	FOREIGN KEY (route_id) REFERENCES route_stations(route_id)
 );
 
+CREATE TABLE correspondences(
+	stop_id INTEGER PRIMARY KEY NOT NULL,
+	connecting_lines VARCHAR,
+	
+	FOREIGN KEY (stop_id) REFERENCES stops(stop_id)
+);
 
+INSERT INTO correspondences(stop_id, connecting_lines) VALUES 
+	(1, 'L1, L1e'),
+	(2, 'L1, L1e'),
+	(3, 'L1, L1e'),
+	(4, 'L1, L1e'),
+	(5, 'L1, L2a, L2b'),
+	(6, 'L1'),
+	(7, 'L1'),
+	(8, 'L1'),
+	(9, 'L1'),
+	(10, 'L1, L2a, L2b'),
+	(11, 'L1'),
+	(12, 'L1'),
+	(13, 'L2a, L2b'),
+	(14, 'L2a, L2b'),
+	(15, 'L2a, L2b'),
+	(16, 'L2a, L2b'),
+	(17, 'L2a, L2b'),
+	(18, 'L2a, L2b'),
+	(19, 'L2a, L2b'),
+	(20, 'L2a, L2e'),
+	(21, 'L2a, L2e'),
+	(22, 'L2b, L2e'),
+	(23, 'L2b, L2e'),
+	(24, 'L2b, L2e'),
+	(25, 'L2a, L2e'),
+	(26, 'L2a, L2e');
+	
+	
+CREATE TABLE correspondences2(
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	stop_id INTEGER NOT NULL,
+	connecting_lines INTEGER,
+	
+	FOREIGN KEY (stop_id) REFERENCES stops(stop_id),
+	FOREIGN KEY (connecting_lines) references route_stations(route_id)
+);
+
+INSERT INTO correspondences2(stop_id, connecting_lines) VALUES 
+	(1, 1),
+	(1, 2),
+	(2, 1),
+	(2, 2),
+	(3, 1),
+	(3, 2),
+	(4, 1),
+	(4, 2),
+	(5, 1),
+	(5, 3),
+	(5, 4),
+	(6, 1),
+	(7, 1),
+	(8, 1),
+	(9, 1),
+	(10, 1),
+	(10, 3),
+	(10, 4),
+	(11, 1),
+	(12, 1),
+	(13, 3),
+	(13, 4),
+	(14, 3),
+	(14, 4),
+	(15, 3),
+	(15, 4),
+	(16, 3),
+	(16, 4),
+	(17, 3),
+	(17, 4),
+	(18, 3),
+	(18, 4),
+	(19, 3),
+	(19, 4),
+	(20, 3),
+	(20, 5),
+	(21, 3),
+	(21, 5),
+	(22, 4),
+	(22, 5),
+	(23, 4),
+	(23, 5),
+	(24, 4),
+	(24, 5),
+	(25, 4),
+	(25, 5),
+	(26, 4),
+	(26, 5);
 
 /*GET IDs ITINERARIO ESTACIONES POR LINEA*/
 SELECT route_stations.* FROM route_stations WHERE route_id = (SELECT lines.id FROM lines WHERE lines.line_name = 'L2e');
@@ -208,6 +301,39 @@ SELECT
 FROM cte_route_stops cte
 ORDER BY cte.route_station_id;
 
+
+
+SELECT l.id as line_id, l.line_name AS line_name, s.name AS stop_name, s.stop_id
+FROM stops s JOIN route_stations r ON s.stop_id = r.stop_id JOIN lines l ON r.route_id = l.id
+WHERE r.route_id = (
+	SELECT lines.id 
+	FROM lines 
+	WHERE lines.id = 2
+);
+
+SELECT route_stations.route_id
+FROM route_stations
+WHERE route_stations.stop_id = 5
+
+------------------------------------------------------
+
+SELECT DISTINCT s.stop_id , s.name, c.connecting_lines
+FROM stops s JOIN correspondences2 c ON c.stop_id = s.stop_id JOIN route_stations r ON r.stop_id = s.stop_id
+WHERE r.route_id = 1
+
+------------------------------------------------------
+
+SELECT l.id as line_id, l.line_name AS line_name, s.stop_id, s.name AS stop_name
+			FROM stops s JOIN route_stations r ON s.stop_id = r.stop_id JOIN lines l ON r.route_id = l.id
+			WHERE r.route_id = (
+				SELECT lines.id 
+				FROM lines 
+				WHERE lines.id = 1
+			);
+			
+			
+SELECT r.stop_id, l.line_name route_stations r JOIN lines l ON l.id = r.route_id
+
 -- RESET AUTOINCREMENT
 DELETE FROM lines;
 DELETE FROM stops;
@@ -215,3 +341,4 @@ DELETE FROM route_stations;
 DELETE FROM sqlite_sequence WHERE name='route_stations';
 DELETE FROM sqlite_sequence WHERE name='stops';
 DELETE FROM sqlite_sequence WHERE name='lines';
+
