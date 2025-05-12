@@ -10,7 +10,7 @@ type StationDataItem =
 	{
 		type: 'service'; 
 		info: {
-			line: string;
+			line: number;
 			timeOfArrival: string;
 			destinationTitle: string;
 		}; 
@@ -21,7 +21,7 @@ type StationDataItem =
 interface StationInfo {
 	id:number,
 	name: string,
-	lines: Array<string>,
+	lines: Array<number>,
 	data: StationDataItem[]
 }
 
@@ -47,14 +47,14 @@ export default function Index() {
 						id: 0,
 						name: "Plaza del Rosel y San Blas",
 						lines:[
-							"L1", "L2a", "L2b",
+							1, 3, 4,
 						],
 						data:[
 							
 							{ 
 								type: 'service', 
 								info: { 
-									line: 'L1', 
+									line: 1, 
 									timeOfArrival: '10:30', 
 									destinationTitle: 'Estación',
 								}
@@ -62,7 +62,7 @@ export default function Index() {
 							{ 
 								type: 'service', 
 								info: { 
-									line: 'L2b', 
+									line: 4, 
 									timeOfArrival: '10:30', 
 									destinationTitle: 'Concatedral',
 								}
@@ -70,7 +70,7 @@ export default function Index() {
 							{ 
 								type: 'service', 
 								info: { 
-									line: 'L2a', 
+									line: 3, 
 									timeOfArrival: '10:35', 
 									destinationTitle: 'Las Camaretas',
 								} 
@@ -80,7 +80,7 @@ export default function Index() {
 						id: 1,
 						name: "Constitución",
 						lines:[
-							"L1", "L2b", "L2a",
+							1, 4, 3,
 						],
 						data:[{ 
 							type: 'warning', 
@@ -93,7 +93,7 @@ export default function Index() {
 						id: 2,
 						name: "Mariano Granados",
 						lines:[
-							"L1e", "L2b", "L2a",
+							2, 4, 3,
 						],
 						data:[{ 
 							type: 'warning', 

@@ -3,12 +3,12 @@ import { colorsList, constants, getArrayIconoLineas, listaIconos } from "../cons
 import { router } from "expo-router"
 interface LineDetails{
     id: number,
-    nameId: string,
+    // nameId: string,
     origin_stop_name: string,
     destination_stop_name: string
 }
 
-export default function LineCard({id, nameId, origin_stop_name, destination_stop_name}:LineDetails){
+export default function LineCard({id, origin_stop_name, destination_stop_name}:LineDetails){
 
 
         
@@ -27,7 +27,7 @@ export default function LineCard({id, nameId, origin_stop_name, destination_stop
                     padding: constants.bounds.padding*2,
                     // columnGap: constants.bounds.padding*3,
                 }}>
-                    {getArrayIconoLineas([nameId], 50)}
+                    {getArrayIconoLineas([id], 50)}
                     <View style={{
                         flex: 1,
                         justifyContent: "center",

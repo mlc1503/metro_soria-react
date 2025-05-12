@@ -1,6 +1,6 @@
 import { Tabs } from "expo-router";
 import React from "react";
-import { colorsList, getArrayIconoLineas, IconoCTFV } from "../constants/Constants";
+import { colorsList, IconoCTFV } from "../constants/Constants";
 
 
 export default function TabLayout(){

@@ -20,7 +20,7 @@ import { useSQLiteContext } from "expo-sqlite";
 
 interface LineDetails{
     id: number,
-    line_name: string,
+    // line_name: string,
     origin_stop_name: string
     destination_stop_name: string
     
@@ -44,7 +44,7 @@ export default function Index() {
         db.getAllAsync<LineDetails>(`
             SELECT 
                 l.id,
-                l.line_name,
+                -- l.line_name,
                 origin.name AS origin_stop_name,
                 destination.name AS destination_stop_name
             FROM 
@@ -81,8 +81,8 @@ export default function Index() {
                     return(
                         <LineCard 
                             key={index} 
-                            id={lineaItem.id} 
-                            nameId={lineaItem.line_name} 
+                            id={lineaItem.id}
+                            // nameId={lineaItem.line_name} 
                             origin_stop_name={lineaItem.origin_stop_name} 
                             destination_stop_name={lineaItem.destination_stop_name} 
                         />

@@ -5,7 +5,7 @@ type StationDataItem =
 	{
 		type: 'service'; 
 		info: {
-			line: string;
+			line: number;
 			timeOfArrival: string;
 			destinationTitle: string;
 		}; 
@@ -15,7 +15,7 @@ type StationDataItem =
 
 interface SavedStationCardProps{
 	nombre: string;
-	lineas: string[];
+	lineas: number[];
 	data: StationDataItem[];
 }
 
@@ -51,11 +51,14 @@ export default function SavedStationCard({ nombre, lineas, data}: SavedStationCa
 						{data.map((elem, index) => {
 
 							if(elem.type == 'warning'){
+								
+								let warningImageId = 6;
+
 								return(
 								<View style={styles.inlineTrainInformation} key={index}> 
 									<View style={{ flexDirection: 'row', gap: constants.bounds.padding, alignItems: 'center', justifyContent: 'center', width: "100%"}}>
 
-											{getArrayIconoLineas([elem.type], constants.icons.normalSize)}
+											{getArrayIconoLineas([warningImageId], constants.icons.normalSize)}
 											<Text style={styles.textStyles}>
 												{elem.info.message}
 											</Text>

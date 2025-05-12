@@ -30,16 +30,16 @@ export const constants = {
 }
 
 export const listaIconos = new Map([
-    ["L1", require("@/assets/icons/L1_icon.webp")],
-    ["L1e", require("@/assets/icons/L1e_icon.webp")],
+    [1, require("@/assets/icons/L1_icon.webp")],
+    [2, require("@/assets/icons/L1e_icon.webp")],
     // ["L2", require("@/assets/icons/L2_icon.webp")],
-    ["L2a", require("@/assets/icons/L2a_icon.webp")],
-    ["L2b", require("@/assets/icons/L2b_icon.webp")],
-    ["L2e", require("@/assets/icons/L2e_icon.webp")],
-    ["warning", require("@/assets/icons/warning.png")],
+    [3, require("@/assets/icons/L2a_icon.webp")],
+    [4, require("@/assets/icons/L2b_icon.webp")],
+    [5, require("@/assets/icons/L2e_icon.webp")],
+    [6, require("@/assets/icons/warning.png")],
 ])
 
-export function getArrayIconoLineas(lineas: string[], size:number = constants.icons.plusSize){
+export function getArrayIconoLineas(lineas: number[], size:number = constants.icons.plusSize){
         return lineas.map((linea, index) =>(
             <Image
                 key={`${linea}-${index}`}
@@ -48,7 +48,6 @@ export function getArrayIconoLineas(lineas: string[], size:number = constants.ic
             />
         ))
 }
-
 
 export const IconoCTFV = <Image 
                             source={require('@/assets/icons/MetroSoriaLogoTinted.png')}

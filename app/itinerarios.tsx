@@ -111,9 +111,7 @@ export default function Index() {
 			<Text>DESTINATION_ID{destination}</Text>
 			<Text>LINE_ID {line_id}</Text>
 
-			{/* {
-				let imageSource
-			} */}
+			
 
 
 			{itinerary.map((item, index) =>{
