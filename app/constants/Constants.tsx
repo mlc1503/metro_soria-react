@@ -40,6 +40,12 @@ export const listaIconos = new Map([
     [6, require("@/assets/icons/warning.png")],
 ])
 
+export function getColorLinea(id:number):string{
+    
+    if([1,2].includes(id)) return colorsList.light.PRIMARY_CYAN
+    return colorsList.light.PRIMARY_BLUE
+}
+
 export function getArrayIconoLineas(lineas: number[], size:number = constants.icons.plusSize){
         return lineas.map((linea, index) =>(
             <Image

@@ -1,5 +1,5 @@
 import { Text, View, Image, StyleSheet } from 'react-native'
-import { colorsList, constants, getArrayIconoLineas, } from "../constants/Constants";
+import { colorsList, constants, getArrayIconoLineas, getColorLinea, } from "../constants/Constants";
 
 interface ItineraryStation {
 	station_id: number;
@@ -11,46 +11,46 @@ interface ItineraryStation {
 
 const ItineraryItem = (data :ItineraryStation)=> {
 
-	let icon_imageSource;
-	let icon_size = 110;
-	
-	switch (data.item_type) {
-		case 'start':
-			icon_imageSource = require('@/assets/icons/SVGLineStart.png')
-			icon_size = 80
-			break;
-			
-		case 'end':
-			icon_imageSource = require('@/assets/icons/SVGLineEnd.png')
-			icon_size = 80
-			break;
-		
-		default:
-			icon_imageSource = require('@/assets/icons/SVGLineaContinue.png')
-			break;
-	}
-	
-
 	const iconImage = (item_type: 'start' | 'end' | null)=>{
 
 		let icon_imageSource;
 		let icon_size = 110;
 		
-		switch (item_type) {
-			case 'start':
-				icon_imageSource = require('@/assets/icons/SVGLineStart.png')
-				icon_size = 80
-				break;
+		if([2,5].includes(data.line_id)){
+			switch (item_type) {
+				case 'start':
+					icon_imageSource = require('@/assets/icons/SVGLineHollowStart.png')
+					icon_size = 80
+					break;
+					
+				case 'end':
+					icon_imageSource = require('@/assets/icons/SVGLineHollowEnd.png')
+					icon_size = 80
+					break;
 				
-			case 'end':
-				icon_imageSource = require('@/assets/icons/SVGLineEnd.png')
-				icon_size = 80
-				break;
-			
-			default:
-				icon_imageSource = require('@/assets/icons/SVGLineaContinue.png')
-				break;
+				default:
+					icon_imageSource = require('@/assets/icons/SVGLineHollowContinue.png')
+					break;
+			}
 		}
+		else{
+			switch (item_type) {
+				case 'start':
+					icon_imageSource = require('@/assets/icons/SVGLineFilledStart.png')
+					icon_size = 80
+					break;
+					
+				case 'end':
+					icon_imageSource = require('@/assets/icons/SVGLineFilledEnd.png')
+					icon_size = 80
+					break;
+				
+				default:
+					icon_imageSource = require('@/assets/icons/SVGLineFilledContinue.png')
+					break;
+			}
+		}
+		
 
 		if(item_type == 'end'){
 			return(
@@ -60,7 +60,7 @@ const ItineraryItem = (data :ItineraryStation)=> {
 				}}>
 					<Image 
 						source={icon_imageSource}
-						//TODO FALTA AÑADIR COLOR LINEA
+						tintColor={getColorLinea(data.line_id)}
 						resizeMode='contain'
 						style={{
 							height: icon_size,
@@ -78,7 +78,7 @@ const ItineraryItem = (data :ItineraryStation)=> {
 			}}>
 				<Image 
 					source={icon_imageSource}
-					tintColor={colorsList.light.PRIMARY_BLUE}
+					tintColor={getColorLinea(data.line_id)}
 					resizeMode='contain'
 					style={{
 						height: icon_size,

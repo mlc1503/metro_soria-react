@@ -110,10 +110,6 @@ export default function Index() {
 			</View>
 		)
 	}
-	
-
-	console.log("LINEA", id);
-	
 
 	return (
 		<ScrollView style={{
