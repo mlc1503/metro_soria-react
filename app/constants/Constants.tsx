@@ -20,6 +20,7 @@ export const constants = {
         padding: 10,
     },
     text:{
+        sectionTitleSize: 30,
         mainTitleSize: 20,
         mainLabelSize: 16
     },

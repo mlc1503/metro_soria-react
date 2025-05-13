@@ -1,8 +1,8 @@
 import { useLocalSearchParams } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { colorsList, constants, getArrayIconoLineas } from "./constants/Constants";
+import { ScrollView, StyleSheet, Text, View, Image } from "react-native";
+import { colorsList, constants, getArrayIconoLineas, } from "./constants/Constants";
 import ItineraryItem from "./components/ItineraryItem";
 
 
@@ -106,32 +106,55 @@ export default function Index() {
 				alignContent: "center",
 				alignItems: "center",
 			}}>
-				<Text>FETCHEANDO DATOS...</Text>
+				<Text>RECOGIENDO DATOS...</Text>
 			</View>
 		)
 	}
 	
+
+	console.log("LINEA", id);
+	
+
 	return (
-		<View style={{
-			margin: constants.bounds.padding,
-			flexDirection: 'column',
-			rowGap: constants.bounds.padding,
-			alignContent: "center",
-			alignItems: "center",
-		}}>
+		<ScrollView style={{
+            backgroundColor: colorsList.light.FULL_WHITE
+        }}>
 
-			{getArrayIconoLineas([id], 50)}
+			<View style={{
+				margin: constants.bounds.padding,
+				flexDirection: 'column',
+				rowGap: constants.bounds.padding,
+				alignContent: "center",
+				alignItems: "center",
+			}}>
 
-			<Text style={styles.labelText}>{labelLine}</Text>
+				{getArrayIconoLineas([id], 50)}
 
-			{itinerary.map((item, index) =>{
-				return(
-					<Text key={index}>{item.name}</Text>
-					// <ItineraryItem key={index} station_id={item.station_id} name={item.name} correspondences={item.correspondences}/>
-				)
-			})}
+				<Text style={styles.labelText}>{labelLine}</Text>
 
-		</View>
+				<View style={{width: "100%"}}>
+					
+					{itinerary.map((item, index) =>{
+						let itinerary_item_type:'start' | 'end' | null = null;
+
+						if(index == 0) itinerary_item_type = 'start'
+						else if(index == itinerary.length-1) itinerary_item_type = 'end'
+						
+						
+						return (
+							<ItineraryItem 
+								key={index} 
+								line_id={id}
+								station_id={item.station_id} 
+								name={item.name} 
+								correspondences={item.correspondences} 
+								item_type={itinerary_item_type}
+							/>)
+					})}
+
+				</View>
+			</View>
+		</ScrollView>
 	);
 }
 
@@ -141,4 +164,30 @@ const styles = StyleSheet.create({
         fontWeight: "500",
         textAlign: "center"
 	},
+})
+
+const styles_itineraryItem = StyleSheet.create({
+	layout:{
+
+		height: 110,
+		
+		paddingLeft: constants.bounds.padding,
+		paddingRight: constants.bounds.padding,
+
+		flexDirection: 'row',
+		alignItems: 'center',
+		columnGap: constants.bounds.padding,
+
+		borderColor: 'red',
+		borderWidth: 1,
+		
+
+	},
+	text:{
+		fontSize: constants.text.mainTitleSize,
+		fontWeight: 'medium',
+		width: "100%",
+		textAlign: "center",
+		flexWrap: "wrap"
+	}
 })

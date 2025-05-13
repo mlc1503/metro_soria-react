@@ -98,7 +98,7 @@ export default function Index() {
 
 const styles = StyleSheet.create({
     labelText:{
-        fontSize: constants.text.mainTitleSize,
+        fontSize: constants.text.sectionTitleSize,
         fontWeight: "500"
     },
     lineaCard: {

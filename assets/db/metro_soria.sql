@@ -315,13 +315,6 @@ SELECT route_stations.route_id
 FROM route_stations
 WHERE route_stations.stop_id = 5
 
-------------------------------------------------------
-
-SELECT DISTINCT s.stop_id , s.name, c.connecting_lines
-FROM stops s JOIN correspondences2 c ON c.stop_id = s.stop_id JOIN route_stations r ON r.stop_id = s.stop_id
-WHERE r.route_id = 5
-
-------------------------------------------------------
 
 SELECT l.id as line_id, l.line_name AS line_name, s.stop_id, s.name AS stop_name
 			FROM stops s JOIN route_stations r ON s.stop_id = r.stop_id JOIN lines l ON r.route_id = l.id
