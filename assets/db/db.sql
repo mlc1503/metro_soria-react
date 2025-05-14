@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
--- Host:                         C:\Users\manel\COSAS\2DAM_PRES\TFG\metro_soria-react\assets\db\test.db
--- Server version:               3.48.0
--- Server OS:                    
--- HeidiSQL Version:             12.10.0.7000
+-- Host:                         C:\Users\meug\projects\metro_soria-react\assets\db\test.db
+-- Versión del servidor:         3.48.0
+-- SO del servidor:              
+-- HeidiSQL Versión:             12.10.0.7000
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -14,11 +14,11 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 
--- Dumping database structure for test
+-- Volcando estructura de base de datos para test
 CREATE DATABASE IF NOT EXISTS "test";
 ;
 
--- Dumping structure for table test.lines
+-- Volcando estructura para tabla test.lines
 CREATE TABLE IF NOT EXISTS lines(
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	line_name VARCHAR(50) NOT NULL,
@@ -29,8 +29,7 @@ CREATE TABLE IF NOT EXISTS lines(
     FOREIGN KEY(destination_id) REFERENCES stops(id)
 );
 
--- Dumping data for table test.lines: 5 rows
-DELETE FROM "lines";
+-- Volcando datos para la tabla test.lines: -1 rows
 /*!40000 ALTER TABLE "lines" DISABLE KEYS */;
 INSERT INTO "lines" ("id", "line_name", "origin_id", "destination_id") VALUES
 	(1, 'L1', 1, NULL),
@@ -40,7 +39,7 @@ INSERT INTO "lines" ("id", "line_name", "origin_id", "destination_id") VALUES
 	(5, 'L2e', 26, 21);
 /*!40000 ALTER TABLE "lines" ENABLE KEYS */;
 
--- Dumping structure for table test.route_stations
+-- Volcando estructura para tabla test.route_stations
 CREATE TABLE IF NOT EXISTS route_stations (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     route_id INTEGER NOT NULL,
@@ -53,8 +52,7 @@ CREATE TABLE IF NOT EXISTS route_stations (
     FOREIGN KEY (next_station_id) REFERENCES stops(id)
 );
 
--- Dumping data for table test.route_stations: -1 rows
-DELETE FROM "route_stations";
+-- Volcando datos para la tabla test.route_stations: 54 rows
 /*!40000 ALTER TABLE "route_stations" DISABLE KEYS */;
 INSERT INTO "route_stations" ("id", "route_id", "stop_id", "next_station_id", "time_to_next") VALUES
 	(1, 1, 1, 2, 2),
@@ -69,53 +67,57 @@ INSERT INTO "route_stations" ("id", "route_id", "stop_id", "next_station_id", "t
 	(10, 1, 10, 11, 2),
 	(11, 1, 11, 12, 2),
 	(12, 1, 12, 1, 2),
-	(13, 2, 1, 2, 2),
-	(14, 2, 2, 3, 2),
-	(15, 2, 3, 4, 2),
-	(16, 2, 4, 17, 2),
-	(17, 2, 17, 18, 2),
-	(18, 2, 18, 19, 2),
-	(19, 2, 19, 20, 2),
-	(20, 2, 20, 21, 2),
-	(21, 3, 13, 14, 2),
-	(22, 3, 14, 15, 2),
-	(23, 3, 15, 10, 2),
-	(24, 3, 10, 16, 2),
-	(25, 3, 16, 5, 2),
-	(26, 3, 5, 17, 2),
-	(27, 3, 17, 18, 2),
-	(28, 3, 18, 19, 2),
-	(29, 3, 19, 20, 2),
-	(30, 3, 20, 21, 2),
-	(31, 4, 13, 14, 2),
-	(32, 4, 14, 15, 2),
-	(33, 4, 15, 10, 2),
-	(34, 4, 10, 16, 2),
-	(35, 4, 16, 5, 2),
-	(36, 4, 5, 17, 2),
-	(37, 4, 17, 18, 2),
-	(38, 4, 18, 19, 2),
-	(39, 4, 19, 22, 2),
-	(40, 4, 22, 23, 2),
-	(41, 4, 23, 24, 2),
-	(42, 4, 24, 25, 2),
-	(43, 4, 25, 26, 2),
-	(44, 5, 21, 20, 2),
-	(45, 5, 20, 22, 2),
-	(46, 5, 22, 23, 2),
-	(47, 5, 23, 24, 2),
-	(48, 5, 24, 25, 2),
-	(49, 5, 25, 26, 2);
+	(13, 1, 1, NULL, NULL),
+	(14, 2, 1, 2, 2),
+	(15, 2, 2, 3, 2),
+	(16, 2, 3, 4, 2),
+	(17, 2, 4, 17, 2),
+	(18, 2, 17, 18, 2),
+	(19, 2, 18, 19, 2),
+	(20, 2, 19, 20, 2),
+	(21, 2, 20, 21, 2),
+	(22, 2, 21, NULL, NULL),
+	(23, 3, 13, 14, 2),
+	(24, 3, 14, 15, 2),
+	(25, 3, 15, 10, 2),
+	(26, 3, 10, 16, 2),
+	(27, 3, 16, 5, 2),
+	(28, 3, 5, 17, 2),
+	(29, 3, 17, 18, 2),
+	(30, 3, 18, 19, 2),
+	(31, 3, 19, 20, 2),
+	(32, 3, 20, 21, 2),
+	(33, 3, 21, NULL, NULL),
+	(34, 4, 13, 14, 2),
+	(35, 4, 14, 15, 2),
+	(36, 4, 15, 10, 2),
+	(37, 4, 10, 16, 2),
+	(38, 4, 16, 5, 2),
+	(39, 4, 5, 17, 2),
+	(40, 4, 17, 18, 2),
+	(41, 4, 18, 19, 2),
+	(42, 4, 19, 22, 2),
+	(43, 4, 22, 23, 2),
+	(44, 4, 23, 24, 2),
+	(45, 4, 24, 25, 2),
+	(46, 4, 25, 26, 2),
+	(47, 4, 26, NULL, NULL),
+	(48, 5, 21, 20, 2),
+	(49, 5, 20, 22, 2),
+	(50, 5, 22, 23, 2),
+	(51, 5, 23, 24, 2),
+	(52, 5, 24, 25, 2),
+	(53, 5, 25, 26, 2),
+	(54, 5, 26, NULL, NULL);
 /*!40000 ALTER TABLE "route_stations" ENABLE KEYS */;
 
--- Dumping structure for table test.stops
+-- Volcando estructura para tabla test.stops
 CREATE TABLE IF NOT EXISTS stops (
     stop_id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT
 );
 
--- Dumping data for table test.stops: -1 rows
-DELETE FROM "stops";
+-- Volcando datos para la tabla test.stops: -1 rows
 /*!40000 ALTER TABLE "stops" DISABLE KEYS */;
 INSERT INTO "stops" ("stop_id", "name") VALUES
 	(1, 'Estación de Soria'),
@@ -146,7 +148,7 @@ INSERT INTO "stops" ("stop_id", "name") VALUES
 	(26, 'Las Casas');
 /*!40000 ALTER TABLE "stops" ENABLE KEYS */;
 
--- Dumping structure for table test.trains
+-- Volcando estructura para tabla test.trains
 CREATE TABLE IF NOT EXISTS trains(	
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	route_id INTEGER NOT NULL,
@@ -156,12 +158,11 @@ CREATE TABLE IF NOT EXISTS trains(
 	FOREIGN KEY (route_id) REFERENCES route_stations(route_id)
 );
 
--- Dumping data for table test.trains: -1 rows
-DELETE FROM "trains";
+-- Volcando datos para la tabla test.trains: -1 rows
 /*!40000 ALTER TABLE "trains" DISABLE KEYS */;
 /*!40000 ALTER TABLE "trains" ENABLE KEYS */;
 
--- Dumping structure for table test.users
+-- Volcando estructura para tabla test.users
 CREATE TABLE IF NOT EXISTS users(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username VARCHAR(50) NOT NULL,
@@ -172,8 +173,7 @@ CREATE TABLE IF NOT EXISTS users(
     FOREIGN KEY (saved_stations_id) REFERENCES stops(id)
 );
 
--- Dumping data for table test.users: -1 rows
-DELETE FROM "users";
+-- Volcando datos para la tabla test.users: -1 rows
 /*!40000 ALTER TABLE "users" DISABLE KEYS */;
 /*!40000 ALTER TABLE "users" ENABLE KEYS */;
 
