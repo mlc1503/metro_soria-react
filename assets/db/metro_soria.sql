@@ -207,6 +207,10 @@ UNION
 SELECT DISTINCT s.name, s.stop_id, cte.route_id FROM route_stops_cte cte, stops s WHERE cte.next_station_id = s.stop_id
 
 
+SELECT r.stop_id, l.id as line_id 
+FROM route_stations r 
+	JOIN lines l ON l.id = r.route_id
+WHERE l.id NOT LIKE 1
 
 
 

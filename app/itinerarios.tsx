@@ -63,10 +63,12 @@ export default function Index() {
 							`, [id])
 
 		const all_route_stations = db.getAllAsync<RouteStations>(`
-										SELECT r.stop_id, l.id as line_id 
-										FROM route_stations r 
-											JOIN lines l ON l.id = r.route_id;
-									`)
+									SELECT r.stop_id, l.id as line_id 
+									FROM route_stations r 
+										JOIN lines l ON l.id = r.route_id
+									WHERE l.id NOT LIKE ?;
+									`, id)
+		
 		
 
 		let itinerary:ItineraryStation[] = [];
@@ -78,11 +80,18 @@ export default function Index() {
 
 			//finds ocurrences of station_id in all the route_stations
 			let entries = (await all_route_stations).filter((rs)=> rs.stop_id == estacion.stop_id)
-	
+			// console.log("ENTRIES", await entries, "\n");
+			
+			
+			let entries_map = new Map<number, number>()
 			entries.forEach(entry => {
-				line_correspondences_of_station.push(entry.line_id)
+				entries_map.set(entry.line_id, entry.line_id)
 			});
+			line_correspondences_of_station = Array.from(entries_map.values())
+
+			console.log("ENTRIES_MAP\n",line_correspondences_of_station);
 	
+
 			itinerary.push(new ItineraryStation(estacion.stop_id, estacion.stop_name, line_correspondences_of_station));
 			
 		}, [])
@@ -111,6 +120,8 @@ export default function Index() {
 		)
 	}
 
+	// console.log(route_stations);
+	
 	return (
 		<ScrollView style={{
             backgroundColor: colorsList.light.FULL_WHITE
