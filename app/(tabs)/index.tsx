@@ -25,11 +25,6 @@ interface StationInfo {
 	data: StationDataItem[]
 }
 
-interface TestData{
-	id: number,
-	line_name: string
-}
-
 export default function Index() {
 	
 	const [textOrigen, onChangeTextOrigen] = useState('')
@@ -37,7 +32,6 @@ export default function Index() {
 	const [estaciones, setEstaciones] = useState<StationInfo[]>([]);
 
 	const db = useSQLiteContext();
-	const [testData, setTestData] = useState<TestData[]>([])	
 
 	useEffect(()=>{
 
@@ -97,62 +91,43 @@ export default function Index() {
 			)
 		}, 0);
 		
-		if(testData.length == 0){
-			db.withTransactionAsync(async() => {
-				await getData()
-			})
-			
-		}
 		
 	}, [db])
-
-
-	async function getData() {
-
-		db.getAllAsync<TestData>(`SELECT * FROM lines;`)
-			.then((result)=> {
-				setTestData(result) 
-			})
-			.catch((err) => {
-				console.error("ERROR GETDATA()\n",err);
-			})
-		
-	}
 		
 	return (
 		<ScrollView style={{
 			backgroundColor: colorsList.light.FULL_WHITE
 		}}>
-		<View style={{
-			margin: constants.bounds.padding,
-			flexDirection: 'column',
-			rowGap: constants.bounds.padding,
-			alignContent: "center",
-			alignItems: "center",
-		}}>
-			<Text style={styles.labelText}>Dónde vas?</Text>
-			<TextInput
-				style={styles.textInput}
-				onChangeText={onChangeTextOrigen}
-				value={textOrigen}
-				placeholder={"Origen..."}
-			/>
-			<TextInput
-				style={styles.textInput}
-				onChangeText={onChangeTextDestino}
-				value={textDestino}
-				placeholder="Destino..."
-			/>
-			<Pressable style={styles.pressable} onPress={()=>{
-				router.navigate({pathname: '/itinerary', params: {origin: textOrigen, destination: textDestino}})
+			<View style={{
+				margin: constants.bounds.padding,
+				flexDirection: 'column',
+				rowGap: constants.bounds.padding,
+				alignContent: "center",
+				alignItems: "center",
 			}}>
-				<Text style={styles.buttonText}>Buscar</Text>
-			</Pressable>
+				<Text style={styles.labelText}>Dónde vas?</Text>
+				<TextInput
+					style={styles.textInput}
+					onChangeText={onChangeTextOrigen}
+					value={textOrigen}
+					placeholder={"Origen..."}
+				/>
+				<TextInput
+					style={styles.textInput}
+					onChangeText={onChangeTextDestino}
+					value={textDestino}
+					placeholder="Destino..."
+				/>
+				<Pressable style={styles.pressable} onPress={()=>{
+					router.navigate({pathname: '/itinerary', params: {origin: textOrigen, destination: textDestino}})
+				}}>
+					<Text style={styles.buttonText}>Buscar</Text>
+				</Pressable>
 
-			{estaciones.map((estacion) =>(
-				<SavedStationCard key={estacion.id} nombre={estacion.name} lineas={estacion.lines} data={estacion.data} />
-			))}
-		</View>
+				{estaciones.map((estacion) =>(
+					<SavedStationCard key={estacion.id} nombre={estacion.name} lineas={estacion.lines} data={estacion.data} />
+				))}
+			</View>
 		</ScrollView>
 	);
 }
