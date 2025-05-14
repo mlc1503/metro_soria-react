@@ -78,7 +78,8 @@ export default function RootLayout() {
 				}}>
 					<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
 					<Stack.Screen name="+not-found" />
-					<Stack.Screen name="itinerarios" />
+					<Stack.Screen name="itinerary" />
+					<Stack.Screen name="stopViewer" />
 				</Stack>
 			</SQLiteProvider>
 

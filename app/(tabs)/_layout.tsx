@@ -25,13 +25,13 @@ export default function TabLayout(){ return(
             }}
         />
         <Tabs.Screen
-            name="lineas"
+            name="lines"
             options={{
                 title: 'Lineas',
             }}
         />
         <Tabs.Screen
-            name="paradas"
+            name="stops"
             options={{
             title: 'Paradas',
             }}
