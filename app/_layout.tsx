@@ -14,8 +14,8 @@ import * as FileSystem from 'expo-file-system'
 SplashScreen.preventAutoHideAsync()
 
 const loadDatabase = async()=>{
-	const dbName = "test.db";
-	const dbAsset = require('@/assets/db/test.db');
+	const dbName = "metro_soria.db";
+	const dbAsset = require('@/assets/db/metro_soria.db');
 	const dbUri = Asset.fromModule(dbAsset).uri;
 	const dbFilePath = `${FileSystem.documentDirectory}SQLite/${dbName}`
 	

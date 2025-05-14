@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
--- Host:                         C:\Users\meug\projects\metro_soria-react\assets\db\test.db
--- Versión del servidor:         3.48.0
--- SO del servidor:              
--- HeidiSQL Versión:             12.10.0.7000
+-- Host:                         C:\Users\manel\COSAS\2DAM_PRES\TFG\metro_soria-react\assets\db\metro_soria.db
+-- Server version:               3.48.0
+-- Server OS:                    
+-- HeidiSQL Version:             12.10.0.7000
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -14,11 +14,11 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 
--- Volcando estructura de base de datos para test
-CREATE DATABASE IF NOT EXISTS "test";
+-- Dumping database structure for metro_soria
+CREATE DATABASE IF NOT EXISTS "metro_soria";
 ;
 
--- Volcando estructura para tabla test.lines
+-- Dumping structure for table metro_soria.lines
 CREATE TABLE IF NOT EXISTS lines(
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	line_name VARCHAR(50) NOT NULL,
@@ -29,7 +29,8 @@ CREATE TABLE IF NOT EXISTS lines(
     FOREIGN KEY(destination_id) REFERENCES stops(id)
 );
 
--- Volcando datos para la tabla test.lines: -1 rows
+-- Dumping data for table metro_soria.lines: -1 rows
+DELETE FROM "lines";
 /*!40000 ALTER TABLE "lines" DISABLE KEYS */;
 INSERT INTO "lines" ("id", "line_name", "origin_id", "destination_id") VALUES
 	(1, 'L1', 1, NULL),
@@ -39,7 +40,7 @@ INSERT INTO "lines" ("id", "line_name", "origin_id", "destination_id") VALUES
 	(5, 'L2e', 26, 21);
 /*!40000 ALTER TABLE "lines" ENABLE KEYS */;
 
--- Volcando estructura para tabla test.route_stations
+-- Dumping structure for table metro_soria.route_stations
 CREATE TABLE IF NOT EXISTS route_stations (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     route_id INTEGER NOT NULL,
@@ -52,7 +53,8 @@ CREATE TABLE IF NOT EXISTS route_stations (
     FOREIGN KEY (next_station_id) REFERENCES stops(id)
 );
 
--- Volcando datos para la tabla test.route_stations: 54 rows
+-- Dumping data for table metro_soria.route_stations: -1 rows
+DELETE FROM "route_stations";
 /*!40000 ALTER TABLE "route_stations" DISABLE KEYS */;
 INSERT INTO "route_stations" ("id", "route_id", "stop_id", "next_station_id", "time_to_next") VALUES
 	(1, 1, 1, 2, 2),
@@ -111,13 +113,14 @@ INSERT INTO "route_stations" ("id", "route_id", "stop_id", "next_station_id", "t
 	(54, 5, 26, NULL, NULL);
 /*!40000 ALTER TABLE "route_stations" ENABLE KEYS */;
 
--- Volcando estructura para tabla test.stops
+-- Dumping structure for table metro_soria.stops
 CREATE TABLE IF NOT EXISTS stops (
     stop_id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT
 );
 
--- Volcando datos para la tabla test.stops: -1 rows
+-- Dumping data for table metro_soria.stops: -1 rows
+DELETE FROM "stops";
 /*!40000 ALTER TABLE "stops" DISABLE KEYS */;
 INSERT INTO "stops" ("stop_id", "name") VALUES
 	(1, 'Estación de Soria'),
@@ -148,7 +151,7 @@ INSERT INTO "stops" ("stop_id", "name") VALUES
 	(26, 'Las Casas');
 /*!40000 ALTER TABLE "stops" ENABLE KEYS */;
 
--- Volcando estructura para tabla test.trains
+-- Dumping structure for table metro_soria.trains
 CREATE TABLE IF NOT EXISTS trains(	
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	route_id INTEGER NOT NULL,
@@ -158,11 +161,12 @@ CREATE TABLE IF NOT EXISTS trains(
 	FOREIGN KEY (route_id) REFERENCES route_stations(route_id)
 );
 
--- Volcando datos para la tabla test.trains: -1 rows
+-- Dumping data for table metro_soria.trains: -1 rows
+DELETE FROM "trains";
 /*!40000 ALTER TABLE "trains" DISABLE KEYS */;
 /*!40000 ALTER TABLE "trains" ENABLE KEYS */;
 
--- Volcando estructura para tabla test.users
+-- Dumping structure for table metro_soria.users
 CREATE TABLE IF NOT EXISTS users(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username VARCHAR(50) NOT NULL,
@@ -173,7 +177,8 @@ CREATE TABLE IF NOT EXISTS users(
     FOREIGN KEY (saved_stations_id) REFERENCES stops(id)
 );
 
--- Volcando datos para la tabla test.users: -1 rows
+-- Dumping data for table metro_soria.users: -1 rows
+DELETE FROM "users";
 /*!40000 ALTER TABLE "users" DISABLE KEYS */;
 /*!40000 ALTER TABLE "users" ENABLE KEYS */;
 
