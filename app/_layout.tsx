@@ -26,9 +26,6 @@ const loadDatabase = async()=>{
 			`${FileSystem.documentDirectory}SQLite`, 
 			{intermediates: true}
 		);
-
-		
-		
 	}
 	await FileSystem.downloadAsync(dbUri, dbFilePath)
 	console.log("se ha descargado el fichero .db al dispositivo");
@@ -72,18 +69,14 @@ export default function RootLayout() {
 		>
 			<SQLiteProvider databaseName="test.db" useSuspense>
 				<StatusBar barStyle="default" backgroundColor={colorScheme === 'dark' ? colorsList.light.MAIN_BLACK : colorsList.light.PRIMARY_BLUE} />
-				<Stack
-					screenOptions={{
-								
-						headerTitle: ()=> IconoCTFV,
-						headerStyle: {
-							backgroundColor: colorsList.light.PRIMARY_BLUE,
-						},
-						headerTitleAlign: "center",
-
-					}}
-				>
-					<Stack.Screen name="(tabs)" options={{ headerShown: false, }} />
+				<Stack screenOptions={{
+					headerTitle: ()=> IconoCTFV,
+					headerStyle: {
+						backgroundColor: colorsList.light.PRIMARY_BLUE,
+					},
+					headerTitleAlign: "center",
+				}}>
+					<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
 					<Stack.Screen name="+not-found" />
 					<Stack.Screen name="itinerarios" />
 				</Stack>

@@ -1,9 +1,8 @@
 import { Text, StyleSheet, View, Pressable } from "react-native"
-import { colorsList, constants, getArrayIconoLineas, listaIconos } from "../constants/Constants"
+import { colorsList, constants, getArrayIconoLineas } from "../constants/Constants"
 import { router } from "expo-router"
 interface LineDetails{
     id: number,
-    // nameId: string,
     origin_stop_name: string,
     destination_stop_name: string
 }
@@ -15,9 +14,8 @@ export default function LineCard({id, origin_stop_name, destination_stop_name}:L
     if(destination_stop_name == null) destination_stop_name = '(Circular)' 
     
     return(
-
         <Pressable onPress={()=>{
-            router.navigate({pathname: '/itinerarios', params: {line_id: id}})
+            router.navigate({pathname: '/itinerary', params: {line_id: id}})
         }}>
 
             <View style={styles.lineCard}>
@@ -27,6 +25,7 @@ export default function LineCard({id, origin_stop_name, destination_stop_name}:L
                     padding: constants.bounds.padding*2,
                     // columnGap: constants.bounds.padding*3,
                 }}>
+
                     {getArrayIconoLineas([id], 50)}
                     <View style={{
                         flex: 1,
@@ -38,6 +37,7 @@ export default function LineCard({id, origin_stop_name, destination_stop_name}:L
                             <Text style={styles.textStyles}>{destination_stop_name}</Text>
                         </View>
                     </View>
+                    
                 </View>
             </View>
         </Pressable>

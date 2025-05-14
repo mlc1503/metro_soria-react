@@ -1,9 +1,9 @@
-import { Link, router } from "expo-router";
+import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import { Button, Pressable, ScrollView, Text, TextInput, View, StyleSheet, Image, Platform } from "react-native";
+import { Pressable, ScrollView, Text, TextInput, View, StyleSheet } from "react-native";
 import { colorsList, constants } from "../constants/Constants";
 import SavedStationCard from "@/app/components/SavedStationCard";
-import { openDatabaseAsync, openDatabaseSync, useSQLiteContext } from "expo-sqlite";
+import { useSQLiteContext } from "expo-sqlite";
 
 
 type StationDataItem = 
@@ -21,7 +21,7 @@ type StationDataItem =
 interface StationInfo {
 	id:number,
 	name: string,
-	lines: Array<number>,
+	lines: number[],
 	data: StationDataItem[]
 }
 
@@ -34,7 +34,7 @@ export default function Index() {
 	
 	const [textOrigen, onChangeTextOrigen] = useState('')
 	const [textDestino, onChangeTextDestino] = useState('')
-	const [estaciones, setEstaciones] = useState(Array<StationInfo>);
+	const [estaciones, setEstaciones] = useState<StationInfo[]>([]);
 
 	const db = useSQLiteContext();
 	const [testData, setTestData] = useState<TestData[]>([])	
@@ -44,21 +44,12 @@ export default function Index() {
 		setTimeout(() => {
 			setEstaciones(
 				[{
-						id: 0,
+						id: 15,
 						name: "Plaza del Rosel y San Blas",
 						lines:[
-							1, 3, 4,
+							3, 4
 						],
 						data:[
-							
-							{ 
-								type: 'service', 
-								info: { 
-									line: 1, 
-									timeOfArrival: '10:30', 
-									destinationTitle: 'Estación',
-								}
-							},
 							{ 
 								type: 'service', 
 								info: { 
@@ -140,14 +131,6 @@ export default function Index() {
 			alignItems: "center",
 		}}>
 			<Text style={styles.labelText}>Dónde vas?</Text>
-			{
-				testData.map((item, index) =>(
-					<View key={index}>
-						<Text>{item.id}</Text>
-						<Text>{item.line_name}</Text>
-					</View>
-				))
-			}
 			<TextInput
 				style={styles.textInput}
 				onChangeText={onChangeTextOrigen}
@@ -161,7 +144,7 @@ export default function Index() {
 				placeholder="Destino..."
 			/>
 			<Pressable style={styles.pressable} onPress={()=>{
-				router.navigate({pathname: '/itinerarios', params: {origin: textOrigen, destination: textDestino}})
+				router.navigate({pathname: '/itinerary', params: {origin: textOrigen, destination: textDestino}})
 			}}>
 				<Text style={styles.buttonText}>Buscar</Text>
 			</Pressable>

@@ -33,7 +33,7 @@ class ItineraryStation {
 
 export default function Index() {
 
-	const {origin, destination, line_id} = useLocalSearchParams();
+	const {line_id} = useLocalSearchParams();
 
 	const db = useSQLiteContext();
 
@@ -77,19 +77,16 @@ export default function Index() {
 		(await route_data).forEach(async estacion =>{
 
 			let line_correspondences_of_station:number[] = [];
-
-			//finds ocurrences of station_id in all the route_stations
-			let entries = (await all_route_stations).filter((rs)=> rs.stop_id == estacion.stop_id)
-			// console.log("ENTRIES", await entries, "\n");
-			
-			
 			let entries_map = new Map<number, number>()
+
+			//finds all ocurrences of station_id in all the route_stations
+			let entries = (await all_route_stations).filter((rs)=> rs.stop_id == estacion.stop_id)
+			
 			entries.forEach(entry => {
 				entries_map.set(entry.line_id, entry.line_id)
 			});
-			line_correspondences_of_station = Array.from(entries_map.values())
 
-			console.log("ENTRIES_MAP\n",line_correspondences_of_station);
+			line_correspondences_of_station = Array.from(entries_map.values())
 	
 
 			itinerary.push(new ItineraryStation(estacion.stop_id, estacion.stop_name, line_correspondences_of_station));
@@ -106,27 +103,22 @@ export default function Index() {
 
 	label()
 
-	if(isLoading){
-		return(
-			<View style={{
-				margin: constants.bounds.padding,
-				flexDirection: 'column',
-				rowGap: constants.bounds.padding,
-				alignContent: "center",
-				alignItems: "center",
-			}}>
-				<Text>RECOGIENDO DATOS...</Text>
-			</View>
-		)
-	}
-
-	// console.log(route_stations);
+	if(isLoading){ return(
+		<View style={{
+			margin: constants.bounds.padding,
+			flexDirection: 'column',
+			rowGap: constants.bounds.padding,
+			alignContent: "center",
+			alignItems: "center",
+		}}>
+			<Text>RECOGIENDO DATOS...</Text>
+		</View>
+	)}
 	
 	return (
 		<ScrollView style={{
             backgroundColor: colorsList.light.FULL_WHITE
         }}>
-
 			<View style={{
 				margin: constants.bounds.padding,
 				flexDirection: 'column',
@@ -140,13 +132,11 @@ export default function Index() {
 				<Text style={styles.labelText}>{labelLine}</Text>
 
 				<View style={{width: "100%"}}>
-					
 					{itinerary.map((item, index) =>{
 						let itinerary_item_type:'start' | 'end' | null = null;
 
 						if(index == 0) itinerary_item_type = 'start'
 						else if(index == itinerary.length-1) itinerary_item_type = 'end'
-						
 						
 						return (
 							<ItineraryItem 
@@ -156,10 +146,11 @@ export default function Index() {
 								name={item.name} 
 								correspondences={item.correspondences} 
 								item_type={itinerary_item_type}
-							/>)
+							/>
+						)
 					})}
-
 				</View>
+
 			</View>
 		</ScrollView>
 	);
@@ -171,30 +162,4 @@ const styles = StyleSheet.create({
         fontWeight: "500",
         textAlign: "center"
 	},
-})
-
-const styles_itineraryItem = StyleSheet.create({
-	layout:{
-
-		height: 110,
-		
-		paddingLeft: constants.bounds.padding,
-		paddingRight: constants.bounds.padding,
-
-		flexDirection: 'row',
-		alignItems: 'center',
-		columnGap: constants.bounds.padding,
-
-		borderColor: 'red',
-		borderWidth: 1,
-		
-
-	},
-	text:{
-		fontSize: constants.text.mainTitleSize,
-		fontWeight: 'medium',
-		width: "100%",
-		textAlign: "center",
-		flexWrap: "wrap"
-	}
 })

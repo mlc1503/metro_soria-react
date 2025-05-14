@@ -1,5 +1,6 @@
-import { Text, View, Image, StyleSheet } from 'react-native'
-import { colorsList, constants, getArrayIconoLineas, getColorLinea, } from "../constants/Constants";
+import { Text, View, Image, StyleSheet, Pressable } from 'react-native'
+import { constants, getArrayIconoLineas, getColorLinea, } from "../constants/Constants";
+import { router } from 'expo-router';
 
 interface ItineraryStation {
 	station_id: number;
@@ -91,7 +92,10 @@ const ItineraryItem = (data :ItineraryStation)=> {
 	}
 
 	return(
-		<View style={styles.container}>
+		<Pressable style={styles.container} 
+			onPress={()=>{
+				router.navigate({pathname: '/stopViewer'})
+			}}>
 			<View style={styles.first_elem}>
 
 				{iconImage(data.item_type)}
@@ -106,7 +110,7 @@ const ItineraryItem = (data :ItineraryStation)=> {
 				{getArrayIconoLineas(data.correspondences)}
 			</View>
 
-		</View>
+		</Pressable>
     )
 }
 

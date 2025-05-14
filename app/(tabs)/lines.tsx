@@ -1,26 +1,12 @@
-import { Link, router } from "expo-router";
 import { useEffect, useState } from "react";
-import { Button, ScrollView, StyleSheet, Text, View } from "react-native";
-import { constants, colorsList, listaIconos } from "../constants/Constants";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { constants, colorsList } from "../constants/Constants";
 import LineCard from "../components/LineCard";
 import { useSQLiteContext } from "expo-sqlite";
 
-// type LineDetails = {
-//     id: number,
-//     nameId: string,
-    // origin:{
-    //     id: number,
-    //     name: string,
-    // }
-    // destination?:{
-    //     id: number,
-    //     name: string,
-    // }
-// }
 
 interface LineDetails{
     id: number,
-    // line_name: string,
     origin_stop_name: string
     destination_stop_name: string
     
@@ -44,15 +30,12 @@ export default function Index() {
         db.getAllAsync<LineDetails>(`
             SELECT 
                 l.id,
-                -- l.line_name,
                 origin.name AS origin_stop_name,
                 destination.name AS destination_stop_name
             FROM 
                 lines l
-            JOIN 
-                stops origin ON l.origin_id = origin.stop_id
-            LEFT JOIN 
-                stops destination ON l.destination_id = destination.stop_id;
+                JOIN stops origin ON l.origin_id = origin.stop_id
+                LEFT JOIN stops destination ON l.destination_id = destination.stop_id;
         `)
         .then((result)=> {
             setLineas(result) 
@@ -82,7 +65,6 @@ export default function Index() {
                         <LineCard 
                             key={index} 
                             id={lineaItem.id}
-                            // nameId={lineaItem.line_name} 
                             origin_stop_name={lineaItem.origin_stop_name} 
                             destination_stop_name={lineaItem.destination_stop_name} 
                         />
@@ -100,8 +82,5 @@ const styles = StyleSheet.create({
     labelText:{
         fontSize: constants.text.sectionTitleSize,
         fontWeight: "500"
-    },
-    lineaCard: {
-
-    },
+    }
 })

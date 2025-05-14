@@ -1,5 +1,6 @@
-import { Text, View, Image, StyleSheet } from 'react-native'
-import { colorsList, constants, listaIconos, getArrayIconoLineas } from "../constants/Constants";
+import { Text, View, StyleSheet, Pressable } from 'react-native'
+import { colorsList, constants, getArrayIconoLineas } from "../constants/Constants";
+import { router } from 'expo-router';
 
 type StationDataItem = 
 	{
@@ -21,23 +22,14 @@ interface SavedStationCardProps{
 
 export default function SavedStationCard({ nombre, lineas, data}: SavedStationCardProps){
 
-	//TODO: calcular tiempo restante hasta paso de tren por estación (probablemente con useEffect y useState)
-
-	// const getArrayIconoLineas = (lineas: string[], size:number = 37)=>{
-
-	// 	return lineas.map((linea, index) =>(
-	// 		<Image
-	// 			key={`${linea}-${index}`}
-	// 			source={listaIconos.get(linea)}
-	// 			style={{width: size, height: size}}
-	// 		/>
-	// 	))
-	// }
+	//TODO: calcular tiempo restante hasta paso de tren por estación (probablemente con useEffect y useState
 
 	return (
 		//TODO: vincular tarjeta con vista de parada
 		<View style={{width: "100%"}}>
-			<View style={styles.savedStationCard}>
+			<Pressable style={styles.savedStationCard} onPress={()=>{
+				router.navigate({pathname: '/stopViewer', params: {}})
+			}}>
 
 				<View style={styles.lineasNombreDiv}>
 					<Text style={{fontSize: constants.text.mainTitleSize, fontWeight: "500"}}>{nombre}</Text>
@@ -53,10 +45,9 @@ export default function SavedStationCard({ nombre, lineas, data}: SavedStationCa
 							if(elem.type == 'warning'){
 								
 								let warningImageId = 6;
-
 								return(
-								<View style={styles.inlineTrainInformation} key={index}> 
-									<View style={{ flexDirection: 'row', gap: constants.bounds.padding, alignItems: 'center', justifyContent: 'center', width: "100%"}}>
+									<View style={styles.inlineTrainInformation} key={index}> 
+										<View style={{ flexDirection: 'row', gap: constants.bounds.padding, alignItems: 'center', justifyContent: 'center', width: "100%"}}>
 
 											{getArrayIconoLineas([warningImageId], constants.icons.normalSize)}
 											<Text style={styles.textStyles}>
@@ -67,30 +58,28 @@ export default function SavedStationCard({ nombre, lineas, data}: SavedStationCa
 									</View>
 								)
 							}
-							else if(elem.type == 'service'){
-								return(
+							else if(elem.type == 'service'){ return(
 								<View style={styles.inlineTrainInformation} key={index}> 
 
-										<View style={{ flexDirection: 'row', gap: constants.bounds.padding, alignItems: 'center'}}>
-											{getArrayIconoLineas([elem.info.line], constants.icons.normalSize)}
-											<Text style={styles.textStyles}>
-												{elem.info.destinationTitle}
-											</Text>
-										</View>
-										<View>
-											<Text style={styles.textStyles}>
-												{elem.info.timeOfArrival}
-											</Text>
-										</View>
-										
+									<View style={{ flexDirection: 'row', gap: constants.bounds.padding, alignItems: 'center'}}>
+										{getArrayIconoLineas([elem.info.line], constants.icons.normalSize)}
+										<Text style={styles.textStyles}>
+											{elem.info.destinationTitle}
+										</Text>
 									</View>
-								)
-							}
+									<View>
+										<Text style={styles.textStyles}>
+											{elem.info.timeOfArrival}
+										</Text>
+									</View>
+									
+								</View>
+							)}
 						})}
 					</View>
 				</View>
 
-			</View>
+			</Pressable>
 		</View>
 	)
 }
