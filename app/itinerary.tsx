@@ -46,6 +46,8 @@ export default function Index() {
 	useEffect(() => {
 		
 		loadData(id)
+		console.log("ITINERARY_LENGTH",itinerary.length);
+		 
 		setIsLoading(false)
 		
 	}, [db])
@@ -132,6 +134,7 @@ export default function Index() {
 				<Text style={styles.labelText}>{labelLine}</Text>
 
 				<View style={{width: "100%"}}>
+					{/* //TODO BUG_FOUND: a veces este elemento no se renderiza. Solo se muestra el labelLine con 'test' */}
 					{itinerary.map((item, index) =>{
 						let itinerary_item_type:'start' | 'end' | null = null;
 

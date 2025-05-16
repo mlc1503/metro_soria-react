@@ -23,17 +23,19 @@ export default function TabLayout(){ return(
                 title: 'Inicio',
                 href: '/'
             }}
-        />
+            />
         <Tabs.Screen
             name="lines"
             options={{
                 title: 'Lineas',
+                href: '/lines'
             }}
-        />
+            />
         <Tabs.Screen
             name="stops"
             options={{
-            title: 'Paradas',
+                title: 'Paradas',
+                href: '/stops'
             }}
         />
     </Tabs>

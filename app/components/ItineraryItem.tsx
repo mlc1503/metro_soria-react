@@ -91,10 +91,13 @@ const ItineraryItem = (data :ItineraryStation)=> {
 		
 	}
 
+	// console.log("DATA STATION",data.station_id);
+	
+
 	return(
 		<Pressable style={styles.container} 
 			onPress={()=>{
-				router.navigate({pathname: '/stopViewer'})
+				router.navigate({pathname: '/stopViewer' , params: {stop_id: data.station_id}})
 			}}>
 			<View style={styles.first_elem}>
 
