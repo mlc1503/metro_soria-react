@@ -125,7 +125,7 @@ export default function Index() {
 				</Pressable>
 
 				{estaciones.map((estacion) =>(
-					<SavedStationCard key={estacion.id} nombre={estacion.name} lineas={estacion.lines} data={estacion.data} />
+					<SavedStationCard key={estacion.id} stop_id={estacion.id} nombre={estacion.name} lineas={estacion.lines} data={estacion.data} />
 				))}
 			</View>
 		</ScrollView>

@@ -15,12 +15,13 @@ type StationDataItem =
 	{ type: 'warning'; info: {message: string;} };
 
 interface SavedStationCardProps{
+	stop_id:number,
 	nombre: string;
 	lineas: number[];
 	data: StationDataItem[];
 }
 
-export default function SavedStationCard({ nombre, lineas, data}: SavedStationCardProps){
+export default function SavedStationCard({stop_id, nombre, lineas, data }: SavedStationCardProps){
 
 	//TODO: calcular tiempo restante hasta paso de tren por estación (probablemente con useEffect y useState
 
@@ -28,7 +29,7 @@ export default function SavedStationCard({ nombre, lineas, data}: SavedStationCa
 		//TODO: vincular tarjeta con vista de parada
 		<View style={{width: "100%"}}>
 			<Pressable style={styles.savedStationCard} onPress={()=>{
-				router.navigate({pathname: '/stopViewer', params: {}})
+				router.navigate({pathname: '/stopViewer' , params: {stop_id: stop_id}})
 			}}>
 
 				<View style={styles.lineasNombreDiv}>
