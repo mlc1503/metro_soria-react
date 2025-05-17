@@ -21,7 +21,7 @@ export default function Index() {
         if(lineas.length == 0){
             db.withTransactionAsync(async() => {
                 await getLines()
-            })
+            }).catch((err) =>{throw err;})
         }        
 
     }, [db])
@@ -41,7 +41,7 @@ export default function Index() {
             setLineas(result) 
         })
         .catch((err) => {
-            console.error("ERROR GETDATA()\n",err);
+            throw err
         })
     }
 

@@ -62,14 +62,14 @@ export default function Index() {
 									JOIN route_stations r ON s.stop_id = r.stop_id 
 									JOIN lines l ON r.route_id = l.id
 								WHERE l.id = ?;
-							`, [id])
+							`, [id]).catch((err) =>{throw err;})
 
 		const all_route_stations = db.getAllAsync<RouteStations>(`
 									SELECT r.stop_id, l.id as line_id 
 									FROM route_stations r 
 										JOIN lines l ON l.id = r.route_id
 									WHERE l.id NOT LIKE ?;
-									`, id)
+									`, id).catch((err) =>{throw err;})
 		
 		
 
