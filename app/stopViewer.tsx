@@ -5,12 +5,7 @@ import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { colorsList, constants, getArrayIconoLineas } from "./constants/Constants";
 import TrainArrivalItem from "./components/TrainArrivalItem";
 
-
-interface RouteStations{
-    stop_id: number,
-}
-
-type LineArrivals = {
+interface LineArrivals {
     line_id:number,
     arrivals:{
         direction_stop_name:string,
@@ -20,44 +15,66 @@ type LineArrivals = {
     }
 }
 
-interface StopData{
-    stop_id:string,
-    stop_name:number,
-    correspondences:number[],
-    line_arrivals:LineArrivals[]
+class StopData {
+    stop_id:number;
+    stop_name:string;
+    correspondences:number[];
+    line_arrivals:LineArrivals[];
+
+    public constructor(){
+        this.stop_id = 0;
+        this.stop_name = "hola";
+        this.correspondences = [6];
+        this.line_arrivals = [];
+    }
+}
+
+interface BasicDataInfo {
+    stop_name:string,
+    line_ids:string // SQLITE returns JSON as string
 }
 
 
 export default function Index(){
     const {stop_id} = useLocalSearchParams();
     const db = useSQLiteContext();
-    const [data, setData] = useState<StopData>();
+    const [data, setData] = useState<StopData>(new StopData());
     const [isLoading, setIsLoading] = useState(true);
     
     let id:number = typeof stop_id === 'string' ? parseInt(stop_id) : parseInt(stop_id[0])
 
     useEffect(()=>{
         loadData(id)
-
-    })
+    }, [db])
 
     const loadData = async(id:number) =>{
+        
+        let stop_data = new StopData();
 
-        //get nombre
-        //compute correspondencias
-
-        //compute times según tren
-
-        const all_route_stations = db.getAllAsync<RouteStations>(`
-            SELECT r.stop_id, l.id as line_id 
-            FROM route_stations r 
-                JOIN lines l ON l.id = r.route_id
-            WHERE l.id NOT LIKE ?;
-            `, id)
-
-    
+        //get nombre, compute correspondencias
+        const name_and_correspondences = db.getAllAsync<BasicDataInfo>(`
+            WITH route_station_correspondences AS(
+                SELECT DISTINCT r.route_id
+                FROM route_stations r
+                WHERE r.stop_id = $id
+            )
+            
+            SELECT s.name as stop_name, json_group_array(cte.route_id) AS line_ids
+            FROM stops s, route_station_correspondences cte
+            WHERE s.stop_id = $id;
+        `, {$id: id});
+        
+        (await name_and_correspondences).forEach(async element => {
+            stop_data.stop_id = id
+            stop_data.stop_name = element.stop_name
+            stop_data.correspondences = JSON.parse(element.line_ids)
+        });
+        
+        
+        setData(stop_data)
     }
 
+    
 
     return(
         <ScrollView style={{
@@ -72,11 +89,10 @@ export default function Index(){
 				alignItems: "center",
 			}}>
                 
-                {/* <Text style={styles.stopText}>{id}</Text> */}
-                <Text style={styles.stopText}>Pontevedra</Text>
+                <Text style={styles.stopText}>{data.stop_name}</Text>
 
                 <View style={styles.correspondence_icon_array}>
-                    {getArrayIconoLineas([2, 3, 4])}
+                    {getArrayIconoLineas(data.correspondences)}
                 </View>
 
                 <Text style={styles.labelSection}>Salidas</Text>
@@ -110,7 +126,8 @@ const styles = StyleSheet.create({
     },
     stopText: {
         fontSize: constants.text.sectionTitleSize,
-        fontWeight: "semibold"
+        fontWeight: "semibold",
+        textAlign: "center"
     },
     labelSection: {
         fontSize: constants.text.mainTitleSize,

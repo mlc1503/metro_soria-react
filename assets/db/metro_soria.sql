@@ -131,12 +131,11 @@ CREATE TABLE IF NOT EXISTS users(
 CREATE TABLE trains(	
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	route_id INTEGER NOT NULL,
-	sentido VARCHAR CHECK( sentido IN ('IDA','VUELTA') ) NOT NULL DEFAULT ('IDA'),
-	departure_time BIGINT NOT NULL,
+	direction VARCHAR CHECK(direction IN ('IDA','VUELTA') ) NOT NULL DEFAULT ('IDA'),
+	departure_time INTEGER NOT NULL CHECK( departure_time >= 0 AND departure_time < 1440),
 	
 	FOREIGN KEY (route_id) REFERENCES route_stations(route_id)
 );
-
 
 
 /*GET IDs ITINERARIO ESTACIONES POR LINEA*/
@@ -218,6 +217,8 @@ WHERE l.id NOT LIKE 1
 DELETE FROM lines;
 DELETE FROM stops;
 DELETE FROM route_stations;
+DELETE FROM trains;
+DELETE FROM sqlite_sequence WHERE name='trains';
 DELETE FROM sqlite_sequence WHERE name='route_stations';
 DELETE FROM sqlite_sequence WHERE name='stops';
 DELETE FROM sqlite_sequence WHERE name='lines';
