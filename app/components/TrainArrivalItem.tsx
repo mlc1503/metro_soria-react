@@ -1,32 +1,66 @@
 import { View, Text, StyleSheet } from "react-native";
 import { constants, getArrayIconoLineas, colorsList } from "../constants/Constants";
+import { useEffect, useState } from "react";
 
 
 interface LineArrivals {
-    line_id:number;
-    arrivals:{
-        direction_stop_name:string;
-        arrival_minutes:number[]
-    }
+    line_id: number;
+    title_name: string
+    arrivals: {
+        direction_stop_name: string;
+        time_to_selectedStation: number,
+        departure_minutes: number[]
+    }[]
 }
 
+export default function Index(data: LineArrivals) {
 
-// export default function Index() {
-export default function Index(data:LineArrivals ) {
-    return(
+    console.log(JSON.stringify(data), '\n');
+
+    let date = new Date() 
+    const current_time = date.getHours()*60 + date.getMinutes()
+
+
+    useEffect(()=>{
+
+    }, [date])
+    console.log("CURRENT TIME",current_time);
+
+    function differences(times:number[], time_to_selectedStation:number) {
+        let label = ""
+        
+        times.forEach((time, index) => {
+
+            console.log("TIME ",time);
+            
+            let minutes_to_train = time + time_to_selectedStation - current_time
+
+            if(index == times.length - 1){
+                label += minutes_to_train + ' min'
+
+            }
+            else{
+                label += minutes_to_train + ', '
+            }
+            
+        });
+        console.log(label);
+        
+        return label
+    };
+
+    return (
         <View style={arrivalStyles.container}>
-                    
+
             <View style={{
                 flexDirection: "row",
                 alignItems: "center",
                 columnGap: constants.bounds.padding,
             }}>
-                {/* {getArrayIconoLineas([2])} */}
                 {getArrayIconoLineas([data.line_id])}
-                {/* <Text style={arrivalStyles.lineItinerary_labelText}> Estación de Soria - Las Camaretas </Text> */}
-                <Text style={arrivalStyles.lineItinerary_labelText}> {data.arrivals.direction_stop_name} </Text>
+                <Text style={arrivalStyles.lineItinerary_labelText}>{data.title_name}</Text>
             </View>
-            
+
             <View style={{
                 width: "100%",
                 padding: constants.bounds.padding,
@@ -35,9 +69,10 @@ export default function Index(data:LineArrivals ) {
                     width: "100%",
                     flexDirection: "column",
                     alignItems: "center",
-                    rowGap:constants.bounds.padding,
+                    rowGap: constants.bounds.padding,
                 }}>
-            
+
+
                     {/* START FOREACH */}
                     <View style={{
                         width: "100%",
@@ -51,11 +86,11 @@ export default function Index(data:LineArrivals ) {
                             justifyContent: "flex-start",
                             columnGap: constants.bounds.padding
                         }}>
-                            {getArrayIconoLineas([2], 25)}
-                            <Text>Estación de Soria</Text>
+                            {getArrayIconoLineas([data.line_id], 25)}
+                            <Text>{data.arrivals[0].direction_stop_name}</Text>
                         </View>
             
-                        <Text> 38, 57 min</Text>
+                        <Text>{differences(data.arrivals[0].departure_minutes, data.arrivals[0].time_to_selectedStation)}</Text>
                     </View>
                     
                     <View style={{
@@ -70,11 +105,11 @@ export default function Index(data:LineArrivals ) {
                             justifyContent: "flex-start",
                             columnGap: constants.bounds.padding
                         }}>
-                            {getArrayIconoLineas([2], 25)}
-                            <Text>Las Camaretas</Text>
+                            {getArrayIconoLineas([data.line_id], 25)}
+                            <Text>{data.arrivals[1].direction_stop_name}</Text>
                         </View>
             
-                        <Text> 38, 57 min</Text>
+                        <Text>{differences(data.arrivals[1].departure_minutes, data.arrivals[1].time_to_selectedStation)}</Text>
                     </View>
                     
                 </View>
