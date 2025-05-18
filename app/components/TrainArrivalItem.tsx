@@ -15,8 +15,6 @@ interface LineArrivals {
 
 export default function Index(data: LineArrivals) {
 
-    console.log(JSON.stringify(data), '\n');
-
     const [date, setDate] = useState(new Date())  
     let current_time = date.getHours()*60 + date.getMinutes()
 
@@ -29,6 +27,10 @@ export default function Index(data: LineArrivals) {
     }, [])
 
     function differences(times:number[], time_to_selectedStation:number) {
+
+        if(times.length == 0){
+            return "Sin servicio por hoy"
+        }
         let label = ""
         
         times.forEach((time, index) => {
@@ -36,18 +38,39 @@ export default function Index(data: LineArrivals) {
             let minutes_to_train = time + time_to_selectedStation - current_time
 
             if(index == times.length - 1){
-                label += minutes_to_train + ' min'
+
+                if(minutes_to_train > 60) {
+                    label += formatMinutesToTime(time)
+                }
+                else{
+                    label += minutes_to_train + ' min'
+                }
 
             }
             else{
-                label += minutes_to_train + ', '
+                if(minutes_to_train > 60) {
+                    label += formatMinutesToTime(time) + ', '
+                }
+                else{
+                    label += minutes_to_train + ', '
+                }
             }
             
+            console.log(formatMinutesToTime(time));
+            
         });
-        console.log(label);
         
         return label
     };
+
+    const formatMinutesToTime = (minutes: number): string => {
+        const hours = Math.floor(minutes / 60) % 24; // Ensure it wraps around 24h
+        const mins = minutes % 60;
+        return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
+    };
+    
+
+    
 
     return (
         <View style={arrivalStyles.container}>
