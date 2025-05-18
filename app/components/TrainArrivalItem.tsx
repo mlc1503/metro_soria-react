@@ -2,15 +2,13 @@ import { View, Text, StyleSheet } from "react-native";
 import { constants, getArrayIconoLineas, colorsList } from "../constants/Constants";
 
 
-// interface LineArrivals {
-//     line_id:number,
-//     arrivals:{
-//         direction_stop_name:string,
-//         arrivals:[{
-//             time: Date
-//         }]
-//     }
-// }
+interface LineArrivals {
+    line_id:number,
+    arrivals:{
+        direction_stop_name:string,
+        arrivals:number[]
+    }
+}
 
 
 // export default function Index(data:LineArrivals | null) {
