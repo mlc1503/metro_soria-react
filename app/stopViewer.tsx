@@ -4,16 +4,15 @@ import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { colorsList, constants, getArrayIconoLineas } from "./constants/Constants";
 import TrainArrivalItem from "./components/TrainArrivalItem";
-import ItineraryItem from "./components/ItineraryItem";
 
 class LineArrival {
     line_id:number;
     arrivals:{
         direction_stop_name:string;
-        arrivals:number[]
+        arrival_minutes:number[]
     }
 
-    constructor( line_id: number, arrivals: { direction_stop_name: string; arrivals: number[]; }){
+    constructor( line_id: number, arrivals: { direction_stop_name: string; arrival_minutes: number[]; }){
         this.line_id = line_id,
         this.arrivals = arrivals
     }
@@ -163,25 +162,38 @@ export default function Index(){
                 }
             });
 
-            stop_data.line_arrivals.push(new LineArrival(parseInt(line.route_id), { direction_stop_name: 'testIDA', arrivals: trains_ida }))
-            stop_data.line_arrivals.push(new LineArrival(parseInt(line.route_id), { direction_stop_name: 'testVUELTA', arrivals: trains_vuelta }))
+            let start_end_station_names:{origin_stop_name:string, destination_stop_name: string} = {origin_stop_name: 'Vía 1',destination_stop_name: 'Vía 2'}
+            const names = await db.getFirstAsync<{origin_stop_name:string, destination_stop_name: string | null}>(`
+                SELECT
+                    origin.name AS origin_stop_name,
+                    destination.name AS destination_stop_name
+                FROM 
+                    lines l
+                JOIN 
+                    stops origin ON l.origin_id = origin.stop_id
+                LEFT JOIN 
+                    stops destination ON l.destination_id = destination.stop_id
+                WHERE l.id = $id;
+            `, {$id: parseInt(line.route_id)}).catch((err)=> {throw err})
 
-            // console.log(stop_data.line_arrivals);
+            if(names && names.destination_stop_name != null){
+                start_end_station_names.origin_stop_name= names.origin_stop_name
+                start_end_station_names.destination_stop_name = names.destination_stop_name
+            }
+
+            stop_data.line_arrivals.push(new LineArrival(parseInt(line.route_id), { direction_stop_name: start_end_station_names.destination_stop_name, arrival_minutes: trains_ida }))
+            stop_data.line_arrivals.push(new LineArrival(parseInt(line.route_id), { direction_stop_name: start_end_station_names.origin_stop_name, arrival_minutes: trains_vuelta }))
+
         }
 
         stop_data.stop_id = id
         stop_data.stop_name = name_and_correspondences.stop_name
         stop_data.correspondences = JSON.parse(name_and_correspondences.line_ids)
+        console.log("\nJSON STOP DATA",JSON.stringify(stop_data));
         
         setData(stop_data)
         setIsLoading(false)
     }
-
-    console.log();
-    // console.log(data);
-    console.log(data.line_arrivals);
-    console.log();
-    
 
     return(
         <ScrollView style={{
@@ -204,13 +216,11 @@ export default function Index(){
 
                 <Text style={styles.labelSection}>Salidas</Text>
 
-                {
-                    <>
-                        <TrainArrivalItem/>
-                        <TrainArrivalItem/>
-                        <TrainArrivalItem/>
-                    </>
-                }
+                {data.line_arrivals.map((entry, index)=>{
+                    return(
+                        <TrainArrivalItem key={index} line_id={entry.line_id} arrivals={entry.arrivals}/>
+                    )
+                })}
 
                 <Text style={styles.labelSection}>Avisos</Text>
                 <View style={{

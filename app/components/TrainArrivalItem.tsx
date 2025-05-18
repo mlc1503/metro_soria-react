@@ -3,16 +3,16 @@ import { constants, getArrayIconoLineas, colorsList } from "../constants/Constan
 
 
 interface LineArrivals {
-    line_id:number,
+    line_id:number;
     arrivals:{
-        direction_stop_name:string,
-        arrivals:number[]
+        direction_stop_name:string;
+        arrival_minutes:number[]
     }
 }
 
 
-// export default function Index(data:LineArrivals | null) {
-export default function Index() {
+// export default function Index() {
+export default function Index(data:LineArrivals ) {
     return(
         <View style={arrivalStyles.container}>
                     
@@ -21,10 +21,10 @@ export default function Index() {
                 alignItems: "center",
                 columnGap: constants.bounds.padding,
             }}>
-                {getArrayIconoLineas([2])}
-                <Text style={arrivalStyles.lineItinerary_labelText}>
-                    Estación de Soria - Las Camaretas
-                </Text>
+                {/* {getArrayIconoLineas([2])} */}
+                {getArrayIconoLineas([data.line_id])}
+                {/* <Text style={arrivalStyles.lineItinerary_labelText}> Estación de Soria - Las Camaretas </Text> */}
+                <Text style={arrivalStyles.lineItinerary_labelText}> {data.arrivals.direction_stop_name} </Text>
             </View>
             
             <View style={{
