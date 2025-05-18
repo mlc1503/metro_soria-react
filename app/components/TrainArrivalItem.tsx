@@ -17,21 +17,21 @@ export default function Index(data: LineArrivals) {
 
     console.log(JSON.stringify(data), '\n');
 
-    let date = new Date() 
-    const current_time = date.getHours()*60 + date.getMinutes()
-
+    const [date, setDate] = useState(new Date())  
+    let current_time = date.getHours()*60 + date.getMinutes()
 
     useEffect(()=>{
+        const interval = setInterval(() => {
+            setDate(new Date())
+        }, 30000);
 
-    }, [date])
-    console.log("CURRENT TIME",current_time);
+        return () =>clearInterval(interval)
+    }, [])
 
     function differences(times:number[], time_to_selectedStation:number) {
         let label = ""
         
         times.forEach((time, index) => {
-
-            console.log("TIME ",time);
             
             let minutes_to_train = time + time_to_selectedStation - current_time
 
@@ -71,9 +71,6 @@ export default function Index(data: LineArrivals) {
                     alignItems: "center",
                     rowGap: constants.bounds.padding,
                 }}>
-
-
-                    {/* START FOREACH */}
                     <View style={{
                         width: "100%",
                         flexDirection: "row",
@@ -113,7 +110,6 @@ export default function Index(data: LineArrivals) {
                     </View>
                     
                 </View>
-                {/* END FOREACH */}
 
             </View>
             
