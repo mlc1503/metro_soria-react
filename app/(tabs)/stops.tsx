@@ -1,4 +1,4 @@
-import { Link, router } from "expo-router";
+import { router } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
 import { Text, View, Pressable, ScrollView, StyleSheet } from "react-native";
@@ -74,7 +74,6 @@ export default function Index() {
                 <View style={{
                     width: "100%",
                     minHeight: 90,
-                    // backgroundColor: 'red',
                     paddingLeft: constants.bounds.padding,
                     paddingRight: constants.bounds.padding,
 
@@ -105,7 +104,6 @@ export default function Index() {
             <View style={{
                 margin: constants.bounds.padding,
                 flexDirection: 'column',
-                // rowGap: constants.bounds.padding,
                 alignContent: "center",
                 alignItems: "center",
             }}>

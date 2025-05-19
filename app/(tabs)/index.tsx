@@ -27,9 +27,10 @@ interface StationInfo {
 
 export default function Index() {
 	
-	const [textOrigen, onChangeTextOrigen] = useState('')
-	const [textDestino, onChangeTextDestino] = useState('')
+	// const [textOrigen, onChangeTextOrigen] = useState('')
+	const [textParada, onChangeTextParada] = useState('')
 	const [estaciones, setEstaciones] = useState<StationInfo[]>([]);
+	const [isThereData, setIsThereData] = useState(false);
 
 	const db = useSQLiteContext();
 
@@ -89,12 +90,26 @@ export default function Index() {
 					},
 				]
 			)
+			setIsThereData(true)
 		}, 0);
 		
 		
 	}, [db])
-		
-	return (
+
+	const showSavedStations = ()=>{
+		if(isThereData){
+			return(
+				estaciones.map((estacion) =>(
+					<SavedStationCard key={estacion.id} stop_id={estacion.id} nombre={estacion.name} lineas={estacion.lines} data={estacion.data} />
+				))
+			)
+		}
+		else{
+			return(<Text style={styles.noDataText}>No hay estaciones guardadas en tu usuario</Text>)
+		}
+	}
+
+	return(
 		<ScrollView style={{
 			backgroundColor: colorsList.light.FULL_WHITE
 		}}>
@@ -105,31 +120,33 @@ export default function Index() {
 				alignContent: "center",
 				alignItems: "center",
 			}}>
-				<Text style={styles.labelText}>Dónde vas?</Text>
-				<TextInput
+				<Text style={styles.labelText}>Busca una parada</Text>
+				{/* <TextInput
 					style={styles.textInput}
 					onChangeText={onChangeTextOrigen}
 					value={textOrigen}
 					placeholder={"Origen..."}
-				/>
+				/> */}
 				<TextInput
 					style={styles.textInput}
-					onChangeText={onChangeTextDestino}
-					value={textDestino}
-					placeholder="Destino..."
+					onChangeText={onChangeTextParada}
+					value={textParada}
+					placeholder="Estación de Soria"
 				/>
 				<Pressable style={styles.pressable} onPress={()=>{
-					router.navigate({pathname: '/itinerary', params: {origin: textOrigen, destination: textDestino}})
+					// router.navigate({pathname: '/stopViewer', params: {stop_id: stop_id}})
 				}}>
 					<Text style={styles.buttonText}>Buscar</Text>
 				</Pressable>
+				
+				<View></View>
+				
+				<Text style={styles.savedStationsText}>Estaciones guardadas</Text>
+				{showSavedStations()}
 
-				{estaciones.map((estacion) =>(
-					<SavedStationCard key={estacion.id} stop_id={estacion.id} nombre={estacion.name} lineas={estacion.lines} data={estacion.data} />
-				))}
 			</View>
 		</ScrollView>
-	);
+	)
 }
 
 const styles = StyleSheet.create({
@@ -162,7 +179,7 @@ const styles = StyleSheet.create({
 	},
 	labelText: {
 		color: colorsList.light.MAIN_BLACK,
-		fontSize: constants.text.mainTitleSize,
+		fontSize: constants.text.sectionTitleSize,
 		textAlign: "center"
 	},
 	viewCard:{
@@ -175,5 +192,15 @@ const styles = StyleSheet.create({
 		borderRadius: constants.bounds.radius,
 		alignItems: "center",
 		justifyContent: "flex-start"
+	},
+	noDataText:{
+		color: colorsList.light.MAIN_BLACK,
+		fontSize: constants.text.mainLabelSize,
+		textAlign: "center"
+	},
+	savedStationsText:{
+		color: colorsList.light.MAIN_BLACK,
+		fontSize: constants.text.mainTitleSize,
+		textAlign: "center"
 	}
 })

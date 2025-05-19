@@ -56,8 +56,6 @@ export default function Index(data: LineArrivals) {
                 }
             }
             
-            console.log(formatMinutesToTime(time));
-            
         });
         
         return label

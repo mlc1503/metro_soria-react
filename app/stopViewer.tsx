@@ -136,9 +136,6 @@ export default function Index(){
                         return <TrainArrivalItem key={index} line_id={item.line_id} title_name={item.title_line} arrivals={item.arrivals}/>
                     })
                 }
-                {/* {
-                    <TrainArrivalItem/>
-                } */}
 
                 <Text style={styles.labelSection}>Avisos</Text>
                 <View style={{
