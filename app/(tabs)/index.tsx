@@ -4,6 +4,7 @@ import { Pressable, ScrollView, Text, TextInput, View, StyleSheet } from "react-
 import { colorsList, constants } from "../constants/Constants";
 import SavedStationCard from "@/app/components/SavedStationCard";
 import { useSQLiteContext } from "expo-sqlite";
+import {AutocompleteDropdownContextProvider, AutocompleteDropdown } from 'react-native-autocomplete-dropdown'
 
 
 type StationDataItem = 
@@ -27,8 +28,7 @@ interface StationInfo {
 
 export default function Index() {
 	
-	// const [textOrigen, onChangeTextOrigen] = useState('')
-	const [textParada, onChangeTextParada] = useState('')
+	const [searchStationId, setSearchStationId] = useState(0)
 	const [estaciones, setEstaciones] = useState<StationInfo[]>([]);
 	const [isThereData, setIsThereData] = useState(false);
 
@@ -110,42 +110,96 @@ export default function Index() {
 	}
 
 	return(
-		<ScrollView style={{
-			backgroundColor: colorsList.light.FULL_WHITE
-		}}>
-			<View style={{
-				margin: constants.bounds.padding,
-				flexDirection: 'column',
-				rowGap: constants.bounds.padding,
-				alignContent: "center",
-				alignItems: "center",
-			}}>
-				<Text style={styles.labelText}>Busca una parada</Text>
-				{/* <TextInput
-					style={styles.textInput}
-					onChangeText={onChangeTextOrigen}
-					value={textOrigen}
-					placeholder={"Origen..."}
-				/> */}
-				<TextInput
-					style={styles.textInput}
-					onChangeText={onChangeTextParada}
-					value={textParada}
-					placeholder="Estación de Soria"
-				/>
-				<Pressable style={styles.pressable} onPress={()=>{
-					// router.navigate({pathname: '/stopViewer', params: {stop_id: stop_id}})
-				}}>
-					<Text style={styles.buttonText}>Buscar</Text>
-				</Pressable>
-				
-				<View></View>
-				
-				<Text style={styles.savedStationsText}>Estaciones guardadas</Text>
-				{showSavedStations()}
+		<AutocompleteDropdownContextProvider>
 
-			</View>
-		</ScrollView>
+			<ScrollView style={{
+				backgroundColor: colorsList.light.FULL_WHITE
+			}}>
+				<View style={{
+					margin: constants.bounds.padding,
+					flexDirection: 'column',
+					rowGap: constants.bounds.padding,
+					alignContent: "center",
+					alignItems: "center",
+				}}>
+					<Text style={styles.labelText}>Busca una parada</Text>
+					
+					<AutocompleteDropdown
+						clearOnFocus={false}
+						closeOnBlur={true}
+						closeOnSubmit={false}
+						onSelectItem={(value)=>{ 
+							if(value){
+								setSearchStationId(parseInt(value.id))
+							}
+						}}
+						dataSet={[
+							{ id: '1', title: "Estación de Soria" },
+							{ id: '2', title: "Europa" },
+							{ id: '3', title: "Segovia" },
+							{ id: '4', title: "Eduardo Saavedra" },
+							{ id: '5', title: "Constitución" },
+							{ id: '6', title: "Juan Antonio Gaya Nuño" },
+							{ id: '7', title: "Hospital" },
+							{ id: '8', title: "Polideportivo" },
+							{ id: '9', title: "Tejera" },
+							{ id: '10', title: "Mariano Granados" },
+							{ id: '11', title: "Mariano Vicén" },
+							{ id: '12', title: "Los Pajaritos" },
+							{ id: '13', title: "Concatedral" },
+							{ id: '14', title: "La Arboleda" },
+							{ id: '15', title: "Plaza del Rosel y San Blas" },
+							{ id: '16', title: "Valladolid" },
+							{ id: '17', title: "Zamora" },
+							{ id: '18', title: "Piqueras" },
+							{ id: '19', title: "Pontevedra" },
+							{ id: '20', title: "Centro Comercial Camaretas" },
+							{ id: '21', title: "Las Camaretas" },
+							{ id: '22', title: "Polígono (Oeste)" },
+							{ id: '23', title: "Polígono (Centro)" },
+							{ id: '24', title: "Polígono (Este)" },
+							{ id: '25', title: "Polígono (Norte)" },
+							{ id: '26', title: "Las Casas"}
+						]}
+						containerStyle={{width: "100%"}}
+						suggestionsListContainerStyle={{
+							backgroundColor: colorsList.light.MAIN_WHITE, 
+							borderColor: colorsList.light.PRIMARY_BLUE, 
+							borderWidth: 2,
+							shadowColor: colorsList.light.MAIN_BLACK,
+						}}
+						suggestionsListTextStyle={{
+							color: colorsList.light.MAIN_BLACK
+						}}
+						inputContainerStyle={{
+							borderRadius: constants.bounds.padding,
+							paddingLeft: constants.bounds.padding,
+							backgroundColor: colorsList.light.MAIN_WHITE, 
+							borderColor: colorsList.light.PRIMARY_BLUE, 
+							borderWidth: 2,
+							flexDirection:"row",
+							alignContent: "center"
+						}}
+						textInputProps={{style:{color: colorsList.light.MAIN_BLACK}, placeholder:'Las Camaretas'}}
+						inputHeight={50}
+					/>
+					<Pressable style={styles.pressable} onPress={()=>{
+						if(searchStationId != 0){
+							router.navigate({pathname: '/stopViewer', params: {stop_id: searchStationId}})
+						}
+					}}>
+						<Text style={styles.buttonText}>Buscar</Text>
+					</Pressable>
+					
+					<View></View>
+					
+					<Text style={styles.savedStationsText}>Estaciones guardadas</Text>
+					{showSavedStations()}
+
+				</View>
+			</ScrollView>
+		</AutocompleteDropdownContextProvider>
+
 	)
 }
 
@@ -175,7 +229,8 @@ const styles = StyleSheet.create({
 	buttonText: {
 		color: colorsList.light.MAIN_WHITE,
 		fontSize: constants.text.mainTitleSize,
-		textAlign: "center"
+		textAlign: "center",
+		shadowColor: colorsList.light.MAIN_BLACK,
 	},
 	labelText: {
 		color: colorsList.light.MAIN_BLACK,
