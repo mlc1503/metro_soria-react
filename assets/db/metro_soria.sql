@@ -168,9 +168,7 @@ WHERE r.route_id = 2
 
 
 /*GET NOMBRE LINEA, ESTACION DE COMIENZO, ESTACION DE FINAL, DE TODAS LAS LÍNEAS*/
-SELECT 
-    l.id,
-    l.line_name,
+SELECT
     origin.name AS origin_stop_name,
     destination.name AS destination_stop_name
 FROM 
@@ -178,7 +176,8 @@ FROM
 JOIN 
     stops origin ON l.origin_id = origin.stop_id
 LEFT JOIN 
-    stops destination ON l.destination_id = destination.stop_id;
+    stops destination ON l.destination_id = destination.stop_id
+WHERE l.id = 1;
 
 
 
