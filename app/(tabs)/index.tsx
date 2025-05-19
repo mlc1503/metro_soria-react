@@ -1,6 +1,6 @@
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import { Pressable, ScrollView, Text, TextInput, View, StyleSheet } from "react-native";
+import { Pressable, ScrollView, Text, TextInput, View, StyleSheet, Dimensions } from "react-native";
 import { colorsList, constants } from "../constants/Constants";
 import SavedStationCard from "@/app/components/SavedStationCard";
 import { useSQLiteContext } from "expo-sqlite";
@@ -133,6 +133,7 @@ export default function Index() {
 								setSearchStationId(parseInt(value.id))
 							}
 						}}
+						onClear={()=>setSearchStationId(0)}
 						dataSet={[
 							{ id: '1', title: "Estación de Soria" },
 							{ id: '2', title: "Europa" },
@@ -171,6 +172,10 @@ export default function Index() {
 						suggestionsListTextStyle={{
 							color: colorsList.light.MAIN_BLACK
 						}}
+						suggestionsListMaxHeight={Dimensions.get('window').height * 0.2}
+						ignoreAccents={true}
+						caseSensitive={false}
+						trimSearchText={true}
 						inputContainerStyle={{
 							borderRadius: constants.bounds.padding,
 							paddingLeft: constants.bounds.padding,
