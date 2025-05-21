@@ -99,8 +99,8 @@ export default function Index() {
 	const showSavedStations = ()=>{
 		if(isThereData){
 			return(
-				estaciones.map((estacion) =>(
-					<SavedStationCard key={estacion.id} stop_id={estacion.id} nombre={estacion.name} lineas={estacion.lines} data={estacion.data} />
+				estaciones.map((estacion, index) =>(
+					<SavedStationCard key={index} stop_id={estacion.id} nombre={estacion.name} lineas={estacion.lines} data={estacion.data} />
 				))
 			)
 		}

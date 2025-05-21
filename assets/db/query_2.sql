@@ -1,4 +1,4 @@
--- compute times según tren
+users-- compute times según tren
 WITH route_station_correspondences AS(
 	SELECT DISTINCT r.route_id
 	FROM route_stations r
@@ -63,7 +63,7 @@ WITH train_timetable AS(
 )
 SELECT * FROM train_timetable ORDER BY train_timetable.direction;
 
-
+SELECT stops.stop_id, stops."name" FROM stops
 
 SELECT 
      s.stop_id as id,

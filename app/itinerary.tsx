@@ -53,10 +53,8 @@ export default function Index() {
 	}, [db])
 
 	const loadData = async (id:number)=> {
-
-		//TODO: MODIFICAR DATOS EN BD Y CONSULTA PARA COGER TAMBIÉN LA ÚLTIMA ESTACIÓN DE LA LÍNEA
 		
-		const route_data = db.getAllAsync<RouteData>(`
+		const route_data = await db.getAllAsync<RouteData>(`
 								SELECT l.id as line_id, l.line_name AS line_name, s.stop_id, s.name AS stop_name
 								FROM stops s 
 									JOIN route_stations r ON s.stop_id = r.stop_id 
@@ -64,7 +62,7 @@ export default function Index() {
 								WHERE l.id = ?;
 							`, [id]).catch((err) =>{throw err;})
 
-		const all_route_stations = db.getAllAsync<RouteStations>(`
+		const all_route_stations = await db.getAllAsync<RouteStations>(`
 									SELECT r.stop_id, l.id as line_id 
 									FROM route_stations r 
 										JOIN lines l ON l.id = r.route_id

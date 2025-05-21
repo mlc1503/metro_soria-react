@@ -1,4 +1,5 @@
-import { Image } from "react-native";
+import { Image, Pressable } from "react-native";
+import { router } from "expo-router"
 
 export const colorsList = {
     light: {
@@ -47,13 +48,32 @@ export function getColorLinea(id:number):string{
 }
 
 export function getArrayIconoLineas(lineas: number[], size:number = constants.icons.plusSize){
-        return lineas.map((linea, index) =>(
+
+    const image = (linea:number, index:number, size:number)=>{
+        return(
             <Image
                 key={`${linea}-${index}`}
                 source={listaIconos.get(linea)}
                 style={{width: size, height: size}}
             />
-        ))
+        )
+    }
+
+
+        return lineas.map((linea, index) =>{
+            if(linea == 6){
+                return image(linea, index, size)
+            }
+            else{
+                return(
+                    <Pressable onPress={()=>{
+                        router.navigate({pathname: '/itinerary', params:{line_id: linea}})
+                    }}>
+                        {image(linea, index, size)}
+                    </Pressable>
+                )
+            }
+        })
 }
 
 export const IconoCTFV = <Image 
