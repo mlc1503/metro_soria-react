@@ -50,9 +50,10 @@ export function getColorLinea(id:number):string{
 export function getArrayIconoLineas(lineas: number[], size:number = constants.icons.plusSize){
 
     const image = (linea:number, index:number, size:number)=>{
+        
         return(
             <Image
-                key={`${linea}-${index}`}
+                key={index}
                 source={listaIconos.get(linea)}
                 style={{width: size, height: size}}
             />
@@ -66,7 +67,7 @@ export function getArrayIconoLineas(lineas: number[], size:number = constants.ic
             }
             else{
                 return(
-                    <Pressable onPress={()=>{
+                    <Pressable key={`pressable-${linea}-${index}`} onPress={()=>{
                         router.navigate({pathname: '/itinerary', params:{line_id: linea}})
                     }}>
                         {image(linea, index, size)}

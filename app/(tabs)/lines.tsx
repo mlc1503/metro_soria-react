@@ -61,6 +61,7 @@ export default function Index() {
                 <Text style={styles.labelText}>Líneas</Text>
                 
                 {lineas.map((lineaItem, index) =>{
+                    
                     return(
                         <LineCard 
                             key={index} 

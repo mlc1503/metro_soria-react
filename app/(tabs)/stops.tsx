@@ -65,7 +65,7 @@ export default function Index() {
         }
     }
     
-    console.log(data);
+    // console.log(data);
     
 
     const station_element = (item:StationData, index: number)=>{
