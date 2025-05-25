@@ -47,8 +47,8 @@ export default function TabLayout(){
                     <Image 
                         source={require('@/assets/icons/lines.png')}
                         style={{
-                            height: 35,
-                            width: 35,
+                            height: 30,
+                            width: 30,
                             resizeMode: "contain",
                             tintColor: focused ? colorsList.light.PRIMARY_BLUE : colorsList.light.FULL_WHITE
                     }}/>
