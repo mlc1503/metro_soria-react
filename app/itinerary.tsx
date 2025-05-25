@@ -46,11 +46,10 @@ export default function Index() {
 	useEffect(() => {
 		
 		loadData(id)
-		console.log("ITINERARY_LENGTH",itinerary.length);
 		 
 		setIsLoading(false)
 		
-	}, [db])
+	}, [db, line_id])
 
 	const loadData = async (id:number)=> {
 		
@@ -95,10 +94,8 @@ export default function Index() {
 		setItinerary(itinerary)
 	}
 
-	const label = async () => {
-		if(labelLine == 'test'){
-			setLabelLine(itinerary[0].name + ' - ' + itinerary[itinerary.length	-1].name);
-		}
+	const label = async() => {
+		setLabelLine((await itinerary[0]).name + ' - ' +  (await itinerary[itinerary.length	-1]).name);
 	}
 
 	label()
