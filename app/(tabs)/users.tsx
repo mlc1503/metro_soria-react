@@ -2,46 +2,21 @@ import { SQLiteDatabase, useSQLiteContext } from "expo-sqlite";
 import React, { useState } from "react";
 import { ScrollView, View, StyleSheet, Text, TextInput, Button } from "react-native";
 import { colorsList, constants } from "../constants/Constants";
-
-
-
-
+import { useAuth } from "../AuthContext";
 
 function UsersTab(){
     const db = useSQLiteContext();
-    const [isUserLogged, setUserLogged] = useState(false);
+
+    const {user, login, logout } = useAuth()
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
 
-    const viewSwitch =()=>{
-        if(isUserLogged){
-            return (
-                <View>
-                    <Text>Hola Logged</Text>
-                    
-                    <Text>{username}</Text>
-                    <Text>{password}</Text>
-                </View>
-            )
-        }
-        else{
-            return(
-                <View style={{width: "100%"}}>
-                    <TextInput placeholder="User" onChangeText={(value)=>setUsername(value)} style={styles.textInput}/>
-                    <TextInput placeholder="psw" onChangeText={(value)=>setPassword(value)} style={styles.textInput}/>
-
-                   
-                </View>
-            )
-
-        }
-    }
-
-
-    
+    console.log(user);    
     
     return (
+
+        
         <ScrollView style={{
             backgroundColor: colorsList.light.FULL_WHITE
         }}>
@@ -53,9 +28,35 @@ function UsersTab(){
                         alignItems: "center",
                     }}>
 
-                    {viewSwitch()}
+                    {user ? 
+                        <View>
+                            <Text>Welcome, {user.username}!</Text>
+                            <Text>You are now logged in.</Text>
+                            <Text>ID: {user.id}</Text>
+                        </View> 
+                    : 
+                        <View style={{width: "100%"}}>
+                            <TextInput placeholder="user" onChangeText={(value)=>setUsername(value.trim())} style={styles.textInput}/>
+                            <TextInput placeholder="psw" onChangeText={(value)=>setPassword(value.trim())} style={styles.textInput}/>
+                        </View>
+                    }
 
-                    <Button title={isUserLogged ? "Desloguear" : "Logear"} onPress={()=>setUserLogged(!isUserLogged)}/>
+                    <Button title={user ? "Desloguear" : "Logear"} onPress={()=>{
+
+                        if(user){
+                            logout()
+                            console.log("Already logged in");
+                            
+                        }
+                        else{
+                            if(username != "" && password != ""){
+                                login(username, password)
+                            }
+                            else{
+                                console.log("username and psq are empty");
+                            }
+                        }
+                    }}/>
                     </View>
 
         </ScrollView>

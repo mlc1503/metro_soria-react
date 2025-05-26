@@ -10,6 +10,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { Asset } from 'expo-asset'
 import { SQLiteProvider } from 'expo-sqlite'
 import * as FileSystem from 'expo-file-system'
+import { AuthProvider } from "./AuthContext";
 
 SplashScreen.preventAutoHideAsync()
 
@@ -107,19 +108,21 @@ export default function RootLayout() {
 			// }
 		>
 			<SQLiteProvider databaseName="metro_soria.db" useSuspense>
-				<StatusBar barStyle="default" backgroundColor={colorScheme === 'dark' ? colorsList.light.MAIN_BLACK : colorsList.light.PRIMARY_BLUE} />
-				<Stack screenOptions={{
-					headerTitle: ()=> IconoCTFV,
-					headerStyle: {
-						backgroundColor: colorsList.light.PRIMARY_BLUE,
-					},
-					headerTitleAlign: "center",
-				}}>
-					<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-					<Stack.Screen name="+not-found" />
-					<Stack.Screen name="itinerary" />
-					<Stack.Screen name="stopViewer" />
-				</Stack>
+				<AuthProvider>
+					<StatusBar barStyle="default" backgroundColor={colorScheme === 'dark' ? colorsList.light.MAIN_BLACK : colorsList.light.PRIMARY_BLUE} />
+					<Stack screenOptions={{
+						headerTitle: ()=> IconoCTFV,
+						headerStyle: {
+							backgroundColor: colorsList.light.PRIMARY_BLUE,
+						},
+						headerTitleAlign: "center",
+					}}>
+						<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+						<Stack.Screen name="+not-found" />
+						<Stack.Screen name="itinerary" />
+						<Stack.Screen name="stopViewer" />
+					</Stack>
+				</AuthProvider>
 			</SQLiteProvider>
 
 		</React.Suspense>
