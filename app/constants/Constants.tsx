@@ -68,7 +68,7 @@ export function getArrayIconoLineas(lineas: number[], size:number = constants.ic
             else{
                 return(
                     <Pressable key={`pressable-${linea}-${index}`} onPress={()=>{
-                        router.navigate({pathname: '/itinerary', params:{line_id: linea}})
+                        router.push({pathname: '/itinerary', params:{line_id: linea}})
                     }}>
                         {image(linea, index, size)}
                     </Pressable>
