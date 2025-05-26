@@ -117,14 +117,21 @@ INSERT INTO route_stations (route_id, stop_id, next_station_id, time_to_next) VA
 INSERT INTO route_stations (route_id, stop_id, next_station_id, time_to_next) VALUES (5, 24, 25, 2);
 INSERT INTO route_stations (route_id, stop_id, next_station_id, time_to_next) VALUES (5, 25, 26, 2);
 
-
 CREATE TABLE IF NOT EXISTS users(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username VARCHAR(50) NOT NULL,
     password VARCHAR(50) NOT NULL,
-    saved_stations_id INTEGER,
+    saved_stations_id INTEGER
+);
 
-    FOREIGN KEY (saved_stations_id) REFERENCES stops(id)
+
+CREATE TABLE "user_saved_stations" (
+	"id" INTEGER AUTO_INCREMENT,
+	"user_id" INTEGER NOT NULL DEFAULT '0',
+	"stop_id" INTEGER NOT NULL DEFAULT '0',
+	PRIMARY KEY ("id"),
+	CONSTRAINT "USER_ID" FOREIGN KEY ("user_id") REFERENCES "users" ("saved_stations_id") ON UPDATE NO ACTION ON DELETE NO ACTION,
+	CONSTRAINT "STOP_ID" FOREIGN KEY ("stop_id") REFERENCES "stops" ("stop_id") ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
 
