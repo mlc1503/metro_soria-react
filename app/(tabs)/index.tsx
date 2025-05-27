@@ -1,10 +1,11 @@
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { Pressable, ScrollView, Text, TextInput, View, StyleSheet, Dimensions } from "react-native";
-import { colorsList, constants } from "../constants/Constants";
+import { colorsList, constants } from "@/app/constants/Constants";
 import SavedStationCard from "@/app/components/SavedStationCard";
 import { useSQLiteContext } from "expo-sqlite";
 import {AutocompleteDropdownContextProvider, AutocompleteDropdown } from 'react-native-autocomplete-dropdown'
+import { useAuth } from "@/app/AuthContext";
 
 
 type StationDataItem = 
@@ -28,9 +29,13 @@ interface StationInfo {
 
 export default function Index() {
 	
+	const {user, login, logout } = useAuth()
+	
 	const [searchStationId, setSearchStationId] = useState(0)
 	const [estaciones, setEstaciones] = useState<StationInfo[]>([]);
 	const [isThereData, setIsThereData] = useState(false);
+
+	const [userSavedStations, setUserSavedStations] = useState<number[] | null>(null)
 
 	const db = useSQLiteContext();
 
@@ -93,8 +98,32 @@ export default function Index() {
 			setIsThereData(true)
 		}, 0);
 		
+		fetchSavedStations()
 		
-	}, [db])
+	}, [db, user])
+
+	const fetchSavedStations = async()=>{
+
+		if(user){
+
+			await db.getAllAsync<{ stop_id: number; }>(`SELECT stop_id FROM user_saved_stations WHERE user_id = ?`, [user.id])
+			.then((result)=>{
+				setUserSavedStations(result.map(item => item.stop_id as number))
+			})
+			.catch((error) =>{throw error})
+		}
+		else{
+			console.log("User is not logged in");
+			setUserSavedStations(null)
+		}
+	}
+
+	if(userSavedStations){
+		userSavedStations.forEach((saved_station)=>{
+			console.log(saved_station);
+			
+		})
+	}
 
 	const showSavedStations = ()=>{
 		if(isThereData){

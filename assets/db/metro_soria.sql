@@ -124,14 +124,14 @@ CREATE TABLE IF NOT EXISTS users(
     saved_stations_id INTEGER
 );
 
-
-CREATE TABLE "user_saved_stations" (
-	"id" INTEGER AUTO_INCREMENT,
-	"user_id" INTEGER NOT NULL DEFAULT '0',
-	"stop_id" INTEGER NOT NULL DEFAULT '0',
-	PRIMARY KEY ("id"),
-	CONSTRAINT "USER_ID" FOREIGN KEY ("user_id") REFERENCES "users" ("saved_stations_id") ON UPDATE NO ACTION ON DELETE NO ACTION,
-	CONSTRAINT "STOP_ID" FOREIGN KEY ("stop_id") REFERENCES "stops" ("stop_id") ON UPDATE NO ACTION ON DELETE NO ACTION
+DROP TABLE IF EXISTS user_saved_stations;
+CREATE TABLE user_saved_stations (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	user_id INTEGER NOT NULL DEFAULT '0',
+	stop_id INTEGER NOT NULL DEFAULT '0',
+	
+	FOREIGN KEY (user_id) REFERENCES users (id),
+	FOREIGN KEY (stop_id) REFERENCES stops (stop_id)
 );
 
 

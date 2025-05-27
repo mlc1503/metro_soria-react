@@ -2,7 +2,7 @@ import { SQLiteDatabase, useSQLiteContext } from "expo-sqlite";
 import React, { useState } from "react";
 import { ScrollView, View, StyleSheet, Text, TextInput, Button } from "react-native";
 import { colorsList, constants } from "../constants/Constants";
-import { useAuth } from "../AuthContext";
+import { useAuth } from "@/app/AuthContext";
 
 function UsersTab(){
     const db = useSQLiteContext();
@@ -10,9 +10,6 @@ function UsersTab(){
     const {user, login, logout } = useAuth()
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-
-
-    console.log(user);    
     
     return (
 
@@ -36,8 +33,8 @@ function UsersTab(){
                         </View> 
                     : 
                         <View style={{width: "100%"}}>
-                            <TextInput placeholder="user" onChangeText={(value)=>setUsername(value.trim())} style={styles.textInput}/>
-                            <TextInput placeholder="psw" onChangeText={(value)=>setPassword(value.trim())} style={styles.textInput}/>
+                            <TextInput placeholder="user" onChangeText={(value)=>setUsername(value.trim())} style={styles.textInput} autoCapitalize="none"/>
+                            <TextInput placeholder="psw" onChangeText={(value)=>setPassword(value.trim())} style={styles.textInput} autoCapitalize="none"/>
                         </View>
                     }
 
