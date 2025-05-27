@@ -1,9 +1,10 @@
-import { useLocalSearchParams } from "expo-router"
+import { router, useLocalSearchParams } from "expo-router"
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { Alert, Button, ScrollView, StyleSheet, Text, View } from "react-native";
 import { colorsList, constants, getArrayIconoLineas } from "./constants/Constants";
 import TrainArrivalItem from "./components/TrainArrivalItem";
+import { useAuth } from "@/app/AuthContext";
 
 class LineArrival {
     line_id: number;
@@ -53,8 +54,11 @@ interface TimeTable{
 
 
 export default function Index(){
+    
+    const { user } = useAuth();
     const {stop_id} = useLocalSearchParams();
     const db = useSQLiteContext();
+    
     const [data, setData] = useState<StopData>(new StopData());
     const [isLoading, setIsLoading] = useState(true);
     
@@ -110,6 +114,22 @@ export default function Index(){
         }
     }
 
+    const alert = ()=>{
+        Alert.alert(
+            "No has iniciado sesión",
+            "No puedes guardar la estación sin iniciar sesión.",
+            [
+                {
+                    text: "Inicia sesión",
+                    onPress: (()=> router.navigate('/users'))
+                },
+                {
+                    text: "Volver",
+                }
+            ]
+        )
+    }
+
     return(
         <ScrollView style={{
             backgroundColor: colorsList.light.FULL_WHITE
@@ -135,6 +155,21 @@ export default function Index(){
                     data.line_arrivals.map((item, index) =>{
                         return <TrainArrivalItem key={index} line_id={item.line_id} title_name={item.title_line} arrivals={item.arrivals}/>
                     })
+                }
+
+                {
+                    user ?
+                    <Button title="Eliminar de favoritos" onPress={()=>{
+                        console.log("consulta elimina estacion con ID:", id);
+                        
+                    }}/>
+                    :
+                    <Button title="Añadir a favoritos" onPress={()=>{
+                        console.log("consulta añade estacion con ID:", id);
+                        console.log("user_ID:", user);
+                        user ? console.log("SE guarda la estacion") : alert()
+                        
+                    }}/>
                 }
 
                 <Text style={styles.labelSection}>Avisos</Text>
