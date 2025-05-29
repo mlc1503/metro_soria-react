@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS lines(
     FOREIGN KEY(destination_id) REFERENCES stops(id)
 );
 
--- Dumping data for table metro_soria.lines: 5 rows
+-- Dumping data for table metro_soria.lines: -1 rows
 DELETE FROM "lines";
 /*!40000 ALTER TABLE "lines" DISABLE KEYS */;
 INSERT INTO "lines" ("id", "line_name", "origin_id", "destination_id") VALUES
@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS route_stations (
     FOREIGN KEY (next_station_id) REFERENCES stops(id)
 );
 
--- Dumping data for table metro_soria.route_stations: 54 rows
+-- Dumping data for table metro_soria.route_stations: -1 rows
 DELETE FROM "route_stations";
 /*!40000 ALTER TABLE "route_stations" DISABLE KEYS */;
 INSERT INTO "route_stations" ("id", "route_id", "stop_id", "next_station_id", "time_to_next") VALUES
@@ -119,7 +119,7 @@ CREATE TABLE IF NOT EXISTS stops (
     name TEXT
 );
 
--- Dumping data for table metro_soria.stops: 26 rows
+-- Dumping data for table metro_soria.stops: -1 rows
 DELETE FROM "stops";
 /*!40000 ALTER TABLE "stops" DISABLE KEYS */;
 INSERT INTO "stops" ("stop_id", "name") VALUES
@@ -161,7 +161,7 @@ CREATE TABLE IF NOT EXISTS trains(
 	FOREIGN KEY (route_id) REFERENCES route_stations(route_id)
 );
 
--- Dumping data for table metro_soria.trains: 458 rows
+-- Dumping data for table metro_soria.trains: -1 rows
 DELETE FROM "trains";
 /*!40000 ALTER TABLE "trains" DISABLE KEYS */;
 INSERT INTO "trains" ("id", "route_id", "direction", "departure_time") VALUES
@@ -629,17 +629,31 @@ INSERT INTO "trains" ("id", "route_id", "direction", "departure_time") VALUES
 CREATE TABLE IF NOT EXISTS users(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username VARCHAR(50) NOT NULL,
-    password VARCHAR(50) NOT NULL,
-    email VARCHAR(70) NOT NULL,
-    saved_stations_id INTEGER,
+    password VARCHAR(50) NOT NULL, "email" VARCHAR(255) NULL DEFAULT NULL);
 
-    FOREIGN KEY (saved_stations_id) REFERENCES stops(id)
-);
-
--- Dumping data for table metro_soria.users: 0 rows
+-- Dumping data for table metro_soria.users: -1 rows
 DELETE FROM "users";
 /*!40000 ALTER TABLE "users" DISABLE KEYS */;
+INSERT INTO "users" ("id", "username", "password", "email") VALUES
+	(1, 'manel', '1234', 'a@a.com');
 /*!40000 ALTER TABLE "users" ENABLE KEYS */;
+
+-- Dumping structure for table metro_soria.user_saved_stations
+CREATE TABLE IF NOT EXISTS user_saved_stations (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	user_id INTEGER NOT NULL DEFAULT '0',
+	stop_id INTEGER NOT NULL DEFAULT '0',
+	
+	FOREIGN KEY (user_id) REFERENCES users (id),
+	FOREIGN KEY (stop_id) REFERENCES stops (stop_id)
+);
+
+-- Dumping data for table metro_soria.user_saved_stations: -1 rows
+DELETE FROM "user_saved_stations";
+/*!40000 ALTER TABLE "user_saved_stations" DISABLE KEYS */;
+INSERT INTO "user_saved_stations" ("id", "user_id", "stop_id") VALUES
+	(1, 1, 11);
+/*!40000 ALTER TABLE "user_saved_stations" ENABLE KEYS */;
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
