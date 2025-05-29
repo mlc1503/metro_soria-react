@@ -5,7 +5,7 @@ import { Text, View, Pressable, ScrollView, StyleSheet } from "react-native";
 import { colorsList, constants, getArrayIconoLineas } from "@/app/constants/Constants";
 
 
-class StationData{
+export class StationData{
     id:number;
     name:string;
     correspondences: number[];

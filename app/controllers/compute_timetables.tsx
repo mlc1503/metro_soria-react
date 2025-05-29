@@ -1,6 +1,6 @@
 import { SQLiteDatabase, useSQLiteContext } from "expo-sqlite";
 
-class LineArrival {
+export class LineArrival {
     line_id: number;
     title_line:string
     arrivals:
@@ -18,7 +18,7 @@ class LineArrival {
 
 }
 
-class StopData {
+export class StopData {
     stop_id:number;
     stop_name:string;
     correspondences:number[];

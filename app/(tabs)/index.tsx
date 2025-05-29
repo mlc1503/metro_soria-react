@@ -1,142 +1,135 @@
-import { router } from "expo-router";
-import { useEffect, useState } from "react";
-import { Pressable, ScrollView, Text, TextInput, View, StyleSheet, Dimensions } from "react-native";
+import { router, useFocusEffect } from "expo-router";
+import { useCallback, useState } from "react";
+import { Pressable, ScrollView, Text, View, StyleSheet, Dimensions } from "react-native";
 import { colorsList, constants } from "@/app/constants/Constants";
 import SavedStationCard from "@/app/components/SavedStationCard";
 import { useSQLiteContext } from "expo-sqlite";
 import {AutocompleteDropdownContextProvider, AutocompleteDropdown } from 'react-native-autocomplete-dropdown'
 import { useAuth } from "@/app/AuthContext";
+import compute_timetables, { StopData } from "../controllers/compute_timetables";
 
-
-type StationDataItem = 
-	{
-		type: 'service'; 
-		info: {
-			line: number;
-			timeOfArrival: string;
-			destinationTitle: string;
-		}; 
-	} 
-	| 
-	{ type: 'warning'; info: {message: string;} };
-
-interface StationInfo {
-	id:number,
-	name: string,
-	lines: number[],
-	data: StationDataItem[]
-}
 
 export default function Index() {
 	
-	const {user, login, logout } = useAuth()
+	const { user } = useAuth()
 	
 	const [searchStationId, setSearchStationId] = useState(0)
-	const [estaciones, setEstaciones] = useState<StationInfo[]>([]);
+	// const [estaciones, setEstaciones] = useState<StationInfo[]>([]);
+	const [estaciones, setEstaciones] = useState<StopData[]>([]);
 	const [isThereData, setIsThereData] = useState(false);
-
-	const [userSavedStations, setUserSavedStations] = useState<number[] | null>(null)
+	const [, setUserSavedStations] = useState<number[]>([])
 
 	const db = useSQLiteContext();
 
-	useEffect(()=>{
+	useFocusEffect(
+		useCallback(()=>{
 
-		setTimeout(() => {
-			setEstaciones(
-				[{
-						id: 15,
-						name: "Plaza del Rosel y San Blas",
-						lines:[
-							3, 4
-						],
-						data:[
-							{ 
-								type: 'service', 
-								info: { 
-									line: 4, 
-									timeOfArrival: '10:30', 
-									destinationTitle: 'Concatedral',
-								}
-							},
-							{ 
-								type: 'service', 
-								info: { 
-									line: 3, 
-									timeOfArrival: '10:35', 
-									destinationTitle: 'Las Camaretas',
-								} 
-							}]
-					},
-					{
-						id: 1,
-						name: "Constitución",
-						lines:[
-							1, 4, 3,
-						],
-						data:[{ 
-							type: 'warning', 
-							info: {
-								message: "No hay servicio en la estación",	
-							} 
-						}]
-					},
-					{
-						id: 2,
-						name: "Mariano Granados",
-						lines:[
-							2, 4, 3,
-						],
-						data:[{ 
-							type: 'warning', 
-							info: {
-								message: "No hay servicio en la estación",	
-							} 
-						}]
-					},
-				]
-			)
-			setIsThereData(true)
-		}, 0);
-		
-		fetchSavedStations()
-		
-	}, [db, user])
-
-	const fetchSavedStations = async()=>{
-
-		if(user){
-
-			await db.getAllAsync<{ stop_id: number; }>(`SELECT stop_id FROM user_saved_stations WHERE user_id = ?`, [user.id])
-			.then((result)=>{
-				setUserSavedStations(result.map(item => item.stop_id as number))
-			})
-			.catch((error) =>{throw error})
-		}
-		else{
-			console.log("User is not logged in");
-			setUserSavedStations(null)
-		}
-	}
-
-	if(userSavedStations){
-		userSavedStations.forEach((saved_station)=>{
-			console.log(saved_station);
+			// console.log("USER STATE:", user);
 			
-		})
-	}
+			fetchSavedStations()
+			
+			// setEstaciones(
+			// 	[{
+			// 			id: 15,
+			// 			name: "Plaza del Rosel y San Blas",
+			// 			lines: [3,4],
+			// 			data:[
+			// 				{ 
+			// 					type: 'service', 
+			// 					info: { 
+			// 						line: 4, 
+			// 						timeOfArrival: '10:30', 
+			// 						destinationTitle: 'Concatedral',
+			// 					}
+			// 				},
+			// 				{ 
+			// 					type: 'service', 
+			// 					info: { 
+			// 						line: 3, 
+			// 						timeOfArrival: '10:35', 
+			// 						destinationTitle: 'Las Camaretas',
+			// 					} 
+			// 				}]
+			// 		},
+			// 		{
+			// 			id: 1,
+			// 			name: "Constitución",
+			// 			lines:[
+			// 				1, 4, 3,
+			// 			],
+			// 			data:[{ 
+			// 				type: 'warning', 
+			// 				info: {
+			// 					message: "No hay servicio en la estación",	
+			// 				} 
+			// 			}]
+			// 		},
+			// 		{
+			// 			id: 2,
+			// 			name: "Mariano Granados",
+			// 			lines:[
+			// 				2, 4, 3,
+			// 			],
+			// 			data:[{ 
+			// 				type: 'warning', 
+			// 				info: {
+			// 					message: "No hay servicio en la estación",	
+			// 				} 
+			// 			}]
+			// 		},
+			// 	]
+			// )
+			setIsThereData(true)
 
-	const showSavedStations = ()=>{
-		if(isThereData){
-			return(
-				estaciones.map((estacion, index) =>(
-					<SavedStationCard key={index} stop_id={estacion.id} nombre={estacion.name} lineas={estacion.lines} data={estacion.data} />
-				))
-			)
+		},[user])
+
+	)
+	
+	const fetchSavedStations = async()=>{
+		
+		if(user != null){
+
+			try {
+				const result = await db.getAllAsync<{ stop_id: number }>(
+					`SELECT stop_id FROM user_saved_stations WHERE user_id = ?`, 
+					[user.id]
+				);
+				
+				const savedStations = result.map(item => item.stop_id as number);
+				setUserSavedStations(savedStations);
+		  
+				let userStations:StopData[] = []
+				// Compute timetables for each saved station
+				for (const stationId of savedStations) {
+					const timetable = await compute_timetables(stationId, db);
+					console.log(timetable);
+					userStations.push(timetable)
+				}
+
+				setEstaciones(userStations);
+
+			} catch (error) {
+				console.error("Error fetching saved stations:", error);
+			}
 		}
 		else{
-			return(<Text style={styles.noDataText}>No hay estaciones guardadas en tu usuario</Text>)
+			setUserSavedStations([])
 		}
 	}
+	
+
+	// const showSavedStations = ()=>{
+	// 	if(isThereData){
+	// 		return(
+	// 			estaciones.map((estacion, index) =>(
+	// 				<SavedStationCard key={index} stop_id={estacion.stop_id} nombre={estacion.stop_name} lineas={estacion.correspondences} data={estacion.line_arrivals} />
+	// 			))
+	// 		)
+	// 	}
+	// 	else{
+	// 		return(<Text style={styles.noDataText}>No hay estaciones guardadas en tu usuario</Text>)
+	// 	}
+	// }
 
 	return(
 		<AutocompleteDropdownContextProvider>
@@ -228,7 +221,7 @@ export default function Index() {
 					<View></View>
 					
 					<Text style={styles.savedStationsText}>Estaciones guardadas</Text>
-					{showSavedStations()}
+					{/* {showSavedStations()} */}
 
 				</View>
 			</ScrollView>

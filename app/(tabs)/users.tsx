@@ -1,68 +1,91 @@
 import { SQLiteDatabase, useSQLiteContext } from "expo-sqlite";
 import React, { useState } from "react";
-import { ScrollView, View, StyleSheet, Text, TextInput, Button } from "react-native";
-import { colorsList, constants } from "../constants/Constants";
-import { useAuth } from "@/app/AuthContext";
+import { ScrollView, View, StyleSheet, Text, TextInput, Button, Pressable, Image } from "react-native";
+import { colorsList, constants, getArrayIconoLineas } from "../constants/Constants";
+import { useAuth, User } from "@/app/AuthContext";
+import { router } from "expo-router";
+import { StationData } from "./stops";
 
 function UsersTab(){
     const db = useSQLiteContext();
 
     const {user, login, logout } = useAuth()
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+    // const [username, setUsername] = useState("");
+    // const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("");
+
+    //debug parameters, me canso de poner el usuario todo el rato
+    const [username, setUsername] = useState("manel");
+    const [password, setPassword] = useState("1234");
+
+
+    const station_element = (item:StationData, index: number)=>{
+            return(
+                <Pressable onPress={()=> router.push({pathname: '/stopViewer', params: {stop_id: item.id}})} key={index}>
+                    <View style={{
+                        width: "100%",
+                        minHeight: 90,
+                        paddingLeft: constants.bounds.padding,
+                        paddingRight: constants.bounds.padding,
+    
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "space-between"
+                    }}>
+                            <Text style={styles.station_text}>{item.name}</Text>
+                            <View style={{
+                                flexDirection: "row",
+                                columnGap: constants.bounds.padding
+                            }}>
+                                {
+                                    getArrayIconoLineas(item.correspondences, 30)
+                                }
+    
+                            </View>
+                    </View>
+                </Pressable>
+            )
+        }
     
     return (
-
-        
         <ScrollView style={{
-            backgroundColor: colorsList.light.FULL_WHITE
+            backgroundColor: colorsList.light.FULL_WHITE,
         }}>
-                    <View style={{
-                        margin: constants.bounds.padding,
-                        flexDirection: 'column',
-                        rowGap: constants.bounds.padding,
-                        alignContent: "center",
-                        alignItems: "center",
-                    }}>
+            <View style={{
+                width: "100%",
+                flexDirection: "column",
+                alignItems: "center",
+                rowGap: constants.bounds.padding,
+                padding: constants.bounds.padding,
+            }}>
+                <Image source={require('@/assets/images/fgc.jpeg')} style={{borderRadius:100, maxHeight: 50, aspectRatio: 1, backgroundColor: 'red'}}/>
+                <Text style={styles.usernameLabel}>Manel Lagunas</Text>
 
-                    {user ? 
-                        <View>
-                            <Text>Welcome, {user.username}!</Text>
-                            <Text>You are now logged in.</Text>
-                            <Text>ID: {user.id}</Text>
-                        </View> 
-                    : 
-                        <View style={{width: "100%"}}>
-                            <TextInput placeholder="user" onChangeText={(value)=>setUsername(value.trim())} style={styles.textInput} autoCapitalize="none"/>
-                            <TextInput placeholder="psw" onChangeText={(value)=>setPassword(value.trim())} style={styles.textInput} autoCapitalize="none"/>
-                        </View>
-                    }
+                <View style={{width:"100%"}}>
+                    <Text style={styles.propertyLabel}>password: ********</Text>
+                    <Text style={styles.propertyLabel}>email: manel@email.com</Text>
+                </View>
+                <View style={{width: "100%", flexDirection: "row-reverse", columnGap: constants.bounds.padding / 2}}>
+                    <Button title="Editar" color={colorsList.light.PRIMARY_BLUE}/>
+                    <Button title="Eliminar" color={colorsList.light.ALERT_RED}/>
+                </View>
 
-                    <Button title={user ? "Desloguear" : "Logear"} onPress={()=>{
+                <Text style={styles.savedStationsDivLabel}>Tus estaciones guardadas</Text>
 
-                        if(user){
-                            logout()
-                            console.log("Already logged in");
-                            
-                        }
-                        else{
-                            if(username != "" && password != ""){
-                                login(username, password)
-                            }
-                            else{
-                                console.log("username and psq are empty");
-                            }
-                        }
-                    }}/>
-                    </View>
-
+                <View>
+                    <View style={{backgroundColor: "lightslategrey", minHeight: 1}}/>
+                    {station_element(new StationData(1, "Estación de soria", [1,2]), 1)}
+                    <View style={{backgroundColor: "lightslategrey", minHeight: 1}}/>
+                    {station_element(new StationData(1, "Estación de soria", [1,2]), 2)}
+                </View>
+                
+            </View>
         </ScrollView>
-    );
+
+    );   
 }
 
-
 export default UsersTab;
-
 
 const styles = StyleSheet.create({
     textInput: {
@@ -93,10 +116,14 @@ const styles = StyleSheet.create({
         textAlign: "center",
         shadowColor: colorsList.light.MAIN_BLACK,
     },
-    labelText: {
+    usernameLabel: {
         color: colorsList.light.MAIN_BLACK,
-        fontSize: constants.text.sectionTitleSize,
+        fontSize: constants.text.mainTitleSize,
         textAlign: "center"
+    },
+    propertyLabel:{
+        color: colorsList.light.MAIN_BLACK,
+        fontSize: constants.text.mainLabelSize,
     },
     viewCard:{
         flexDirection: "row",
@@ -114,9 +141,14 @@ const styles = StyleSheet.create({
         fontSize: constants.text.mainLabelSize,
         textAlign: "center"
     },
-    savedStationsText:{
+    savedStationsDivLabel:{
         color: colorsList.light.MAIN_BLACK,
         fontSize: constants.text.mainTitleSize,
         textAlign: "center"
+    },
+    station_text:{
+        fontSize: constants.text.mainLabelSize,
+        fontWeight: "600",
+        maxWidth: "60%"
     }
 })
