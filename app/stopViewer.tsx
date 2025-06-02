@@ -57,11 +57,12 @@ interface TimeTable{
 export default function Index(){
     
     const { user } = useAuth();
-    const {stop_id} = useLocalSearchParams();
+    const { stop_id } = useLocalSearchParams();
     const db = useSQLiteContext();
     
     const [data, setData] = useState<StopData>(new StopData());
     const [isLoading, setIsLoading] = useState(true);
+    const [isStationSaved, setIsStationSaved] = useState(false);
     
     let id:number = typeof stop_id === 'string' ? parseInt(stop_id) : parseInt(stop_id[0])
 
@@ -73,7 +74,43 @@ export default function Index(){
         
         setData(await compute_timetables(id, db));
         setIsLoading(false);
+        getSavedStation()
 
+
+    }
+
+    const getSavedStation = async()=>{
+        if(user){
+            await db.getFirstAsync('SELECT stop_id FROM user_saved_stations WHERE user_id = ? AND stop_id = ?', [user.id, id])
+            .then((result)=>{
+                if(result){ 
+                    console.log("RESULT",result);
+                    setIsStationSaved(true)
+                }
+            })
+            .catch((error)=> {throw error})
+        }
+    }
+
+    const saveStation = async()=>{
+        if(user){
+            db.runAsync('INSERT INTO user_saved_stations (user_id, stop_id) VALUES (?,?)', [user.id, id])
+                .then((result)=>{
+                    console.log("ESTACION GUARDADA",result);
+                    setIsStationSaved(true)
+                })
+                .catch((error)=> {throw error})
+        }
+    }
+    const removeStation = async()=>{
+        if(user){
+            db.runAsync('DELETE FROM user_saved_stations WHERE user_id = ? AND stop_id = ?', [user.id, id])
+                .then((result)=>{
+                    console.log("ESTACION BORRADA",result);
+                    setIsStationSaved(false)
+                })
+                .catch((error)=> {throw error})
+        }
     }
 
     const alert = ()=>{
@@ -120,16 +157,17 @@ export default function Index(){
                 }
 
                 {
-                    user ?
-                    <Button title="Eliminar de favoritos" onPress={()=>{
+                    user && isStationSaved ?
+                    <Button title="Eliminar de favoritos" onPress={async()=>{
                         console.log("consulta elimina estacion con ID:", id);
+                        removeStation();
                         
                     }}/>
                     :
                     <Button title="Añadir a favoritos" onPress={()=>{
                         console.log("consulta añade estacion con ID:", id);
                         console.log("user_ID:", user);
-                        user ? console.log("SE guarda la estacion") : alert()
+                        user ? saveStation() : alert()
                         
                     }}/>
                 }

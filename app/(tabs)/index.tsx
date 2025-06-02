@@ -102,10 +102,11 @@ export default function Index() {
 				// Compute timetables for each saved station
 				for (const stationId of savedStations) {
 					const timetable = await compute_timetables(stationId, db);
-					console.log(timetable);
 					userStations.push(timetable)
 				}
-
+				
+				console.log("USER_SAVED_STATIONS:", userStations);
+				
 				setEstaciones(userStations);
 
 			} catch (error) {
