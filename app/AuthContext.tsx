@@ -76,7 +76,6 @@ export const AuthProvider:React.FC<AuthProviderProps> = ({children})=>{
             return {success: true}
 
         } catch (error: any) {
-            console.error("Registration error: ", error)
             return{
                 success: false,
                 error: error.message
