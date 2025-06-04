@@ -68,7 +68,7 @@ export default function Index() {
     // console.log(data);
     
 
-    const station_element = (item:StationData, index: number)=>{
+    function station_element(item:StationData, index: number){
         return(
             <Pressable onPress={()=> router.push({pathname: '/stopViewer', params: {stop_id: item.id}})} key={index}>
                 <View style={{

@@ -11,6 +11,7 @@ function UsersTab(){
 
     const {user, login, logout, register } = useAuth();
     const [isRegistering, setIsRegistering] = useState(false);
+    const [userSavedStations, setUserSavedStations] = useState<StationData[]>([]);
 
     const [email, setEmail] = useState("");
     const [isEmailValid, setIsEmailValid] = useState(true);
@@ -31,9 +32,12 @@ function UsersTab(){
         
 	)
 
+    console.log("SAVED_STATIONS", userSavedStations);
+    
+
     const debugUsers = async()=>{
         try {
-            await db.getAllAsync(
+            db.getAllAsync(
                 `SELECT * FROM users`
             ).then((result)=> console.log("TODOS USUARIOS:",result))
             
@@ -139,26 +143,106 @@ function UsersTab(){
     const fetchSavedStations = async()=>{
         if(user != null){
             try {
-                const result = await db.getAllAsync<{ stop_id: number }>(
-                    `SELECT stop_id FROM user_saved_stations WHERE user_id = ?`, 
-                    [user.id]
-                );
+                let station_array:StationData[] = [];
+                const db_data = await db.getAllAsync<{
+                    id:number,
+                    name:string,
+                    correspondences:string;
+                }>(`
+                    SELECT 
+                        s.stop_id as id,
+                        s.name AS name,
+                        json_group_array(DISTINCT rs.route_id) AS correspondences
+                    FROM 
+                        stops s
+                    LEFT JOIN 
+                        route_stations rs ON s.stop_id = rs.stop_id
+                    WHERE s.stop_id IN(SELECT stop_id FROM user_saved_stations WHERE user_id = ?)
+                    GROUP BY 
+                        s.stop_id, s.name
+                    ORDER BY 
+                        s.name;
     
-                console.log("STATIONS: ",result);
+                `, [user.id]).catch((err)=> {throw err})
                 
-    
+                db_data.forEach(station => {
+                    let correspondences_array:number[] = JSON.parse(station.correspondences)
+                    
+        
+                    station_array.push(new StationData(station.id, station.name, correspondences_array))
+                });
+                
+                setUserSavedStations(station_array)
             } catch (error) {
                 console.error("Error fetching saved stations:", error);
             }
         }
 
     }
+
+    function station_element(item:StationData, index: number){
+        return(
+            <Pressable onPress={()=> router.push({pathname: '/stopViewer', params: {stop_id: item.id}})} key={index}>
+                <View style={{
+                    width: "100%",
+                    minHeight: 90,
+                    paddingLeft: constants.bounds.padding,
+                    paddingRight: constants.bounds.padding,
+
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between"
+                }}>
+                        <Text style={styles.station_text}>{item.name}</Text>
+                        <View style={{
+                            flexDirection: "row",
+                            columnGap: constants.bounds.padding
+                        }}>
+                            {
+                                getArrayIconoLineas(item.correspondences, 30)
+                            }
+
+                        </View>
+                </View>
+            </Pressable>
+        )
+    }
     
     if(user){
 
         return(
-            <View>
-                <Text>{user.username}</Text>
+            <ScrollView style={{
+				backgroundColor: colorsList.light.FULL_WHITE,
+                padding: constants.bounds.padding,
+			}} contentContainerStyle={{
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                rowGap: constants.bounds.padding
+            }}>
+                <View style={{width: "100%", flexDirection: "column", alignItems: "center", rowGap: constants.bounds.padding}}>
+                    <Image source={require('@/assets/images/fgc.jpeg')} style={{width: 60, height: 60, borderRadius: 100}}/>
+                    <Text style={styles.usernameLabel}>{user.username}</Text>
+                </View>
+
+                <View style={{width: "100%"}}>
+                    <Text style={styles.propertyLabel}>Email: <Text style={styles.propertyLabel}>{user.email}</Text></Text>
+                </View>
+
+                <View style={{width: "100%", flexDirection: "row-reverse", columnGap: constants.bounds.padding}}>
+                    <Pressable style={{display: "flex", justifyContent: "center", alignItems: "center", padding: constants.bounds.padding*0.5, backgroundColor:'red'}}>
+                        <Text style={styles.buttonText}>Eliminar</Text>
+                    </Pressable>
+                    <Pressable style={{display: "flex", justifyContent: "center", alignItems: "center", padding: constants.bounds.padding*0.5, backgroundColor:'red'}}>
+                        <Text style={styles.buttonText}>Editar</Text>
+                    </Pressable>
+                </View>
+
+                <Text style={styles.savedStationsDivLabel}>Tus estaciones guardadas</Text>
+
+                <View>
+                    {userSavedStations.map((value, index)=> station_element(value, index))}
+                </View>
 
                 <Pressable onPress={()=>{
                     logout()
@@ -167,7 +251,7 @@ function UsersTab(){
                 }} style={{padding: 3, backgroundColor: 'pink', width: 70, margin: 10}}>
                     <Text>DesLoguear</Text>
                 </Pressable>
-            </View>
+            </ScrollView>
         )
 
 
@@ -186,15 +270,30 @@ function UsersTab(){
                     padding: constants.bounds.padding
                 }}>
                     
-                    <View style={{width: "100%", }}>
-                        <TextInput style={[styles.textInput, isUsernameValid ? null : styles.alert]} placeholder="Usuario" autoCapitalize="none"
-                            onChangeText={(value)=> { if(parseUsername(value)) setUsername(value) }} />
+                    <View style={{width: "100%", rowGap: constants.bounds.padding}}>
+                        <View>
+                            <TextInput style={[styles.textInput, isUsernameValid ? null : styles.alert]} placeholder="Usuario" autoCapitalize="none"
+                                onChangeText={(value)=> { if(parseUsername(value)) setUsername(value) }} />
+                            <View>
+                                <Text style={[styles.parseErrorText, isUsernameValid ? styles.errorTextNotVisible : null]}>El usuario no es válido!</Text>
+                            </View>
+                        </View>
 
-                        <TextInput style={[styles.textInput, isPasswordValid ? null : styles.alert]} placeholder="Contraseña" secureTextEntry={true}
-                            onChangeText={(value)=> { if(parsePassword(value)) setPassword(value.toLowerCase().trim()) }} />
+                        <View>
+                            <TextInput style={[styles.textInput, isPasswordValid ? null : styles.alert]} placeholder="Contraseña" secureTextEntry={true}
+                                onChangeText={(value)=> { if(parsePassword(value)) setPassword(value.toLowerCase().trim()) }} />
+                            <View>
+                                <Text style={[styles.parseErrorText, isPasswordValid ? styles.errorTextNotVisible : null]}>La contraseña no es válida!</Text>
+                            </View>
+                        </View>
 
-                        <TextInput style={[styles.textInput, isEmailValid ? null : styles.alert]} placeholder="Email" autoCapitalize="none"
-                            onChangeText={(value)=>{ if(parseEmail(value)) setEmail(value) }} />
+                        <View>
+                            <TextInput style={[styles.textInput, isEmailValid ? null : styles.alert]} placeholder="Email" autoCapitalize="none"
+                                onChangeText={(value)=>{ if(parseEmail(value)) setEmail(value) }} />
+                            <View>
+                                <Text style={[styles.parseErrorText, isEmailValid ? styles.errorTextNotVisible : null]}>El email no es válido!</Text>
+                            </View>
+                        </View>
                     </View>
                     
                     <View style={{width: "100%", flexDirection: "row", columnGap: constants.bounds.padding}}>
@@ -229,7 +328,8 @@ function UsersTab(){
                             <Text>Registrar</Text>
                         </Pressable>
 
-                        <Pressable onPress={()=>setIsRegistering(!isRegistering)} style={{padding: 3, backgroundColor: 'indianred', width: 70, margin: 10}}>
+                        <Pressable style={{padding: 3, backgroundColor: 'indianred', width: 70, margin: 10}}
+                            onPress={()=>setIsRegistering(!isRegistering)}>
                             <Text>noRegistrar</Text>
                         </Pressable>
 
@@ -290,6 +390,13 @@ const styles = StyleSheet.create({
     alert: {
         borderColor: colorsList.light.ALERT_RED
     },
+    parseErrorText:{
+        paddingLeft: constants.bounds.padding,
+        color: colorsList.light.ALERT_RED
+    },
+    errorTextNotVisible: {
+        display: "none"
+    },
     pressable: {
         backgroundColor: colorsList.light.PRIMARY_BLUE,
         borderRadius: constants.bounds.radius,
@@ -304,7 +411,7 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: colorsList.light.MAIN_WHITE,
-        fontSize: constants.text.mainTitleSize,
+        fontSize: constants.text.mainLabelSize,
         textAlign: "center",
         shadowColor: colorsList.light.MAIN_BLACK,
     },

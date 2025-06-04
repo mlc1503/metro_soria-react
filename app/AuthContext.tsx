@@ -5,7 +5,8 @@ import React, { createContext, useState, useContext, useEffect, ReactNode } from
 
 export interface User{
     id:number, 
-    username:string
+    username:string,
+    email:string
 }
 
 interface AuthContextType{
@@ -48,12 +49,12 @@ export const AuthProvider:React.FC<AuthProviderProps> = ({children})=>{
     const login = async(username:string, password:string)=>{
         try {
             const result = await db.getAllAsync<User>(
-                'SELECT id, username FROM users WHERE username = ? AND password = ?',
+                'SELECT id, username, email FROM users WHERE username = ? AND password = ?',
                 [username, password]
             );
             
             if (result && result.length > 0) {
-                const user = { id: result[0].id, username };
+                const user = { id: result[0].id, username: result[0].username, email: result[0].email };
                 setUser(user);
                 return { success: true }; 
             }
