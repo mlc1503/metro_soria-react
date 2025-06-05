@@ -1,8 +1,8 @@
-import { SQLiteDatabase, useSQLiteContext } from "expo-sqlite";
+import { useSQLiteContext } from "expo-sqlite";
 import React, { useCallback, useState } from "react";
-import { ScrollView, View, StyleSheet, Text, TextInput, Button, Pressable, Image, Alert } from "react-native";
+import { ScrollView, View, StyleSheet, Text, TextInput, Pressable, Image, Alert } from "react-native";
 import { colorsList, constants, getArrayIconoLineas } from "../constants/Constants";
-import { useAuth, User } from "@/app/AuthContext";
+import { useAuth } from "@/app/AuthContext";
 import { router, useFocusEffect } from "expo-router";
 import { StationData } from "./stops";
 
@@ -139,7 +139,6 @@ function UsersTab(){
         return true;
     }
 
-
     const fetchSavedStations = async()=>{
         if(user != null){
             try {
@@ -182,29 +181,33 @@ function UsersTab(){
 
     function station_element(item:StationData, index: number){
         return(
-            <Pressable onPress={()=> router.push({pathname: '/stopViewer', params: {stop_id: item.id}})} key={index}>
-                <View style={{
-                    width: "100%",
-                    minHeight: 90,
-                    paddingLeft: constants.bounds.padding,
-                    paddingRight: constants.bounds.padding,
+            <View>
+                <View style={{width: "100%", backgroundColor: 'lightslategray', height: 1}}/>
+                <Pressable onPress={()=> router.push({pathname: '/stopViewer', params: {stop_id: item.id}})} key={index}>
+                    <View style={{
+                        width: "100%",
+                        minHeight: 90,
+                        paddingLeft: constants.bounds.padding,
+                        paddingRight: constants.bounds.padding,
 
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "space-between"
-                }}>
-                        <Text style={styles.station_text}>{item.name}</Text>
-                        <View style={{
-                            flexDirection: "row",
-                            columnGap: constants.bounds.padding
-                        }}>
-                            {
-                                getArrayIconoLineas(item.correspondences, 30)
-                            }
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "space-between"
+                    }}>
+                            <Text style={styles.station_text}>{item.name}</Text>
+                            <View style={{
+                                flexDirection: "row",
+                                columnGap: constants.bounds.padding
+                            }}>
+                                {
+                                    getArrayIconoLineas(item.correspondences, 30)
+                                }
 
-                        </View>
-                </View>
-            </Pressable>
+                            </View>
+                    </View>
+                </Pressable>
+            </View>
+
         )
     }
     
@@ -218,7 +221,7 @@ function UsersTab(){
                 flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "center",
-                rowGap: constants.bounds.padding
+                rowGap: constants.bounds.padding,
             }}>
                 <View style={{width: "100%", flexDirection: "column", alignItems: "center", rowGap: constants.bounds.padding}}>
                     <Image source={require('@/assets/images/fgc.jpeg')} style={{width: 60, height: 60, borderRadius: 100}}/>
@@ -227,14 +230,15 @@ function UsersTab(){
 
                 <View style={{width: "100%"}}>
                     <Text style={styles.propertyLabel}>Email: <Text style={styles.propertyLabel}>{user.email}</Text></Text>
+                    <Text style={styles.propertyLabel}>Contraseña: <Text style={styles.propertyLabel}>********</Text></Text>
                 </View>
 
-                <View style={{width: "100%", flexDirection: "row-reverse", columnGap: constants.bounds.padding}}>
-                    <Pressable style={{display: "flex", justifyContent: "center", alignItems: "center", padding: constants.bounds.padding*0.5, backgroundColor:'red'}}>
-                        <Text style={styles.buttonText}>Eliminar</Text>
+                <View style={{width: "100%", flexDirection: "row-reverse", columnGap: constants.bounds.padding / 2}}>
+                    <Pressable style={{display: "flex", justifyContent: "center", alignItems: "center", padding: constants.bounds.padding, backgroundColor:colorsList.light.PRIMARY_BLUE, borderRadius: constants.bounds.radius}}>
+                        <Text style={styles.buttonText}>EDITAR</Text>
                     </Pressable>
-                    <Pressable style={{display: "flex", justifyContent: "center", alignItems: "center", padding: constants.bounds.padding*0.5, backgroundColor:'red'}}>
-                        <Text style={styles.buttonText}>Editar</Text>
+                    <Pressable style={{display: "flex", justifyContent: "center", alignItems: "center", padding: constants.bounds.padding, backgroundColor:colorsList.light.ALERT_RED, borderRadius: constants.bounds.radius}}>
+                        <Text style={styles.buttonText}>ELIMINAR</Text>
                     </Pressable>
                 </View>
 
@@ -248,9 +252,12 @@ function UsersTab(){
                     logout()
                     setUsername("")
                     setPassword("")
-                }} style={{padding: 3, backgroundColor: 'pink', width: 70, margin: 10}}>
-                    <Text>DesLoguear</Text>
+                    setUserSavedStations([])
+                }} style={styles.pressable}>
+                    <Text style={{color: colorsList.light.MAIN_WHITE}}>CERRAR SESIÓN</Text>
                 </Pressable>
+
+                <View style={{height: 50}}/>
             </ScrollView>
         )
 
@@ -271,6 +278,9 @@ function UsersTab(){
                 }}>
                     
                     <View style={{width: "100%", rowGap: constants.bounds.padding}}>
+
+                        <Text>Registra tu usuario</Text>
+
                         <View>
                             <TextInput style={[styles.textInput, isUsernameValid ? null : styles.alert]} placeholder="Usuario" autoCapitalize="none"
                                 onChangeText={(value)=> { if(parseUsername(value)) setUsername(value) }} />
@@ -345,10 +355,13 @@ function UsersTab(){
                 flexDirection: "column",
                 justifyContent: "center",
                 alignItems:"center",
-                padding: constants.bounds.padding
+                padding: constants.bounds.padding,
+                rowGap: constants.bounds.padding
             }}>
+
+                <Text style={styles.savedStationsDivLabel}>Inicia sesión</Text>
                 
-                <View style={{width: "100%", }}>
+                <View style={{width: "100%", rowGap: constants.bounds.padding}}>
                     <TextInput style={[styles.textInput, isUsernameValid ? null : styles.alert]} placeholder="Usuario" autoCapitalize="none"
                         onChangeText={(value)=> { if(parseUsername(value)) setUsername(value.toLowerCase().trim()) }} />
 
@@ -359,7 +372,9 @@ function UsersTab(){
                     <Pressable style={{padding: 3, backgroundColor: 'cyan', width: 70, margin: 10}}
                     onPress={()=>{
                         if(parseUsername(username) && parsePassword(password)){ login(username, password) }
-                        else{ console.warn("login fields are invalid!") }
+                        else{ 
+                            console.warn("login fields are invalid!")
+                        }
                     }}>
                         <Text>Loguear</Text>
                     </Pressable>
@@ -449,5 +464,11 @@ const styles = StyleSheet.create({
         fontSize: constants.text.mainLabelSize,
         fontWeight: "600",
         maxWidth: "60%"
+    },
+    editButton:{
+        backgroundColor: colorsList.light.PRIMARY_BLUE,
+        flexDirection: 'column',
+        alignItems: "center",
+        justifyContent: "center"
     }
 })
