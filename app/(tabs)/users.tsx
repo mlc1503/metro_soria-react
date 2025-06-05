@@ -181,29 +181,15 @@ function UsersTab(){
 
     function station_element(item:StationData, index: number){
         return(
-            <View>
-                <View style={{width: "100%", backgroundColor: 'lightslategray', height: 1}}/>
-                <Pressable onPress={()=> router.push({pathname: '/stopViewer', params: {stop_id: item.id}})} key={index}>
-                    <View style={{
-                        width: "100%",
-                        minHeight: 90,
-                        paddingLeft: constants.bounds.padding,
-                        paddingRight: constants.bounds.padding,
+            <View style={savedStationStyle.stationItemContainer}>
+                <View style={savedStationStyle.divider} />
+                <Pressable key={index}
+                    onPress={() => router.push({ pathname: '/stopViewer', params: { stop_id: item.id } })}
+                >
+                    <View style={savedStationStyle.stationPressableContainer}>
+                        <Text style={savedStationStyle.station_text}>{item.name}</Text>
 
-                        flexDirection: "row",
-                        alignItems: "center",
-                        justifyContent: "space-between"
-                    }}>
-                            <Text style={styles.station_text}>{item.name}</Text>
-                            <View style={{
-                                flexDirection: "row",
-                                columnGap: constants.bounds.padding
-                            }}>
-                                {
-                                    getArrayIconoLineas(item.correspondences, 30)
-                                }
-
-                            </View>
+                        <View style={savedStationStyle.lineIconsContainer}>{getArrayIconoLineas(item.correspondences, 30)}</View>
                     </View>
                 </Pressable>
             </View>
@@ -214,176 +200,174 @@ function UsersTab(){
     if(user){
 
         return(
-            <ScrollView style={{
-				backgroundColor: colorsList.light.FULL_WHITE,
-                padding: constants.bounds.padding,
-			}} contentContainerStyle={{
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                rowGap: constants.bounds.padding,
-            }}>
-                <View style={{width: "100%", flexDirection: "column", alignItems: "center", rowGap: constants.bounds.padding}}>
-                    <Image source={require('@/assets/images/fgc.jpeg')} style={{width: 60, height: 60, borderRadius: 100}}/>
-                    <Text style={styles.usernameLabel}>{user.username}</Text>
+            <ScrollView 
+                style={userScreenStyle.scrollView}
+                contentContainerStyle={userScreenStyle.scrollContent}
+            >
+                <View style={userScreenStyle.userHeader}>
+                    <Image 
+                        source={require('@/assets/images/fgc.jpeg')} 
+                        style={userScreenStyle.userImage}
+                    />
+                    <Text style={userScreenStyle.usernameLabel}>{user.username}</Text>
                 </View>
 
-                <View style={{width: "100%"}}>
-                    <Text style={styles.propertyLabel}>Email: <Text style={styles.propertyLabel}>{user.email}</Text></Text>
-                    <Text style={styles.propertyLabel}>Contraseña: <Text style={styles.propertyLabel}>********</Text></Text>
+                <View style={{ width: "100%" }}>
+                    <Text style={userScreenStyle.propertyLabel}>Email: <Text style={userScreenStyle.propertyLabel}>{user.email}</Text></Text>
+                    <Text style={userScreenStyle.propertyLabel}>Contraseña: <Text style={userScreenStyle.propertyLabel}>********</Text></Text>
                 </View>
 
-                <View style={{width: "100%", flexDirection: "row-reverse", columnGap: constants.bounds.padding / 2}}>
-                    <Pressable style={{display: "flex", justifyContent: "center", alignItems: "center", padding: constants.bounds.padding, backgroundColor:colorsList.light.PRIMARY_BLUE, borderRadius: constants.bounds.radius}}>
-                        <Text style={styles.buttonText}>EDITAR</Text>
+                <View style={userScreenStyle.buttonContainer}>
+                    <Pressable style={[userScreenStyle.actionButton, userScreenStyle.editButton]}>
+                        <Text style={userScreenStyle.buttonText}>EDITAR</Text>
                     </Pressable>
-                    <Pressable style={{display: "flex", justifyContent: "center", alignItems: "center", padding: constants.bounds.padding, backgroundColor:colorsList.light.ALERT_RED, borderRadius: constants.bounds.radius}}>
-                        <Text style={styles.buttonText}>ELIMINAR</Text>
+                    
+                    <Pressable style={[userScreenStyle.actionButton, userScreenStyle.deleteButton]}>
+                        <Text style={userScreenStyle.buttonText}>ELIMINAR</Text>
                     </Pressable>
                 </View>
 
-                <Text style={styles.savedStationsDivLabel}>Tus estaciones guardadas</Text>
+                <Text style={userScreenStyle.savedStationsDivLabel}>Tus estaciones guardadas</Text>
 
-                <View>
-                    {userSavedStations.map((value, index)=> station_element(value, index))}
-                </View>
+                <View>{userSavedStations.map((value, index) => station_element(value, index))}</View>
 
-                <Pressable onPress={()=>{
-                    logout()
-                    setUsername("")
-                    setPassword("")
-                    setUserSavedStations([])
-                }} style={styles.pressable}>
-                    <Text style={{color: colorsList.light.MAIN_WHITE}}>CERRAR SESIÓN</Text>
+                <Pressable style={userScreenStyle.pressable}
+                    onPress={() => {
+                        logout();
+                        setUsername("");
+                        setPassword("");
+                        setUserSavedStations([]);
+                }}>
+                <Text style={userScreenStyle.buttonText}>CERRAR SESIÓN</Text>
                 </Pressable>
 
-                <View style={{height: 50}}/>
+                <View style={userScreenStyle.spacer}/>
             </ScrollView>
         )
-
-
     }
     else{
 
         if(isRegistering){
             return(
+            <View style={registerScreenStyle.registerContainer}>
+                <View style={registerScreenStyle.registerFormContainer}>
+                    <Text style={registerScreenStyle.loginText}>Regístrate</Text>
 
-                <View style={{
-                    flex: 1,
-                    backgroundColor: colorsList.light.PRIMARY_BLUE,
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    alignItems:"center",
-                    padding: constants.bounds.padding
-                }}>
-                    
-                    <View style={{width: "100%", rowGap: constants.bounds.padding}}>
+                    <View style={registerScreenStyle.inputFieldContainer}>
 
-                        <Text>Registra tu usuario</Text>
-
+                        <TextInput style={[loginScreenStyle.textInput, isUsernameValid ? null : loginScreenStyle.alert]} placeholder="Usuario" autoCapitalize="none"
+                            onChangeText={(value) => { if(parseUsername(value)) setUsername(value) }} 
+                        />
                         <View>
-                            <TextInput style={[styles.textInput, isUsernameValid ? null : styles.alert]} placeholder="Usuario" autoCapitalize="none"
-                                onChangeText={(value)=> { if(parseUsername(value)) setUsername(value) }} />
-                            <View>
-                                <Text style={[styles.parseErrorText, isUsernameValid ? styles.errorTextNotVisible : null]}>El usuario no es válido!</Text>
-                            </View>
-                        </View>
-
-                        <View>
-                            <TextInput style={[styles.textInput, isPasswordValid ? null : styles.alert]} placeholder="Contraseña" secureTextEntry={true}
-                                onChangeText={(value)=> { if(parsePassword(value)) setPassword(value.toLowerCase().trim()) }} />
-                            <View>
-                                <Text style={[styles.parseErrorText, isPasswordValid ? styles.errorTextNotVisible : null]}>La contraseña no es válida!</Text>
-                            </View>
-                        </View>
-
-                        <View>
-                            <TextInput style={[styles.textInput, isEmailValid ? null : styles.alert]} placeholder="Email" autoCapitalize="none"
-                                onChangeText={(value)=>{ if(parseEmail(value)) setEmail(value) }} />
-                            <View>
-                                <Text style={[styles.parseErrorText, isEmailValid ? styles.errorTextNotVisible : null]}>El email no es válido!</Text>
-                            </View>
+                            <Text style={[registerScreenStyle.parseErrorText, isUsernameValid ? registerScreenStyle.errorTextNotVisible : null]}>
+                                El usuario no es válido!
+                            </Text>
                         </View>
                     </View>
-                    
-                    <View style={{width: "100%", flexDirection: "row", columnGap: constants.bounds.padding}}>
-                        <Pressable style={{padding: 3, backgroundColor: 'cyan', width: 70, margin: 10}}
-                        onPress={()=>{
-                            if(parseEmail(email) && parsePassword(password) && parseUsername(username)){
-                                register(username, password, email).then((result)=>{
-                                    if(result.success){
-                                        console.log("USUARIO REGISTRADO");
-                                        setUsername(username)
-                                        setPassword(password)
-                                        login(username, password)
-                                        setIsRegistering(false)
-                                    }
-                                    else{
-                                        console.warn(result.error);
-                                        Alert.alert(
-                                            "El usuario ya existe!",
-                                            "Escoge otro nombre y/o email.",
-                                            [{
-                                                text: "OK",
-                                            }]
-                                        )
-                                    }
-                                })
-                            }
-                            else{
-                                console.warn("registration fields are invalid!");
-                            }
 
-                        }}>
-                            <Text>Registrar</Text>
-                        </Pressable>
+                    <View style={registerScreenStyle.inputFieldContainer}>
 
-                        <Pressable style={{padding: 3, backgroundColor: 'indianred', width: 70, margin: 10}}
-                            onPress={()=>setIsRegistering(!isRegistering)}>
-                            <Text>noRegistrar</Text>
-                        </Pressable>
+                        <TextInput style={[loginScreenStyle.textInput, isPasswordValid ? null : loginScreenStyle.alert]} placeholder="Contraseña" secureTextEntry={true}
+                            onChangeText={(value) => { if(parsePassword(value)) setPassword(value.toLowerCase().trim()) }} 
+                        />
+                        <View>
+                            <Text style={[registerScreenStyle.parseErrorText, isPasswordValid ? registerScreenStyle.errorTextNotVisible : null]}>
+                                La contraseña no es válida!
+                            </Text>
+                        </View>
+                    </View>
 
+                    <View style={registerScreenStyle.inputFieldContainer}>
+
+                        <TextInput autoCapitalize="none" placeholder="Email" style={[loginScreenStyle.textInput, isEmailValid ? null : loginScreenStyle.alert]} 
+                            onChangeText={(value) => { if(parseEmail(value)) setEmail(value) }} 
+                        />
+                        <View>
+                            <Text style={[registerScreenStyle.parseErrorText, isEmailValid ? registerScreenStyle.errorTextNotVisible : null]}>
+                                El email no es válido!
+                            </Text>
+                        </View>
                     </View>
                 </View>
+                
+                <View style={registerScreenStyle.registerButtonRow}>
+                    <Pressable 
+                        style={registerScreenStyle.registerButton}
+                        onPress={() => {
+                        if(parseEmail(email) && parsePassword(password) && parseUsername(username)) {
+                            register(username, password, email).then((result) => {
+                            if(result.success) {
+                                console.log("USUARIO REGISTRADO");
+                                setUsername(username);
+                                setPassword(password);
+                                login(username, password);
+                                setIsRegistering(false);
+                            } else {
+                                console.warn(result.error);
+                                Alert.alert(
+                                "El usuario ya existe!",
+                                "Escoge otro nombre y/o email.",
+                                [{ text: "OK" }]
+                                );
+                            }
+                            });
+                        } else {
+                            console.warn("registration fields are invalid!");
+                        }
+                    }}>
+                        <Text style={[loginScreenStyle.buttonText]}>Registrar</Text>
+                    </Pressable>
+
+                    <Pressable style={[loginScreenStyle.registerLinkPressable]}
+                        onPress={() => setIsRegistering(!isRegistering)
+                    }>
+                        <Text style={loginScreenStyle.registerLinkText}>Iniciar sesión</Text>
+                    </Pressable>
+                </View>
+            </View>
             )
         }
 
         return(
-            <View style={{
-                flex: 1,
-                backgroundColor: colorsList.light.PRIMARY_BLUE,
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems:"center",
-                padding: constants.bounds.padding,
-                rowGap: constants.bounds.padding
-            }}>
-
-                <Text style={styles.savedStationsDivLabel}>Inicia sesión</Text>
+            <View style={loginScreenStyle.loginContainer}>
+                <Text style={loginScreenStyle.loginText}>Inicia sesión</Text>
                 
-                <View style={{width: "100%", rowGap: constants.bounds.padding}}>
-                    <TextInput style={[styles.textInput, isUsernameValid ? null : styles.alert]} placeholder="Usuario" autoCapitalize="none"
-                        onChangeText={(value)=> { if(parseUsername(value)) setUsername(value.toLowerCase().trim()) }} />
+                <View style={loginScreenStyle.inputContainer}>
+                    <TextInput 
+                        style={[loginScreenStyle.textInput, isUsernameValid ? null : loginScreenStyle.alert]} 
+                        placeholder="Usuario" 
+                        autoCapitalize="none"
+                        onChangeText={(value) => { 
+                        if (parseUsername(value)) setUsername(value.toLowerCase().trim()) 
+                    }}/>
 
-                    <TextInput style={[styles.textInput, isPasswordValid ? null : styles.alert]} placeholder="Contraseña" secureTextEntry={true}
-                        onChangeText={(value)=> { if(parsePassword(value)) setPassword(value.toLowerCase().trim()) }} />
+                    <TextInput 
+                        style={[loginScreenStyle.textInput, isPasswordValid ? null : loginScreenStyle.alert]} 
+                        placeholder="Contraseña" 
+                        secureTextEntry={true}
+                        onChangeText={(value) => { 
+                        if (parsePassword(value)) setPassword(value.toLowerCase().trim()) 
+                    }}/>
                 </View>
-                <View style={{width: "100%", flexDirection: "row", columnGap: constants.bounds.padding}}>
-                    <Pressable style={{padding: 3, backgroundColor: 'cyan', width: 70, margin: 10}}
-                    onPress={()=>{
-                        if(parseUsername(username) && parsePassword(password)){ login(username, password) }
-                        else{ 
-                            console.warn("login fields are invalid!")
+
+                <View style={loginScreenStyle.buttonRow}>
+                    <Pressable style={[loginScreenStyle.actionButton]}
+                        onPress={() => {
+                        if (parseUsername(username) && parsePassword(password)) { 
+                            login(username, password) 
+                        } else { 
+                            console.warn("login fields are invalid!");
                         }
                     }}>
-                        <Text>Loguear</Text>
+                        <Text style={loginScreenStyle.buttonText}>Entrar</Text>
                     </Pressable>
                     
-                    <Pressable onPress={()=>setIsRegistering(!isRegistering)} style={{padding: 3, backgroundColor: 'cyan', width: 100, margin: 10}}>
-                        <Text>SetRegister</Text>
-                    </Pressable>
                 </View>
-
+                <Pressable style={[loginScreenStyle.registerLinkPressable]}
+                    onPress={() => setIsRegistering(!isRegistering)
+                }>
+                    <Text style={loginScreenStyle.registerLinkText}>Registrarse</Text>
+                </Pressable>
             </View>
         )
     }
@@ -391,26 +375,69 @@ function UsersTab(){
 
 export default UsersTab;
 
-const styles = StyleSheet.create({
-    textInput: {
-        borderWidth: 2,
-        borderRadius: constants.bounds.radius,
+const userScreenStyle = StyleSheet.create({
+    scrollView: {
+        backgroundColor: colorsList.light.FULL_WHITE,
         padding: constants.bounds.padding,
-        backgroundColor: colorsList.light.MAIN_WHITE,
-        borderColor: colorsList.light.PRIMARY_BLUE,
+    },
+    scrollContent: {
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        rowGap: constants.bounds.padding,
+    },
+    userHeader: {
+        width: "100%",
+        flexDirection: "column",
+        alignItems: "center",
+        rowGap: constants.bounds.padding,
+    },
+    userImage: {
+        width: 60,
+        height: 60,
+        borderRadius: 100,
+    },
+    buttonContainer: {
+        width: "100%",
+        flexDirection: "row-reverse",
+        columnGap: constants.bounds.padding / 2,
+    },
+    actionButton: {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: constants.bounds.padding,
+        borderRadius: constants.bounds.radius,
+    },
+    editButton: {
+        backgroundColor: colorsList.light.PRIMARY_BLUE,
+    },
+    deleteButton: {
+        backgroundColor: colorsList.light.ALERT_RED,
+    },
+    spacer: {
+        height: 50,
+    },
+        // Reuse existing styles from your previous StyleSheet
+    usernameLabel: {
+        color: colorsList.light.MAIN_BLACK,
         fontSize: constants.text.mainTitleSize,
-        color: colorsList.light.PRIMARY_BLUE,
-        width: "100%"
+        textAlign: "center"
     },
-    alert: {
-        borderColor: colorsList.light.ALERT_RED
+    propertyLabel: {
+        color: colorsList.light.MAIN_BLACK,
+        fontSize: constants.text.mainLabelSize,
     },
-    parseErrorText:{
-        paddingLeft: constants.bounds.padding,
-        color: colorsList.light.ALERT_RED
+    buttonText: {
+        color: colorsList.light.MAIN_WHITE,
+        fontSize: constants.text.mainLabelSize,
+        textAlign: "center",
+        shadowColor: colorsList.light.MAIN_BLACK,
     },
-    errorTextNotVisible: {
-        display: "none"
+    savedStationsDivLabel: {
+        color: colorsList.light.MAIN_BLACK,
+        fontSize: constants.text.mainTitleSize,
+        textAlign: "center"
     },
     pressable: {
         backgroundColor: colorsList.light.PRIMARY_BLUE,
@@ -424,51 +451,152 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
     },
+})
+
+const savedStationStyle = StyleSheet.create({
+    
+    stationItemContainer: {
+        width: "100%",
+    },
+    divider: {
+        backgroundColor: 'lightslategray',
+        height: 1,
+    },
+    stationPressableContainer: {
+        width: "100%",
+        minHeight: 90,
+        paddingLeft: constants.bounds.padding,
+        paddingRight: constants.bounds.padding,
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+    },
+    lineIconsContainer: {
+        flexDirection: "row",
+        columnGap: constants.bounds.padding,
+    },
+    // Reusing your existing station_text style
+    station_text: {
+        fontSize: constants.text.mainLabelSize,
+        fontWeight: "600",
+        maxWidth: "60%"
+    }
+});
+
+const loginScreenStyle = StyleSheet.create({
+  
+    loginContainer: {
+        flex: 1,
+        backgroundColor: colorsList.light.PRIMARY_BLUE,
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: constants.bounds.padding,
+        rowGap: constants.bounds.padding
+    },
+    inputContainer: {
+        width: "100%",
+        rowGap: constants.bounds.padding
+    },
+    buttonRow: {
+        width: "100%",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        columnGap: constants.bounds.padding
+    },
+    actionButton: {
+        padding: constants.bounds.padding,
+        backgroundColor: colorsList.light.PRIMARY_CYAN,
+        borderWidth: 1,
+        borderRadius: constants.bounds.padding,
+        borderColor: colorsList.light.PRIMARY_CYAN
+    },
+    registerLinkPressable: {
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    registerLinkText: {
+        fontSize: constants.text.mainLabelSize,
+        color: colorsList.light.MAIN_WHITE,
+        textDecorationLine: "underline"
+    },
     buttonText: {
         color: colorsList.light.MAIN_WHITE,
         fontSize: constants.text.mainLabelSize,
         textAlign: "center",
-        shadowColor: colorsList.light.MAIN_BLACK,
     },
-    usernameLabel: {
-        color: colorsList.light.MAIN_BLACK,
-        fontSize: constants.text.mainTitleSize,
-        textAlign: "center"
-    },
-    propertyLabel:{
-        color: colorsList.light.MAIN_BLACK,
-        fontSize: constants.text.mainLabelSize,
-    },
-    viewCard:{
-        flexDirection: "row",
-        columnGap: constants.bounds.padding,
+    textInput: {
+        borderWidth: 2,
+        borderRadius: constants.bounds.radius,
+        padding: constants.bounds.padding,
         backgroundColor: colorsList.light.MAIN_WHITE,
         borderColor: colorsList.light.PRIMARY_BLUE,
-        borderWidth: 2,
-        padding: constants.bounds.padding,
-        borderRadius: constants.bounds.radius,
-        alignItems: "center",
-        justifyContent: "flex-start"
-    },
-    noDataText:{
-        color: colorsList.light.MAIN_BLACK,
-        fontSize: constants.text.mainLabelSize,
-        textAlign: "center"
-    },
-    savedStationsDivLabel:{
-        color: colorsList.light.MAIN_BLACK,
         fontSize: constants.text.mainTitleSize,
+        color: colorsList.light.PRIMARY_BLUE,
+        width: "100%"
+    },
+    alert: {
+        borderColor: colorsList.light.ALERT_RED
+    },
+    loginText: {
+        color: colorsList.light.MAIN_WHITE,
+        fontSize: constants.text.mainTitleSize,
+        fontWeight: "500",
         textAlign: "center"
-    },
-    station_text:{
-        fontSize: constants.text.mainLabelSize,
-        fontWeight: "600",
-        maxWidth: "60%"
-    },
-    editButton:{
-        backgroundColor: colorsList.light.PRIMARY_BLUE,
-        flexDirection: 'column',
-        alignItems: "center",
-        justifyContent: "center"
     }
-})
+});
+
+const registerScreenStyle = StyleSheet.create({
+  
+    registerContainer: {
+        flex: 1,
+        backgroundColor: colorsList.light.PRIMARY_BLUE,
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: constants.bounds.padding
+    },
+    registerFormContainer: {
+        width: "100%",
+        rowGap: constants.bounds.padding
+    },
+    inputFieldContainer: {
+        marginBottom: constants.bounds.padding / 2
+    },
+    registerButtonRow: {
+        width: "50%",
+        columnGap: constants.bounds.padding,
+        justifyContent: 'center'
+    },
+    registerButton: {
+        padding: constants.bounds.padding,
+        backgroundColor: colorsList.light.PRIMARY_CYAN,
+        margin: constants.bounds.padding,
+        alignItems: 'center',
+        borderRadius: constants.bounds.radius * 0.5
+    },
+    cancelButton: {
+        padding: constants.bounds.padding,
+        backgroundColor: colorsList.light.ALERT_RED,
+        margin: constants.bounds.padding,
+        alignItems: 'center',
+        borderRadius: constants.bounds.radius * 0.5
+    },
+    loginText: {
+        color: colorsList.light.MAIN_WHITE,
+        fontSize: constants.text.mainTitleSize,
+        textAlign: "center",
+        marginBottom: constants.bounds.padding
+    },
+    alert: {
+        color: colorsList.light.ALERT_RED
+    },
+    parseErrorText:{
+        paddingLeft: constants.bounds.padding,
+        color: colorsList.light.ALERT_RED
+    },
+    errorTextNotVisible: {
+        display: "none"
+    },
+});
