@@ -506,6 +506,7 @@ const loginScreenStyle = StyleSheet.create({
         columnGap: constants.bounds.padding
     },
     actionButton: {
+        width: "40%",
         padding: constants.bounds.padding,
         backgroundColor: colorsList.light.PRIMARY_CYAN,
         borderWidth: 1,
@@ -562,10 +563,10 @@ const registerScreenStyle = StyleSheet.create({
         rowGap: constants.bounds.padding
     },
     inputFieldContainer: {
-        marginBottom: constants.bounds.padding / 2
+        rowGap: constants.bounds.padding / 2
     },
     registerButtonRow: {
-        width: "50%",
+        width: "40%",
         columnGap: constants.bounds.padding,
         justifyContent: 'center'
     },
@@ -574,14 +575,14 @@ const registerScreenStyle = StyleSheet.create({
         backgroundColor: colorsList.light.PRIMARY_CYAN,
         margin: constants.bounds.padding,
         alignItems: 'center',
-        borderRadius: constants.bounds.radius * 0.5
+        borderRadius: constants.bounds.radius
     },
     cancelButton: {
         padding: constants.bounds.padding,
         backgroundColor: colorsList.light.ALERT_RED,
         margin: constants.bounds.padding,
         alignItems: 'center',
-        borderRadius: constants.bounds.radius * 0.5
+        borderRadius: constants.bounds.radius
     },
     loginText: {
         color: colorsList.light.MAIN_WHITE,
