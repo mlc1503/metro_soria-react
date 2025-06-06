@@ -15,6 +15,7 @@ interface AuthContextType{
     login: (username:string, password:string) => Promise<{ success: boolean; error?:string }>
     register: (username:string, password:string, email:string) => Promise<{ success: boolean; error?:string }>
     logout: ()=>undefined
+    deleteUser: (id:number) => Promise<{ success: boolean; error?:string }>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -84,6 +85,24 @@ export const AuthProvider:React.FC<AuthProviderProps> = ({children})=>{
         } 
     }
 
+    const deleteUser = async(id:number)=>{
+        try {
+
+            await db.runAsync(
+                'DELETE FROM users WHERE id = ?',
+                [id]
+            );
+            setUser(null)
+            return {success: true}
+
+        } catch (error: any) {
+            return{
+                success: false,
+                error: error.message
+            }
+        }
+    }
+
     const logout = ():undefined=>{
         setUser(null)
         return undefined
@@ -91,7 +110,7 @@ export const AuthProvider:React.FC<AuthProviderProps> = ({children})=>{
 
 
     return(
-        <AuthContext.Provider value={{ user, isLoading, login, register, logout }} >
+        <AuthContext.Provider value={{ user, isLoading, login, register, logout, deleteUser }} >
             {children}
         </AuthContext.Provider>
     )
